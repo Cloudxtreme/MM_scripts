@@ -1,0 +1,8 @@
+=== ALIASES ===
+stat 			~ list out all sorts of details
+disable trigger escape		~ disable arena auto escapes
+enable trigger <trigger name>	~ enable trigger
+
+auto enter <town name> 	~ will auto enter arena after retreat (must be one step from arena)
+prep <town name> 		~ handles the setup and entrance into an arena
+disable auto enter		~ Disables arena aut
