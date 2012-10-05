@@ -204,7 +204,7 @@ end</script>
                         <integer>0</integer>
                         <integer>0</integer>
                     </regexCodePropertyList>
-                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                    <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>hunting</name>
                         <script>target = matches[1]
 send(&quot;attack &quot; .. target)
@@ -259,7 +259,7 @@ disableTrigger(&quot;huntingHold&quot;)</script>
                         </regexCodePropertyList>
                     </Trigger>
                 </TriggerGroup>
-                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>auto enter NewHaven</name>
                     <script>if tonumber(matches[2]) &gt;= autoEnterHP then
 	autoEnterTrigger = &quot;auto enter NewHaven&quot;
@@ -284,6 +284,32 @@ end
                     </regexCodePropertyList>
                 </Trigger>
             </TriggerGroup>
+            <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <name>Chat</name>
+                <script>selectCurrentLine()
+copy()
+appendBuffer(&quot;chat&quot;)</script>
+                <triggerType>0</triggerType>
+                <conditonLineDelta>0</conditonLineDelta>
+                <mStayOpen>0</mStayOpen>
+                <mCommand></mCommand>
+                <packageName></packageName>
+                <mFgColor>#ff0000</mFgColor>
+                <mBgColor>#ffff00</mBgColor>
+                <mSoundFile></mSoundFile>
+                <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                <regexCodeList>
+                    <string>say</string>
+                    <string>gossip</string>
+                    <string>whisper</string>
+                </regexCodeList>
+                <regexCodePropertyList>
+                    <integer>0</integer>
+                    <integer>0</integer>
+                    <integer>0</integer>
+                </regexCodePropertyList>
+            </Trigger>
         </TriggerGroup>
     </TriggerPackage>
     <TimerPackage/>
@@ -505,12 +531,36 @@ autoEnterHP = 31</script>
 -------------------------------------------------
 
 healthPanic = 10
-healthMinorTop = 27
-healthMinorBottom = 20
-autoEnterHP = 31</script>
+healthMinorTop = 35
+healthMinorBottom = 25
+autoEnterHP = 35</script>
                     <eventHandlerList/>
                 </Script>
             </ScriptGroup>
+            <Script isActive="yes" isFolder="no">
+                <name>UI</name>
+                <packageName></packageName>
+                <script>-------------------------------------------------
+--         Put your Lua functions here.        --
+--                                             --
+-- Note that you can also use external Scripts --
+-------------------------------------------------
+
+
+WindowWidth, WindowHeight = getMainWindowSize();
+createConsole(&quot;chat&quot;, 9, 50, 20, WindowWidth-365,0)
+echo(&quot;chat&quot;,WindowWidth..&quot;:&quot;..WindowHeight..&quot;\n&quot;)
+
+function resizeEvent( event, x, y )
+	WindowWidth, WindowHeight = getMainWindowSize();
+	-- move chat window
+	moveWindow(&quot;chat&quot;,WindowWidth-365,0)
+	echo(&quot;chat&quot;,&quot;...................20..................40........50........60..................80..................1\n&quot;)
+end
+
+registerAnonymousEventHandler(&quot;sysWindowResizeEvent&quot;, &quot;resizeEvent&quot;)</script>
+                <eventHandlerList/>
+            </Script>
         </ScriptGroup>
     </ScriptPackage>
     <KeyPackage/>
