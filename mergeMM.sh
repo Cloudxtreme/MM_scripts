@@ -9,3 +9,8 @@ sed -n '/<TriggerPackage>/,/MudletPackage>/p' ./current/MM.xml >> holder
 
 # replace current profile
 mv holder $profile
+
+# find most recent map
+profile=$(find ./map/ -name *dat | sort -n | tail -1)
+
+cp ./map/mm $profile
