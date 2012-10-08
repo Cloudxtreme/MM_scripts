@@ -328,13 +328,15 @@ appendBuffer(&quot;chat&quot;)</script>
                 <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="yes">
                     <name>Name_Line</name>
                     <script>disableTrigger(&quot;Name_Line&quot;)
-enableTrigger(&quot;Exits_Line&quot;)
+enableTrigger(&quot;Exit_Line&quot;)
 loc = split(matches[1],&quot;,&quot;)
 land = string.trim(loc[0])
 room = string.trim(loc[1])
 
-if table.size(loc) == 1 then
-	enteredRoom(loc[0],nil)
+if manual_map then return end
+
+if table.size(loc) == 0 then
+	enteredRoom(matches[1],nil)
 else
 	enteredRoom(room,land)
 end</script>
@@ -355,7 +357,7 @@ end</script>
                         <integer>6</integer>
                     </regexCodePropertyList>
                 </Trigger>
-                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>Exit_Line</name>
                     <script>disableTrigger(&quot;Exit_Line&quot;)
 enableTrigger(&quot;Name_Line&quot;)</script>
@@ -456,7 +458,9 @@ autoEnterTrigger = nil</script>
                     <name>Moved</name>
                     <script>last_movement = matches[2]
 
-if not manual_map then
+if manual_map then
+	enteredRoom(&quot;&quot;,nil)
+else
 	send(matches[2])
 end</script>
                     <command></command>
@@ -671,18 +675,39 @@ addMapEvent(&quot;I'm Here&quot;, &quot;setPlayerLoc&quot;)
 registerAnonymousEventHandler(&quot;setPlayerLoc&quot;, &quot;setPlayerLocation&quot;)
 
 function setPlayerLocation(evet, list, rm)
-	centerview(rm)
-	current_room = rm
+	setRoom(rm)
 end
 
 function doSpeedWalk()
+	auto_map = false
 	echo(&quot;Path we need to take: &quot; .. table.concat(speedWalkDir, &quot;, &quot;) .. &quot;\n&quot;)
 	echo(&quot;Rooms we'll pass through: &quot; .. table.concat(speedWalkPath, &quot;, &quot;) .. &quot;\n&quot;)	
-	speedwalk(table.concat(speedWalkDir, &quot;, &quot;))
+	speedwalk(table.concat(speedWalkDir, &quot;, &quot;),false,1)
 	centerview(speedWalkPath[#speedWalkPath])
 end
 
 function enteredRoom(room_name,area_name)
+	if current_room == nil then
+		local room_list = searchRoom(room_name)
+		if table.size(room_list) == 1 then
+			for rid,rname in pairs(room_list) do setLocation(rid) end
+		else
+			echo(&quot;I don't know where I am\n&quot;)
+		end
+	else
+		exits = getRoomExits(current_room)
+		if table.contains(exits,longDirection(last_movement)) then
+			local rid = exits[longDirection(last_movement)]
+			setLocation(rid)
+			if getRoomName(rid) == &quot;&quot; then setRoomName(rid,room_name) end
+		else 
+			if auto_map or manual_map then
+				createRoom(room_name,area_name)
+			else
+				echo(&quot; - Room not found\n&quot;)
+			end
+		end
+	end
 end
 
 function createRoom(room_name,area_name)
@@ -695,11 +720,21 @@ function createRoom(room_name,area_name)
 		end
 	else
 		addAreaName(area_name)
+		current_room = nil
+	end
+
+	pos_table = getRoomsByPosition(findAreaID(area_name),targetPosition())
+	if table.size(pos_table) ~= 0 then
+		rid = pos_table[0]
+		setExit(rid,current_room,inverseDirection(last_movement))
+		setExit(current_room,rid,last_movement)
+		setRoom(rid)
+		return
 	end
 
 	rid = createRoomID()
 	addRoom(rid)
-	setRoomName(room_name)
+	setRoomName(rid,room_name)
 	setRoomArea(rid,findAreaID(area_name))
 	setRoomCoordinates(rid,targetPosition())
 
@@ -708,13 +743,22 @@ function createRoom(room_name,area_name)
 		setExit(current_room,rid,last_movement)
 	end
 
-	current_room = rid
-	centermap = rid
+	setRoom(rid)
+	echo(&quot;Room &quot;..room_name..&quot; (&quot;..rid..&quot;) created\n&quot;)
+end
+
+function setRoom(room_id)
+	current_room = room_id
+	centerview(room_id)
+end
+
+function describeRoom(room_id)
+	echo(&quot;Room &quot;..room_id..&quot; - &quot;..getRoomName(room_id)..&quot; in area &quot;..getRoomAreaName(getRoomArea(room_id))..&quot;\n&quot;)
 end
 
 function mapControl(inst)
 	if inst == &quot;save&quot; then saveMap() echo(&quot;default map saved\n&quot;)
-	elseif inst == &quot;load&quot; then loadMap() echo(&quot;default map loaded\n&quot;)
+	elseif inst == &quot;load&quot; then loadMap() updateMap() echo(&quot;default map loaded\n&quot;)
 	elseif inst:find(&quot;delete&quot;) ~= nil then
 		if inst:find(&quot;all&quot;) ~= nil then
 			local list = getAreaTable()
@@ -744,12 +788,30 @@ function mapControl(inst)
 		end
 	elseif inst:find(&quot;create&quot;) ~= nil then
 		if inst:find(&quot;area&quot;) ~= nil then
-			createRoom(&quot;&quot;,nil)
+			aname = inst:sub(13,inst:len())
+			createRoom(&quot;&quot;,aname)
+			echo(&quot;area &quot;..aname..&quot; created\n&quot;)
 		end
+	elseif inst:find(&quot;describe&quot;) ~= nil then
+		if inst:find(&quot;room&quot;) ~= nil then
+			rid = inst:sub(15,inst:len())
+			if roomExists(rid) then describeRoom(rid)
+			else echo(&quot;room &quot;..rid..&quot; does not exist\n&quot;) end
+		end
+	elseif inst:find(&quot;rename&quot;) ~= nil then
+		if inst:find(&quot;room&quot;) ~= nil then
+			rname = inst:sub(13,inst:len())
+			if current_room ~= nil then setRoomName(current_room,rname) describeRoom(current_room)
+			else echo(&quot;I don't know where I am.\n&quot;) end
+		end
+	elseif inst:find(&quot;where am i&quot;) then
+		if current_room ~= nil then describeRoom(current_room)
+		else echo(&quot;I don't know where I am.\n&quot;) end
 	elseif inst == &quot;manual on&quot; then manual_map = true auto_map = false echo(&quot;manual mapping enabled\n&quot;)
 	elseif inst == &quot;manual off&quot; then manual_map = false echo(&quot;manual mapping disabled\n&quot;)
 	elseif inst == &quot;auto on&quot; then auto_map = true manual_map = false echo(&quot;auto mapping enabled\n&quot;)
-	elseif inst == &quot;auto off&quot; then manual_map = false echo(&quot;auto mapping disabled\n&quot;)
+	elseif inst == &quot;auto off&quot; then auto_map = false echo(&quot;auto mapping disabled\n&quot;)
+	else echo(&quot;Map command not found\n&quot;)
 	end
 end
 
@@ -787,12 +849,12 @@ function targetPosition()
 	else
 		x,y,z = getRoomCoordinates(current_room)
 
-		if last_movement:find(&quot;n&quot;) ~= nil then y = y + 1
-		elseif last_movement:find(&quot;s&quot;) ~= nil then y = y - 1
-		elseif last_movement:find(&quot;e&quot;) ~= nil then x = x + 1
-		elseif last_movement:find(&quot;w&quot;) ~= nil then x = x - 1
-		elseif last_movement:find(&quot;u&quot;) ~= nil then z = z + 1
-		elseif last_movement:find(&quot;d&quot;) ~= nil then z = z - 1
+		if last_movement:find(&quot;n&quot;) ~= nil then y = y + 2 end
+		if last_movement:find(&quot;s&quot;) ~= nil then y = y - 2 end
+		if last_movement:find(&quot;e&quot;) ~= nil then x = x + 2 end
+		if last_movement:find(&quot;w&quot;) ~= nil then x = x - 2 end
+		if last_movement:find(&quot;u&quot;) ~= nil then z = z + 2
+		elseif last_movement:find(&quot;d&quot;) ~= nil then z = z - 2
 		end
 
 		return x,y,z
