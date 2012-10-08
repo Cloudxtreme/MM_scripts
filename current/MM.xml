@@ -686,6 +686,30 @@ function enteredRoom(room_name,area_name)
 end
 
 function createRoom(room_name,area_name)
+	if area_name == nil then
+		if current_room == nil then
+			echo(&quot;can't find an area for the room\n&quot;)
+			return
+		else
+			area_name = getRoomAreaName(getRoomArea(current_room))
+		end
+	else
+		addAreaName(area_name)
+	end
+
+	rid = createRoomID()
+	addRoom(rid)
+	setRoomName(room_name)
+	setRoomArea(rid,findAreaID(area_name))
+	setRoomCoordinates(rid,targetPosition())
+
+	if current_room ~= nil then
+		setExit(rid,current_room,inverseDirection(last_movement))
+		setExit(current_room,rid,last_movement)
+	end
+
+	current_room = rid
+	centermap = rid
 end
 
 function mapControl(inst)
