@@ -10,4 +10,13 @@ sed -i '/<Host/,/<\/HostPackage>/d' ./current/MM.xml
 # find most recent map
 profile=$(find ./map/ -name *dat | sort -n | tail -1)
 
+# backup map
 cp $profile ./map/mm
+
+# remove old map files
+cd map
+rm `ls -t | awk 'NR>6'`
+cd ..
+
+#update git
+git add map

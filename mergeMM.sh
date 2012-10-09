@@ -11,6 +11,6 @@ sed -n '/<TriggerPackage>/,/MudletPackage>/p' ./current/MM.xml >> holder
 mv holder $profile
 
 # find most recent map
-profile=$(find ./map/ -name *dat | sort -n | tail -1)
+#profile=$(find ./map/ -name *dat | sort -n | tail -1)
 
-cp ./map/mm $profile
+#cp ./map/mm $profile
