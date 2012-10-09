@@ -680,10 +680,14 @@ end
 
 function doSpeedWalk()
 	auto_map = false
+	disableTrigger(&quot;Name_Line&quot;)
 	echo(&quot;Path we need to take: &quot; .. table.concat(speedWalkDir, &quot;, &quot;) .. &quot;\n&quot;)
-	echo(&quot;Rooms we'll pass through: &quot; .. table.concat(speedWalkPath, &quot;, &quot;) .. &quot;\n&quot;)	
-	speedwalk(table.concat(speedWalkDir, &quot;, &quot;),false,1)
-	centerview(speedWalkPath[#speedWalkPath])
+	echo(&quot;Rooms we'll pass through: &quot; .. table.concat(speedWalkPath, &quot;, &quot;) .. &quot;\n&quot;)
+	for i,v in ipairs(speedWalkDir) do
+		tempTimer(i, [[send(&quot;]]..v..[[&quot;)]])
+	end
+	setRoom(speedWalkPath[#speedWalkPath])
+	tempTimer(#speedWalkPath + 2, [[enableTrigger(&quot;Name_Line&quot;)]])
 end
 
 function enteredRoom(room_name,area_name)
