@@ -325,7 +325,7 @@ appendBuffer(&quot;chat&quot;)</script>
                 <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList/>
                 <regexCodePropertyList/>
-                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="yes">
+                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="yes">
                     <name>Name_Line</name>
                     <script>disableTrigger(&quot;Name_Line&quot;)
 enableTrigger(&quot;Exit_Line&quot;)
@@ -335,11 +335,11 @@ room = string.trim(loc[1])
 
 if manual_map then return end
 
-if table.size(loc) == 0 then
+--if table.size(loc) == 0 then
 	enteredRoom(matches[1],nil)
-else
-	enteredRoom(room,land)
-end</script>
+--else
+--	enteredRoom(room,land)
+--end</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
                     <mStayOpen>0</mStayOpen>
@@ -357,7 +357,7 @@ end</script>
                         <integer>6</integer>
                     </regexCodePropertyList>
                 </Trigger>
-                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>Exit_Line</name>
                     <script>disableTrigger(&quot;Exit_Line&quot;)
 enableTrigger(&quot;Name_Line&quot;)</script>
@@ -676,6 +676,7 @@ registerAnonymousEventHandler(&quot;setPlayerLoc&quot;, &quot;setPlayerLocation&
 
 function setPlayerLocation(evet, list, rm)
 	setRoom(rm)
+	last_movement = nil
 end
 
 function doSpeedWalk()
@@ -686,8 +687,8 @@ function doSpeedWalk()
 	for i,v in ipairs(speedWalkDir) do
 		tempTimer(i, [[send(&quot;]]..v..[[&quot;)]])
 	end
-	setRoom(speedWalkPath[#speedWalkPath])
-	tempTimer(#speedWalkPath + 2, [[enableTrigger(&quot;Name_Line&quot;)]])
+	tempTimer(table.size(speedWalkPath) + 2, [[enableTrigger(&quot;Name_Line&quot;)]])
+	setRoom(speedWalkPath[table.size(speedWalkPath)])
 end
 
 function enteredRoom(room_name,area_name)
