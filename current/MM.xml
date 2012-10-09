@@ -188,7 +188,8 @@ end</script>
                 </Trigger>
                 <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>healing</name>
-                    <script>if tonumber(hp) &lt;= HP_healthSpell and tonumber(hp) &gt; HP_autoEnter then
+                    <script>hp = matches[2]
+if tonumber(hp) &gt;= HP_healthSpell and tonumber(hp) &lt; HP_autoEnter then
 	if HP_maheAvail then
 		send(&quot;cast mihe;rest&quot;)
 	elseif HP_miheAvail then
@@ -200,8 +201,11 @@ end</script>
 	tempTimer(7, [[enableTrigger(&quot;check health&quot;)]])
 	echo(&quot;Healing until &quot;..HP_autoEnter..&quot;\n&quot;)
 else
-	disableTrigger(&quot;healing&quot;)
-	enableTrigger(&quot;check health&quot;)
+	if tonumber(hp) &gt; HP_autoEnter then
+		disableTrigger(&quot;healing&quot;)
+		enableTrigger(&quot;check health&quot;)
+		checkHealth(hp)
+	end
 end</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
@@ -217,7 +221,7 @@ end</script>
                         <string>^\[HP=(\d+)</string>
                     </regexCodeList>
                     <regexCodePropertyList>
-                        <integer>0</integer>
+                        <integer>1</integer>
                     </regexCodePropertyList>
                 </Trigger>
             </TriggerGroup>
@@ -264,7 +268,9 @@ end</script>
                         <script>target = matches[1]
 send(&quot;attack &quot; .. target)
 enableTrigger(&quot;huntingHold&quot;)
-disableTrigger(&quot;hunting&quot;)</script>
+disableTrigger(&quot;hunting&quot;)
+disableTrigger(&quot;Name_Line&quot;)
+disableTrigger(&quot;Exit_Line&quot;)</script>
                         <triggerType>0</triggerType>
                         <conditonLineDelta>0</conditonLineDelta>
                         <mStayOpen>0</mStayOpen>
@@ -292,10 +298,12 @@ disableTrigger(&quot;hunting&quot;)</script>
                             <integer>0</integer>
                         </regexCodePropertyList>
                     </Trigger>
-                    <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>huntingHold</name>
                         <script>enableTrigger(&quot;hunting&quot;)
-disableTrigger(&quot;huntingHold&quot;)</script>
+disableTrigger(&quot;huntingHold&quot;)
+enableTrigger(&quot;Name_Line&quot;)
+</script>
                         <triggerType>0</triggerType>
                         <conditonLineDelta>0</conditonLineDelta>
                         <mStayOpen>0</mStayOpen>
@@ -342,17 +350,17 @@ end
                     <name>auto Stroll Slums</name>
                     <script>if tonumber(matches[2]) &gt;= HP_autoEnter then
 	autoEnterTrigger = &quot;Stroll Slums&quot;
-	if current_room ~= 122 then 
+	if current_room ~= 289 then 
 		echo(&quot;Loop must start at Slum Street Crossroads\nLoop will be unpaused\n&quot;) 
-		loopWalk_pause = false
+		walkLoop_pause = false
 	else
-		loopWalk_count = 0
-		loopWalk_run = true
-		loopWalk_pause = false
-		loopWalk(slumsLoop)
+		walkLoop_count = 1
+		walkLoop_run = true
+		walkLoop_pause = false
+		walkLoop(slumsLoop)
 	end
 end
-disableTrigger(&quot;Stroll Slums&quot;)</script>
+disableTrigger(&quot;auto Stroll Slums&quot;)</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
                     <mStayOpen>0</mStayOpen>
@@ -397,7 +405,7 @@ disableTrigger(&quot;Stroll Slums&quot;)</script>
                     </regexCodePropertyList>
                     <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>SlumHunting</name>
-                        <script>loopWalk_pause = true
+                        <script>walkLoop_pause = true
 disableTrigger(&quot;Name_Line&quot;)
 disableTrigger(&quot;Exit_Line&quot;)
 disableTrigger(&quot;SlumHunting&quot;)
@@ -429,7 +437,7 @@ send(&quot;attack &quot; .. matches[1])</script>
                         <script>disableTrigger(&quot;SlumHold&quot;)
 enableTrigger(&quot;SlumHunting&quot;)
 enableTrigger(&quot;Name_Line&quot;)
-loopWalk_pause = false</script>
+walkLoop_pause = false</script>
                         <triggerType>0</triggerType>
                         <conditonLineDelta>0</conditonLineDelta>
                         <mStayOpen>0</mStayOpen>
@@ -490,9 +498,15 @@ appendBuffer(&quot;chat&quot;)</script>
                 <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList/>
                 <regexCodePropertyList/>
-                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="yes">
+                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="yes">
                     <name>Name_Line</name>
-                    <script>if matches[1]:findPattern(&quot;%d&quot;) ~= nil or matches[1]:find(&quot;You&quot;) ~= nil then return end
+                    <script>--handle list
+if matches[1]:findPattern(&quot;Quantity&quot;) ~= nil then
+	disableTrigger(&quot;Name_Line&quot;)
+	tempTimer(1, [[enableTrigger(&quot;Name_Line&quot;)]])
+	return
+end
+if matches[1]:findPattern(&quot;%d&quot;) ~= nil or matches[1]:find(&quot;You&quot;) ~= nil or matches[1]:find(&quot;you&quot;) ~= nil then return end
 
 disableTrigger(&quot;Name_Line&quot;)
 enableTrigger(&quot;Exit_Line&quot;)
@@ -565,10 +579,11 @@ enableTrigger(&quot;Name_Line&quot;)</script>
             </Alias>
             <Alias isActive="yes" isFolder="no">
                 <name>Disable Direction Escapes</name>
-                <script>disableEscapes()</script>
+                <script>disableRetreats()
+enableTrigger(&quot;check health&quot;)</script>
                 <command></command>
                 <packageName></packageName>
-                <regex>^disable trigger escape$</regex>
+                <regex>^disable retreats$</regex>
             </Alias>
             <Alias isActive="yes" isFolder="no">
                 <name>Enable Trigger</name>
@@ -609,7 +624,9 @@ enableTrigger(tableAutoEnter[matches[2]])
                 <Alias isActive="yes" isFolder="no">
                     <name>Disable Auto Enter</name>
                     <script>echo(tostring(autoEnterTrigger)..&quot; disabled&quot;)
-autoEnterTrigger = nil</script>
+disableTrigger(autoEnterTrigger)
+autoEnterTrigger = nil
+</script>
                     <command></command>
                     <packageName></packageName>
                     <regex>^disable auto enter$</regex>
@@ -642,6 +659,39 @@ end</script>
                     <regex>^map\s(.*)$</regex>
                 </Alias>
             </AliasGroup>
+            <Alias isActive="yes" isFolder="no">
+                <name>Panic HangUp</name>
+                <script>echo(&quot;Panic hangup changed from &quot;..tostring(HP_panicHangup)..&quot; to &quot;..matches[2]..&quot;\n&quot;)
+HP_panicHangup = matches[2]
+</script>
+                <command></command>
+                <packageName></packageName>
+                <regex>^panic\shangup\s(.*)$</regex>
+            </Alias>
+            <Alias isActive="yes" isFolder="no">
+                <name>Disable Trigger</name>
+                <script>disableTrigger(matches[2])</script>
+                <command></command>
+                <packageName></packageName>
+                <regex>^disable trigger (.*)$</regex>
+            </Alias>
+            <Alias isActive="yes" isFolder="no">
+                <name>Disable Town</name>
+                <script>if matches[2]:find(&quot;slums&quot;) then disableSlums() 
+else echo(&quot;Town not found\n&quot;)
+end
+</script>
+                <command></command>
+                <packageName></packageName>
+                <regex>^disable\stown\s(.*)$</regex>
+            </Alias>
+            <Alias isActive="yes" isFolder="no">
+                <name>Disable Loop</name>
+                <script>walkLoop_run = false</script>
+                <command></command>
+                <packageName></packageName>
+                <regex>^disable\sloop$</regex>
+            </Alias>
         </AliasGroup>
     </AliasPackage>
     <ActionPackage/>
@@ -670,9 +720,10 @@ maxHP = 0
 
 function health(hp, direction)
 	if tonumber(hp) &lt;= HP_panic or tonumber(hp) &lt; 10 then
-		loopWalk_run = false 
+		walkLoop_run = false 
 		if direction ~= nil then
 			send(direction..&quot;;rest&quot;)
+			changeRoom(direction)
 			disableRetreats()
 			disableTrigger(&quot;check health&quot;)
 			enableTrigger(&quot;panic&quot;)
@@ -686,8 +737,9 @@ function health(hp, direction)
 	end
 
 	if tonumber(hp) &lt; HP_retreat and tonumber(hp) &gt; HP_panic then
-		loopWalk_pause = true
-		if direction ~= nil then 	send(direction) end
+		echo(&quot;RETREAT!&quot;)
+		walkLoop_pause = true
+		if direction ~= nil then 	send(direction) changeRoom(direction) end
 		send(&quot;rest&quot;)
 		disableRetreats()
 		enableTrigger(&quot;healing&quot;)
@@ -699,24 +751,29 @@ function health(hp, direction)
 		end
 	end
 	
-	if hp &gt; maxHP then maxHP = hp end
-	setGauge(&quot;HP&quot;, hp, maxHP, hp..&quot;/&quot;..maxHP)
+	if tonumber(hp) &gt; maxHP then maxHP = tonumber(hp) end
+	HP = tonumber(hp)
+	setGauge(&quot;HP&quot;, hp, maxHP, &quot;HP: &quot;..HP..&quot;/&quot;..maxHP)
 end
 
 walkLoop_run = false --keep stepping through loop
 walkLoop_pause = false --temporarily stop running steps
-walkLoop_count = 0 --current step
+walkLoop_count = 1 --current step
 
 function walkLoop(loop)
-	if not walkLoop_pause then 
+	if not walkLoop_pause and HP &gt; HP_autoEnter then 
 		send(loop[walkLoop_count]) 
 		last_movement = loop[walkLoop_count]
+		walkLoop_count = walkLoop_count + 1
+		if walkLoop_count &gt; table.size(loop) then walkLoop_count =  1 end
 	end
  
 	if walkLoop_run then
-		walkLoop_count = walkLoop_count + 1
-		if walkLoop_count &gt; table.size(loop) then walkLoop_count =  0 end
-		tempTimer(2,function() walkLoop(loop) end)
+		changeRoom(last_movement)
+		disableTrigger(&quot;Name_Line&quot;)
+		tempTimer(4,function() walkLoop(loop) end)
+	else
+		enableTrigger(&quot;Name_Line&quot;)
 	end
 end
 
@@ -764,12 +821,17 @@ function strollSlums()
 	echo(&quot;hunting enabled\n&quot;)
 end
 
+function disableSlums()
+	disableTrigger(&quot;SlumHold&quot;)
+	disableTrigger(&quot;SlumHunting&quot;)
+end
+
 function enterCommon()
 	disableTrigger(&quot;healing&quot;)
 	disableTrigger(&quot;check health&quot;)
 	echo(&quot;check health disabled\n&quot;)
-	enableTrigger(&quot;escape reverse&quot;)
-	echo(&quot;escape enabled\n&quot;)
+	enableTrigger(&quot;retreat reverse&quot;)
+	echo(&quot;retreat enabled\n&quot;)
 end</script>
                     <eventHandlerList/>
                 </Script>
@@ -792,7 +854,7 @@ tableAutoEnter = {
 	[&quot;slums&quot;] = &quot;auto Stroll Slums&quot;,
 }
 
-slumsLoop = { &quot;e&quot;,&quot;e&quot;,&quot;e&quot;,&quot;e&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot; }</script>
+slumsLoop = { &quot;s&quot;,&quot;s&quot;,&quot;e&quot;,&quot;e&quot;,&quot;e&quot;,&quot;e&quot;,&quot;n&quot;,&quot;n&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot; }</script>
                     <eventHandlerList/>
                 </Script>
             </ScriptGroup>
@@ -828,8 +890,30 @@ HP_miheAvail = true
 HP_autoEnter = 35</script>
                     <eventHandlerList/>
                 </Script>
-                <Script isActive="yes" isFolder="no">
+                <Script isActive="no" isFolder="no">
                     <name>paladin</name>
+                    <packageName></packageName>
+                    <script>-------------------------------------------------
+-- Definition of paladin specific variables.   --
+-------------------------------------------------
+
+--When should panic set in?
+HP_panic = 10
+--Should I hang up of panic?
+HP_panicHangup = true
+--When should I retreat from room?
+HP_retreat = 25
+--When should I start using health spells?
+HP_healthSpell = 20
+--Which health spells are available?
+HP_maheAvail = false
+HP_miheAvail = true
+--When can I automatically re-enter battle?
+HP_autoEnter = 35</script>
+                    <eventHandlerList/>
+                </Script>
+                <Script isActive="yes" isFolder="no">
+                    <name>Ranger</name>
                     <packageName></packageName>
                     <script>-------------------------------------------------
 -- Definition of paladin specific variables.   --
@@ -842,12 +926,12 @@ HP_panicHangup = true
 --When should I retreat from room?
 HP_retreat = 20
 --When should I start using health spells?
-HP_healthSpell = 25
+HP_healthSpell = 20
 --Which health spells are available?
 HP_maheAvail = false
-HP_miheAvail = true
+HP_miheAvail = false
 --When can I automatically re-enter battle?
-HP_autoEnter = 35</script>
+HP_autoEnter = 40</script>
                     <eventHandlerList/>
                 </Script>
             </ScriptGroup>
@@ -872,6 +956,9 @@ function resizeEvent( event, x, y )
 	WindowWidth, WindowHeight = getMainWindowSize();
 	-- move chat window
 	moveWindow(&quot;chat&quot;,WindowWidth-415,0)
+	if WindowHeight-400 &lt; 200 then resizeWindow(&quot;chat&quot;,400,WindowHeight-400) end
+	
+	moveWindow(&quot;HP&quot;,WindowWidth-520,0)
 	HBox:move(WindowWidth-415,WindowHeight-400)
 end
 
@@ -890,9 +977,9 @@ registerAnonymousEventHandler(&quot;sysWindowResizeEvent&quot;, &quot;resizeEven
 mudlet = mudlet or {}; mudlet.mapper_script = true
 
 registerAnonymousEventHandler(&quot;setPlayerLoc&quot;, &quot;setPlayerLocation&quot;)
---registerAnonymousEventHandler(&quot;sysLoadEvent&quot;, &quot;mapStartup&quot;)
+registerAnonymousEventHandler(&quot;sysLoadEvent&quot;, &quot;mapStartup&quot;)
 
-function onConnect()
+function mapStartup()
 	last_movement = nil
 	current_room = nil
 	manual_map = false
@@ -901,6 +988,9 @@ function onConnect()
 	loadMap()
 	addMapEvent(&quot;I'm Here&quot;, &quot;setPlayerLoc&quot;)
 	echo(&quot;Default map loaded\n&quot;)
+
+	disableRetreats()
+	enableTrigger(&quot;check health&quot;)
 end
 
 function setPlayerLocation(evet, list, rm)
@@ -981,6 +1071,14 @@ function createRoom(room_name,area_name)
 
 	setRoom(rid)
 	echo(&quot;Room &quot;..room_name..&quot; (&quot;..rid..&quot;) created\n&quot;)
+end
+
+function changeRoom(direction)
+	exits = getRoomExits(current_room)
+	if table.contains(exits,longDirection(last_movement)) then
+		local rid = exits[longDirection(last_movement)]
+		setRoom(rid)
+	end
 end
 
 function setRoom(room_id)
@@ -1133,5 +1231,14 @@ end</script>
             </Script>
         </ScriptGroup>
     </ScriptPackage>
-    <KeyPackage/>
+    <KeyPackage>
+        <Key isActive="yes" isFolder="no">
+            <name>Disconnect</name>
+            <packageName></packageName>
+            <script>disconnect()</script>
+            <command></command>
+            <keyCode>16777264</keyCode>
+            <keyModifier>0</keyModifier>
+        </Key>
+    </KeyPackage>
 </MudletPackage>
