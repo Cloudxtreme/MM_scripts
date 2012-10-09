@@ -158,7 +158,7 @@ health(matches[2], inverseDirection(last_movement))</script>
                 </Trigger>
                 <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>panic</name>
-                    <script>if tonumber(matches[2]) &gt; healthPanic then
+                    <script>if tonumber(matches[2]) &gt; HP_panic and tonumber(matches[2]) &gt; 10 then
 	disableTrigger(&quot;panic&quot;)
 	enableTrigger(&quot;check health&quot;)
 
@@ -282,7 +282,7 @@ disableTrigger(&quot;huntingHold&quot;)</script>
                 </TriggerGroup>
                 <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>auto enter NewHaven</name>
-                    <script>if tonumber(matches[2]) &gt;= autoEnterHP then
+                    <script>if tonumber(matches[2]) &gt;= HP_autoEnter then
 	autoEnterTrigger = &quot;auto enter NewHaven&quot;
 	tablePreps[&quot;newhaven&quot;]()
 end
@@ -306,10 +306,19 @@ end
                 </Trigger>
                 <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>Stroll Slums</name>
-                    <script>if tonumber(matches[2]) &gt;= autoEnterHP then
+                    <script>if tonumber(matches[2]) &gt;= HP_autoEnter then
 	autoEnterTrigger = &quot;Stroll Slums&quot;
-	send(&quot;e&quot;)
-end</script>
+	if current_room ~= 122 then 
+		echo(&quot;Loop must start at Slum Street Crossroads\nLoop will be unpaused\n&quot;) 
+		loopWalk_pause = false
+	else
+		loopWalk_count = 0
+		loopWalk_run = true
+		loopWalk_pause = false
+		loopWalk(slumsLoop)
+	end
+end
+disableTrigger(&quot;Stroll Slums&quot;)</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
                     <mStayOpen>0</mStayOpen>
@@ -354,7 +363,8 @@ end</script>
                     </regexCodePropertyList>
                     <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>SlumHunting</name>
-                        <script>disableTrigger(&quot;Name_Line&quot;)
+                        <script>loopWalk_pause = true
+disableTrigger(&quot;Name_Line&quot;)
 disableTrigger(&quot;Exit_Line&quot;)
 disableTrigger(&quot;SlumHunting&quot;)
 enableTrigger(&quot;SlumHold&quot;)
@@ -384,7 +394,8 @@ send(&quot;attack &quot; .. matches[1])</script>
                         <name>SlumHold</name>
                         <script>disableTrigger(&quot;SlumHold&quot;)
 enableTrigger(&quot;SlumHunting&quot;)
-enableTrigger(&quot;Name_Line&quot;)</script>
+enableTrigger(&quot;Name_Line&quot;)
+loopWalk_pause = false</script>
                         <triggerType>0</triggerType>
                         <conditonLineDelta>0</conditonLineDelta>
                         <mStayOpen>0</mStayOpen>
@@ -623,14 +634,16 @@ end</script>
 autoEnterTrigger = nil
 
 function health(hp, direction)
-	if tonumber(hp) &lt;= healthPanic then 
+	if tonumber(hp) &lt;= HP_panic or tonumber(hp) &lt; 10 then
+		loopWalk_run = false 
 		if direction ~= nil then
 			send(direction..&quot;;rest&quot;)
 			disableEscapes()
 			disableTrigger(&quot;check health&quot;)
 			enableTrigger(&quot;panic&quot;)
-		else
-			--disconnect()
+			if HP_panicHangup then
+				disconnect()
+			end
 		end
 		bg (&quot;red&quot;)
 		echo (&quot;PANIC!&quot;)
@@ -654,6 +667,23 @@ function health(hp, direction)
 			disableTrigger(&quot;check health&quot;)
 			tempTimer(7, [[enableTrigger(&quot;check health&quot;)]])
 		end
+	end
+end
+
+walkLoop_run = false --keep stepping through loop
+walkLoop_pause = false --temporarily stop running steps
+walkLoop_count = 0 --current step
+
+function walkLoop(loop)
+	if not walkLoop_pause then 
+		send(loop[walkLoop_count]) 
+		last_movement = loop[walkLoop_count]
+	end
+ 
+	if walkLoop_run then
+		walkLoop_count = walkLoop_count + 1
+		if walkLoop_count &gt; table.size(loop) then walkLoop_count =  0 end
+		tempTimer(2,function() walkLoop(loop) end)
 	end
 end
 
@@ -685,6 +715,7 @@ end</script>
 -------------------------------------------------
 
 function enterNewHavenArena()
+	HP_panicHangup = false
 	disableTrigger(&quot;check health&quot;)
 	echo(&quot;check health enabled\n&quot;)
 	enableTrigger(&quot;escape up&quot;)
@@ -723,7 +754,9 @@ tablePreps = {
 
 tableAutoEnter = {
 	[&quot;newhaven&quot;] = &quot;auto enter NewHaven&quot;,
-}</script>
+}
+
+slumsLoop = { &quot;e&quot;,&quot;e&quot;,&quot;e&quot;,&quot;e&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot; }</script>
                     <eventHandlerList/>
                 </Script>
             </ScriptGroup>
@@ -761,10 +794,12 @@ autoEnterHP = 31</script>
 -- Note that you can also use external Scripts --
 -------------------------------------------------
 
-healthPanic = 10
+
+HP_panic = 10
+HP_panicHangup = true
 healthMinorTop = 35
 healthMinorBottom = 25
-autoEnterHP = 35</script>
+HP_autoEnter = 35</script>
                     <eventHandlerList/>
                 </Script>
             </ScriptGroup>
