@@ -114,10 +114,10 @@ health(matches[2], &quot;e&quot;)</script>
                             <integer>1</integer>
                         </regexCodePropertyList>
                     </Trigger>
-                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                    <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>escape reverse</name>
                         <script>disableTrigger(&quot;check health&quot;)
-health(matches[2], reverseDirection(last_movement))</script>
+health(matches[2], inverseDirection(last_movement))</script>
                         <triggerType>0</triggerType>
                         <conditonLineDelta>0</conditonLineDelta>
                         <mStayOpen>0</mStayOpen>
@@ -136,7 +136,7 @@ health(matches[2], reverseDirection(last_movement))</script>
                         </regexCodePropertyList>
                     </Trigger>
                 </TriggerGroup>
-                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>check health</name>
                     <script>health(matches[2])</script>
                     <triggerType>0</triggerType>
@@ -307,8 +307,8 @@ end
                 <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>Stroll Slums</name>
                     <script>if tonumber(matches[2]) &gt;= autoEnterHP then
-	autoEnterTrigger = &quot;auto enter NewHaven&quot;
-	tablePreps[&quot;newhaven&quot;]()
+	autoEnterTrigger = &quot;Stroll Slums&quot;
+	send(&quot;e&quot;)
 end</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
@@ -352,7 +352,7 @@ end</script>
                         <integer>0</integer>
                         <integer>0</integer>
                     </regexCodePropertyList>
-                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                    <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>SlumHunting</name>
                         <script>disableTrigger(&quot;Name_Line&quot;)
 disableTrigger(&quot;Exit_Line&quot;)
@@ -372,8 +372,10 @@ send(&quot;attack &quot; .. matches[1])</script>
                         <regexCodeList>
                             <string>orc</string>
                             <string>thug</string>
+                            <string>cultist</string>
                         </regexCodeList>
                         <regexCodePropertyList>
+                            <integer>0</integer>
                             <integer>0</integer>
                             <integer>0</integer>
                         </regexCodePropertyList>
@@ -445,7 +447,7 @@ appendBuffer(&quot;chat&quot;)</script>
                 <regexCodePropertyList/>
                 <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="yes">
                     <name>Name_Line</name>
-                    <script>if matches[1]:findPattern(&quot;%d&quot;) ~= nil then return end
+                    <script>if matches[1]:findPattern(&quot;%d&quot;) ~= nil or matches[1]:find(&quot;You&quot;) ~= nil then return end
 
 disableTrigger(&quot;Name_Line&quot;)
 enableTrigger(&quot;Exit_Line&quot;)
