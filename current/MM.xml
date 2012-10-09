@@ -57,7 +57,7 @@
                     <integer>0</integer>
                 </regexCodePropertyList>
                 <TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                    <name>Escape Directions</name>
+                    <name>Retreats</name>
                     <script></script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
@@ -72,7 +72,7 @@
                     <regexCodeList/>
                     <regexCodePropertyList/>
                     <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                        <name>escape up</name>
+                        <name>retreat up</name>
                         <script>disableTrigger(&quot;check health&quot;)
 health(matches[2], &quot;u&quot;)
 </script>
@@ -94,7 +94,7 @@ health(matches[2], &quot;u&quot;)
                         </regexCodePropertyList>
                     </Trigger>
                     <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                        <name>escape east</name>
+                        <name>retreat east</name>
                         <script>disableTrigger(&quot;check health&quot;)
 health(matches[2], &quot;e&quot;)</script>
                         <triggerType>0</triggerType>
@@ -115,7 +115,7 @@ health(matches[2], &quot;e&quot;)</script>
                         </regexCodePropertyList>
                     </Trigger>
                     <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                        <name>escape reverse</name>
+                        <name>retreat reverse</name>
                         <script>disableTrigger(&quot;check health&quot;)
 health(matches[2], inverseDirection(last_movement))</script>
                         <triggerType>0</triggerType>
@@ -160,7 +160,7 @@ health(matches[2], inverseDirection(last_movement))</script>
                     <name>panic</name>
                     <script>if tonumber(matches[2]) &gt; HP_panic and tonumber(matches[2]) &gt; 10 then
 	disableTrigger(&quot;panic&quot;)
-	enableTrigger(&quot;check health&quot;)
+	enableTrigger(&quot;healing&quot;)
 
 	if autoEnterTrigger ~= nil then
 		bg(&quot;DarkGreen&quot;)
@@ -184,6 +184,40 @@ end</script>
                     </regexCodeList>
                     <regexCodePropertyList>
                         <integer>1</integer>
+                    </regexCodePropertyList>
+                </Trigger>
+                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                    <name>healing</name>
+                    <script>if tonumber(hp) &lt;= HP_healthSpell and tonumber(hp) &gt; HP_autoEnter then
+	if HP_maheAvail then
+		send(&quot;cast mihe;rest&quot;)
+	elseif HP_miheAvail then
+		send(&quot;cast mihe;rest&quot;)
+	else
+		send(&quot;rest&quot;)
+	end
+	disableTrigger(&quot;healing&quot;)
+	tempTimer(7, [[enableTrigger(&quot;check health&quot;)]])
+	echo(&quot;Healing until &quot;..HP_autoEnter..&quot;\n&quot;)
+else
+	disableTrigger(&quot;healing&quot;)
+	enableTrigger(&quot;check health&quot;)
+end</script>
+                    <triggerType>0</triggerType>
+                    <conditonLineDelta>0</conditonLineDelta>
+                    <mStayOpen>0</mStayOpen>
+                    <mCommand></mCommand>
+                    <packageName></packageName>
+                    <mFgColor>#ff0000</mFgColor>
+                    <mBgColor>#ffff00</mBgColor>
+                    <mSoundFile></mSoundFile>
+                    <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                    <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                    <regexCodeList>
+                        <string>^\[HP=(\d+)</string>
+                    </regexCodeList>
+                    <regexCodePropertyList>
+                        <integer>0</integer>
                     </regexCodePropertyList>
                 </Trigger>
             </TriggerGroup>
@@ -305,7 +339,7 @@ end
                     </regexCodePropertyList>
                 </Trigger>
                 <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                    <name>Stroll Slums</name>
+                    <name>auto Stroll Slums</name>
                     <script>if tonumber(matches[2]) &gt;= HP_autoEnter then
 	autoEnterTrigger = &quot;Stroll Slums&quot;
 	if current_room ~= 122 then 
@@ -632,13 +666,14 @@ end</script>
 -------------------------------------------------
 
 autoEnterTrigger = nil
+maxHP = 0
 
 function health(hp, direction)
 	if tonumber(hp) &lt;= HP_panic or tonumber(hp) &lt; 10 then
 		loopWalk_run = false 
 		if direction ~= nil then
 			send(direction..&quot;;rest&quot;)
-			disableEscapes()
+			disableRetreats()
 			disableTrigger(&quot;check health&quot;)
 			enableTrigger(&quot;panic&quot;)
 			if HP_panicHangup then
@@ -650,24 +685,22 @@ function health(hp, direction)
 		bg (&quot;black&quot;)
 	end
 
-	if direction ~= nil then --escape sequence enabled, battle instead of heal
-		if tonumber(hp) &lt; healthMinorBottom and tonumber(hp) &gt; healthPanic then
-			send(direction .. &quot;;rest&quot;)
-			disableEscapes()
-			if autoEnterTrigger ~= nil then
-				bg(&quot;DarkGreen&quot;)
-				echo(&quot;enabling &quot;..tostring(autoEnterTrigger))
-				bg(&quot;black&quot;)
-				enableTrigger(autoEnterTrigger)
-			end
-		end
-	else
-		if tonumber(hp) &lt;= healthMinorTop and tonumber(hp) &gt; healthMinorBottom then
-			send(&quot;cast mihe;rest&quot;)
-			disableTrigger(&quot;check health&quot;)
-			tempTimer(7, [[enableTrigger(&quot;check health&quot;)]])
+	if tonumber(hp) &lt; HP_retreat and tonumber(hp) &gt; HP_panic then
+		loopWalk_pause = true
+		if direction ~= nil then 	send(direction) end
+		send(&quot;rest&quot;)
+		disableRetreats()
+		enableTrigger(&quot;healing&quot;)
+		if autoEnterTrigger ~= nil then
+			bg(&quot;DarkGreen&quot;)
+			echo(&quot;Enabling &quot;..tostring(autoEnterTrigger))
+			bg(&quot;black&quot;)
+			enableTrigger(autoEnterTrigger)
 		end
 	end
+	
+	if hp &gt; maxHP then maxHP = hp end
+	setGauge(&quot;HP&quot;, hp, maxHP, hp..&quot;/&quot;..maxHP)
 end
 
 walkLoop_run = false --keep stepping through loop
@@ -687,11 +720,10 @@ function walkLoop(loop)
 	end
 end
 
-function disableEscapes()
-	disableTrigger(&quot;escape up&quot;)
-	disableTrigger(&quot;escape east&quot;)
-	disableTrigger(&quot;escape reverse&quot;)
-	enableTrigger(&quot;check health&quot;)
+function disableRetreats()
+	disableTrigger(&quot;retreat up&quot;)
+	disableTrigger(&quot;retreat east&quot;)
+	disableTrigger(&quot;retreat reverse&quot;)
 end</script>
                 <eventHandlerList/>
             </Script>
@@ -716,25 +748,28 @@ end</script>
 
 function enterNewHavenArena()
 	HP_panicHangup = false
-	disableTrigger(&quot;check health&quot;)
-	echo(&quot;check health enabled\n&quot;)
-	enableTrigger(&quot;escape up&quot;)
-	echo(&quot;escape up enabled\n&quot;)
 	disableTrigger(&quot;huntingHold&quot;)
 	enableTrigger(&quot;hunting&quot;)
 	echo(&quot;hunting enabled\n&quot;)
 	disableTrigger(&quot;auto enter NewHaven&quot;)
+	last_movement = &quot;d&quot;
 	send(&quot;d&quot;)
 end
 
 function strollSlums()
-	disableTrigger(&quot;check health&quot;)
-	echo(&quot;check health enabled\n&quot;)
-	enableTrigger(&quot;escape reverse&quot;)
-	echo(&quot;escape up enabled\n&quot;)
+	HP_panicHangup = true
+	enterCommon()
 	disableTrigger(&quot;SlumHold&quot;)
 	enableTrigger(&quot;SlumHunting&quot;)
 	echo(&quot;hunting enabled\n&quot;)
+end
+
+function enterCommon()
+	disableTrigger(&quot;healing&quot;)
+	disableTrigger(&quot;check health&quot;)
+	echo(&quot;check health disabled\n&quot;)
+	enableTrigger(&quot;escape reverse&quot;)
+	echo(&quot;escape enabled\n&quot;)
 end</script>
                     <eventHandlerList/>
                 </Script>
@@ -754,6 +789,7 @@ tablePreps = {
 
 tableAutoEnter = {
 	[&quot;newhaven&quot;] = &quot;auto enter NewHaven&quot;,
+	[&quot;slums&quot;] = &quot;auto Stroll Slums&quot;,
 }
 
 slumsLoop = { &quot;e&quot;,&quot;e&quot;,&quot;e&quot;,&quot;e&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot; }</script>
@@ -774,31 +810,43 @@ slumsLoop = { &quot;e&quot;,&quot;e&quot;,&quot;e&quot;,&quot;e&quot;,&quot;w&qu
                     <name>cleric</name>
                     <packageName></packageName>
                     <script>-------------------------------------------------
---         Put your Lua functions here.        --
---                                             --
--- Note that you can also use external Scripts --
+-- Definition of cleric specific variables.    --
 -------------------------------------------------
 
-healthPanic = 10
-healthMinorTop = 30
-healthMinorBottom = 20
-autoEnterHP = 31</script>
+--When should panic set in?
+HP_panic = 10
+--Should I hang up of panic?
+HP_panicHangup = true
+--When should I retreat from room?
+HP_retreat = 20
+--When should I start using health spells?
+HP_healthSpell = 25
+--Which health spells are available?
+HP_maheAvail = false
+HP_miheAvail = true
+--When can I automatically re-enter battle?
+HP_autoEnter = 35</script>
                     <eventHandlerList/>
                 </Script>
                 <Script isActive="yes" isFolder="no">
                     <name>paladin</name>
                     <packageName></packageName>
                     <script>-------------------------------------------------
---         Put your Lua functions here.        --
---                                             --
--- Note that you can also use external Scripts --
+-- Definition of paladin specific variables.   --
 -------------------------------------------------
 
-
+--When should panic set in?
 HP_panic = 10
+--Should I hang up of panic?
 HP_panicHangup = true
-healthMinorTop = 35
-healthMinorBottom = 25
+--When should I retreat from room?
+HP_retreat = 20
+--When should I start using health spells?
+HP_healthSpell = 25
+--Which health spells are available?
+HP_maheAvail = false
+HP_miheAvail = true
+--When can I automatically re-enter battle?
 HP_autoEnter = 35</script>
                     <eventHandlerList/>
                 </Script>
@@ -814,12 +862,17 @@ HP_autoEnter = 35</script>
 
 
 WindowWidth, WindowHeight = getMainWindowSize();
-createConsole(&quot;chat&quot;, 9, 50, 20, WindowWidth-365,0)
+createConsole(&quot;chat&quot;, 9, 57, 20, WindowWidth-415,0)
+createGauge(&quot;HP&quot;, 100, 25, WindowWidth-520, 0, &quot;HEALTH&quot;, &quot;green&quot;)
+
+local HBox = Geyser.HBox:new({name=&quot;HBox&quot;, x=WindowWidth-415, y=WindowHeight-400, width=400, height=400,})
+local mapper = Geyser.Mapper:new({name = &quot;mapper&quot;},HBox)
 
 function resizeEvent( event, x, y )
 	WindowWidth, WindowHeight = getMainWindowSize();
 	-- move chat window
-	moveWindow(&quot;chat&quot;,WindowWidth-365,0)
+	moveWindow(&quot;chat&quot;,WindowWidth-415,0)
+	HBox:move(WindowWidth-415,WindowHeight-400)
 end
 
 registerAnonymousEventHandler(&quot;sysWindowResizeEvent&quot;, &quot;resizeEvent&quot;)</script>
@@ -836,13 +889,19 @@ registerAnonymousEventHandler(&quot;sysWindowResizeEvent&quot;, &quot;resizeEven
 
 mudlet = mudlet or {}; mudlet.mapper_script = true
 
-last_movement = nil
-current_room = nil
-manual_map = false
-auto_map = false
-
-addMapEvent(&quot;I'm Here&quot;, &quot;setPlayerLoc&quot;)
 registerAnonymousEventHandler(&quot;setPlayerLoc&quot;, &quot;setPlayerLocation&quot;)
+--registerAnonymousEventHandler(&quot;sysLoadEvent&quot;, &quot;mapStartup&quot;)
+
+function onConnect()
+	last_movement = nil
+	current_room = nil
+	manual_map = false
+	auto_map = false
+
+	loadMap()
+	addMapEvent(&quot;I'm Here&quot;, &quot;setPlayerLoc&quot;)
+	echo(&quot;Default map loaded\n&quot;)
+end
 
 function setPlayerLocation(evet, list, rm)
 	setRoom(rm)
