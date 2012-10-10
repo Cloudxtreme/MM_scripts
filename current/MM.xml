@@ -292,7 +292,7 @@ disableTrigger(&quot;auto Stroll Slums&quot;)</script>
                         <integer>1</integer>
                     </regexCodePropertyList>
                 </Trigger>
-                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>huntHold</name>
                     <script>HuntHold()</script>
                     <triggerType>0</triggerType>
@@ -316,6 +316,7 @@ disableTrigger(&quot;auto Stroll Slums&quot;)</script>
             <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                 <name>Chat</name>
                 <script>selectCurrentLine()
+echo(&quot;chat&quot;,getTimestamp(getLineCount()))
 copy()
 appendBuffer(&quot;chat&quot;)</script>
                 <triggerType>0</triggerType>
@@ -440,13 +441,13 @@ enableTrigger(&quot;Name_Line&quot;)</script>
         </TriggerGroup>
     </TriggerPackage>
     <TimerPackage>
-        <Timer isActive="yes" isFolder="no" isTempTimer="no" isOffsetTimer="no">
+        <Timer isActive="no" isFolder="no" isTempTimer="no" isOffsetTimer="no">
             <name>Combat</name>
             <script>CombatTimer = true
 disableTimer(&quot;combat&quot;)</script>
             <command></command>
             <packageName></packageName>
-            <time>00:02:00.000</time>
+            <time>00:01:00.000</time>
         </Timer>
     </TimerPackage>
     <AliasPackage>
@@ -537,6 +538,7 @@ if prepedFor ~= nil then
 	retreatSequence = &quot;i&quot;
 	disableTimer(&quot;Combat&quot;)
 	CombatTimer = false
+	echo(prepedFor..&quot; unpreped\n&quot;)
 else
 	echo(&quot;Already unpreped\n&quot;)
 end</script>
@@ -639,7 +641,7 @@ function health(hp, direction)
 		if HP_panicHangup then
 			disconnect()
 		else
-			retreatSequence()
+			doRetreat()
 			enableTrigger(&quot;panic&quot;)
 		end
 		bg (&quot;red&quot;)
@@ -650,7 +652,7 @@ function health(hp, direction)
 	if tonumber(hp) &lt; HP_retreat and tonumber(hp) &gt; HP_panic then
 		echo(&quot;RETREAT!&quot;)
 		walkLoop_pause = true
-		retreatSequence()
+		doRetreat()
 		send(&quot;rest&quot;)
 		enableTrigger(&quot;healing&quot;)
 		if autoEnterTrigger ~= nil then
@@ -670,7 +672,7 @@ function health(hp, direction)
 	setGauge(&quot;HP&quot;, hp, maxHP, &quot;HP: &quot;..HP..&quot;/&quot;..maxHP)
 end
 
-function retreatSequence()
+function doRetreat()
 	if retreatSequence == &quot;i&quot; then 
 		send(inverseDirection(last_movement)) 
 		changeRoom(inverseDirection(last_movement))
@@ -752,7 +754,7 @@ function enterCommon()
 	disableTrigger(&quot;healing&quot;)
 	enableTrigger(&quot;check health&quot;)
 	echo(&quot;health enabled\n&quot;)
-	retreatSequence = i
+	retreatSequence = &quot;i&quot;
 	echo(&quot;retreat enabled\n&quot;)
 end
 
@@ -866,7 +868,7 @@ HP_panic = 15
 --Should I hang up of panic?
 HP_panicHangup = true
 --When should I retreat from room?
-HP_retreat = 20
+HP_retreat = 25
 --When should I start using health spells?
 HP_healthSpell = 20
 --Which health spells are available?
@@ -1057,6 +1059,15 @@ function describeRoom(room_id)
 	echo(&quot;Room &quot;..room_id..&quot; - &quot;..getRoomName(room_id)..&quot; in area &quot;..getRoomAreaName(getRoomArea(room_id))..&quot;\n&quot;)
 end
 
+function findRoom(room_name)
+	local room_list = searchRoom(room_name)
+	if table.size(room_list) == 1 then
+		for rid,rname in pairs(room_list) do describeRoom(rid) end
+	else
+		echo(&quot;Room not found\n&quot;)
+	end
+end
+
 function mapControl(inst)
 	if inst == &quot;save&quot; then saveMap() echo(&quot;default map saved\n&quot;)
 	elseif inst == &quot;load&quot; then loadMap() updateMap() echo(&quot;default map loaded\n&quot;)
@@ -1105,9 +1116,12 @@ function mapControl(inst)
 			if current_room ~= nil then setRoomName(current_room,rname) describeRoom(current_room)
 			else echo(&quot;I don't know where I am.\n&quot;) end
 		end
+	elseif inst:find(&quot;find&quot;) ~= nil then
+		if inst:find(&quot;room&quot;) ~= nil then findRoom(inst:sub(11,inst:len())) end
 	elseif inst:find(&quot;where am i&quot;) then
 		if current_room ~= nil then describeRoom(current_room)
 		else echo(&quot;I don't know where I am.\n&quot;) end
+	elseif inst:find(&quot;goto&quot;) ~= nil then goto(inst:sub(6,inst:len()))
 	elseif inst == &quot;manual on&quot; then manual_map = true auto_map = false echo(&quot;manual mapping enabled\n&quot;)
 	elseif inst == &quot;manual off&quot; then manual_map = false echo(&quot;manual mapping disabled\n&quot;)
 	elseif inst == &quot;auto on&quot; then auto_map = true manual_map = false echo(&quot;auto mapping enabled\n&quot;)
