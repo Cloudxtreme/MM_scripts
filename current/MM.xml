@@ -181,7 +181,7 @@ end</script>
                         <integer>0</integer>
                         <integer>0</integer>
                     </regexCodePropertyList>
-                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                    <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>newhavenHunt</name>
                         <script>Hunt(matches[1])</script>
                         <triggerType>0</triggerType>
@@ -292,7 +292,7 @@ disableTrigger(&quot;auto Stroll Slums&quot;)</script>
                         <integer>1</integer>
                     </regexCodePropertyList>
                 </Trigger>
-                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>huntHold</name>
                     <script>HuntHold()</script>
                     <triggerType>0</triggerType>
@@ -354,7 +354,7 @@ appendBuffer(&quot;chat&quot;)</script>
                 <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList/>
                 <regexCodePropertyList/>
-                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="yes">
+                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="yes">
                     <name>Name_Line</name>
                     <script>--handle list
 if matches[1]:findPattern(&quot;Quantity&quot;) ~= nil then
@@ -440,8 +440,8 @@ enableTrigger(&quot;Name_Line&quot;)</script>
         </TriggerGroup>
     </TriggerPackage>
     <TimerPackage>
-        <Timer isActive="no" isFolder="no" isTempTimer="no" isOffsetTimer="no">
-            <name>combat</name>
+        <Timer isActive="yes" isFolder="no" isTempTimer="no" isOffsetTimer="no">
+            <name>Combat</name>
             <script>CombatTimer = true
 disableTimer(&quot;combat&quot;)</script>
             <command></command>
@@ -504,6 +504,7 @@ end
 
 --enable correct auto enter
 enableTrigger(tableAutoEnter[matches[2]])
+prepedFor = matches[2]
 </script>
                     <command></command>
                     <packageName></packageName>
@@ -756,8 +757,6 @@ function enterCommon()
 end
 
 function HuntHold()
-	huntTrig = prepedFor..&quot;Hunt&quot;
-	echo(huntTrig)
 	CombatTimer = false
 	disableTimer(&quot;Combat&quot;)
 	disableTrigger(&quot;huntHold&quot;)
@@ -793,7 +792,7 @@ tablePreps = {
 }
 
 tableAutoEnter = {
-	[&quot;newhaven&quot;] = &quot;auto enter NewHaven&quot;,
+	[&quot;newhaven&quot;] = &quot;auto enter newhaven&quot;,
 	[&quot;slums&quot;] = &quot;auto Stroll Slums&quot;,
 }
 
@@ -863,7 +862,7 @@ HP_autoEnter = 35</script>
 -------------------------------------------------
 
 --When should panic set in?
-HP_panic = 10
+HP_panic = 15
 --Should I hang up of panic?
 HP_panicHangup = true
 --When should I retreat from room?
@@ -875,6 +874,28 @@ HP_maheAvail = false
 HP_miheAvail = false
 --When can I automatically re-enter battle?
 HP_autoEnter = 40</script>
+                    <eventHandlerList/>
+                </Script>
+                <Script isActive="no" isFolder="no">
+                    <name>Mystic</name>
+                    <packageName></packageName>
+                    <script>-------------------------------------------------
+-- Definition of mystci specific variables.   --
+-------------------------------------------------
+
+--When should panic set in?
+HP_panic = 15
+--Should I hang up of panic?
+HP_panicHangup = true
+--When should I retreat from room?
+HP_retreat = 20
+--When should I start using health spells?
+HP_healthSpell = 20
+--Which health spells are available?
+HP_maheAvail = false
+HP_miheAvail = false
+--When can I automatically re-enter battle?
+HP_autoEnter = 38</script>
                     <eventHandlerList/>
                 </Script>
             </ScriptGroup>
