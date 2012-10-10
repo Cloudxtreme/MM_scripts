@@ -56,86 +56,6 @@
                 <regexCodePropertyList>
                     <integer>0</integer>
                 </regexCodePropertyList>
-                <TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                    <name>Retreats</name>
-                    <script></script>
-                    <triggerType>0</triggerType>
-                    <conditonLineDelta>0</conditonLineDelta>
-                    <mStayOpen>0</mStayOpen>
-                    <mCommand></mCommand>
-                    <packageName></packageName>
-                    <mFgColor>#ff0000</mFgColor>
-                    <mBgColor>#ffff00</mBgColor>
-                    <mSoundFile></mSoundFile>
-                    <colorTriggerFgColor>#000000</colorTriggerFgColor>
-                    <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                    <regexCodeList/>
-                    <regexCodePropertyList/>
-                    <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                        <name>retreat up</name>
-                        <script>disableTrigger(&quot;check health&quot;)
-health(matches[2], &quot;u&quot;)
-</script>
-                        <triggerType>0</triggerType>
-                        <conditonLineDelta>0</conditonLineDelta>
-                        <mStayOpen>0</mStayOpen>
-                        <mCommand></mCommand>
-                        <packageName></packageName>
-                        <mFgColor>#ff0000</mFgColor>
-                        <mBgColor>#ffff00</mBgColor>
-                        <mSoundFile></mSoundFile>
-                        <colorTriggerFgColor>#000000</colorTriggerFgColor>
-                        <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                        <regexCodeList>
-                            <string>^\[HP=(\d+)</string>
-                        </regexCodeList>
-                        <regexCodePropertyList>
-                            <integer>1</integer>
-                        </regexCodePropertyList>
-                    </Trigger>
-                    <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                        <name>retreat east</name>
-                        <script>disableTrigger(&quot;check health&quot;)
-health(matches[2], &quot;e&quot;)</script>
-                        <triggerType>0</triggerType>
-                        <conditonLineDelta>0</conditonLineDelta>
-                        <mStayOpen>0</mStayOpen>
-                        <mCommand></mCommand>
-                        <packageName></packageName>
-                        <mFgColor>#ff0000</mFgColor>
-                        <mBgColor>#ffff00</mBgColor>
-                        <mSoundFile></mSoundFile>
-                        <colorTriggerFgColor>#000000</colorTriggerFgColor>
-                        <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                        <regexCodeList>
-                            <string>^\[HP=(\d+)</string>
-                        </regexCodeList>
-                        <regexCodePropertyList>
-                            <integer>1</integer>
-                        </regexCodePropertyList>
-                    </Trigger>
-                    <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                        <name>retreat reverse</name>
-                        <script>disableTrigger(&quot;check health&quot;)
-health(matches[2], inverseDirection(last_movement))</script>
-                        <triggerType>0</triggerType>
-                        <conditonLineDelta>0</conditonLineDelta>
-                        <mStayOpen>0</mStayOpen>
-                        <mCommand></mCommand>
-                        <packageName></packageName>
-                        <mFgColor>#ff0000</mFgColor>
-                        <mBgColor>#ffff00</mBgColor>
-                        <mSoundFile></mSoundFile>
-                        <colorTriggerFgColor>#000000</colorTriggerFgColor>
-                        <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                        <regexCodeList>
-                            <string>^\[HP=(\d+)</string>
-                        </regexCodeList>
-                        <regexCodePropertyList>
-                            <integer>1</integer>
-                        </regexCodePropertyList>
-                    </Trigger>
-                </TriggerGroup>
                 <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>check health</name>
                     <script>health(matches[2])</script>
@@ -241,7 +161,7 @@ end</script>
                 <regexCodeList/>
                 <regexCodePropertyList/>
                 <TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                    <name>New Haven</name>
+                    <name>Hunts</name>
                     <script></script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
@@ -255,22 +175,15 @@ end</script>
                     <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
                         <string>room</string>
-                        <string>Combat Off</string>
                         <string>you</string>
                     </regexCodeList>
                     <regexCodePropertyList>
                         <integer>0</integer>
                         <integer>0</integer>
-                        <integer>0</integer>
                     </regexCodePropertyList>
-                    <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                        <name>hunting</name>
-                        <script>target = matches[1]
-send(&quot;attack &quot; .. target)
-enableTrigger(&quot;huntingHold&quot;)
-disableTrigger(&quot;hunting&quot;)
-disableTrigger(&quot;Name_Line&quot;)
-disableTrigger(&quot;Exit_Line&quot;)</script>
+                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                        <name>newhavenHunt</name>
+                        <script>Hunt(matches[1])</script>
                         <triggerType>0</triggerType>
                         <conditonLineDelta>0</conditonLineDelta>
                         <mStayOpen>0</mStayOpen>
@@ -298,12 +211,9 @@ disableTrigger(&quot;Exit_Line&quot;)</script>
                             <integer>0</integer>
                         </regexCodePropertyList>
                     </Trigger>
-                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                        <name>huntingHold</name>
-                        <script>enableTrigger(&quot;hunting&quot;)
-disableTrigger(&quot;huntingHold&quot;)
-enableTrigger(&quot;Name_Line&quot;)
-</script>
+                    <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                        <name>slumHunt</name>
+                        <script>Hunt(matches[1])</script>
                         <triggerType>0</triggerType>
                         <conditonLineDelta>0</conditonLineDelta>
                         <mStayOpen>0</mStayOpen>
@@ -315,17 +225,21 @@ enableTrigger(&quot;Name_Line&quot;)
                         <colorTriggerFgColor>#000000</colorTriggerFgColor>
                         <colorTriggerBgColor>#000000</colorTriggerBgColor>
                         <regexCodeList>
-                            <string>Combat Off</string>
+                            <string>orc</string>
+                            <string>thug</string>
+                            <string>cultist</string>
                         </regexCodeList>
                         <regexCodePropertyList>
+                            <integer>0</integer>
+                            <integer>0</integer>
                             <integer>0</integer>
                         </regexCodePropertyList>
                     </Trigger>
                 </TriggerGroup>
                 <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                    <name>auto enter NewHaven</name>
+                    <name>auto enter newhaven</name>
                     <script>if tonumber(matches[2]) &gt;= HP_autoEnter then
-	autoEnterTrigger = &quot;auto enter NewHaven&quot;
+	autoEnterTrigger = &quot;auto enter newhaven&quot;
 	tablePreps[&quot;newhaven&quot;]()
 end
 	</script>
@@ -378,9 +292,9 @@ disableTrigger(&quot;auto Stroll Slums&quot;)</script>
                         <integer>1</integer>
                     </regexCodePropertyList>
                 </Trigger>
-                <TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                    <name>Slums</name>
-                    <script></script>
+                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                    <name>huntHold</name>
+                    <script>HuntHold()</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
                     <mStayOpen>0</mStayOpen>
@@ -392,70 +306,12 @@ disableTrigger(&quot;auto Stroll Slums&quot;)</script>
                     <colorTriggerFgColor>#000000</colorTriggerFgColor>
                     <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
-                        <string>you</string>
-                        <string>here</string>
                         <string>Combat Off</string>
-                        <string>room</string>
                     </regexCodeList>
                     <regexCodePropertyList>
                         <integer>0</integer>
-                        <integer>0</integer>
-                        <integer>0</integer>
-                        <integer>0</integer>
                     </regexCodePropertyList>
-                    <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                        <name>SlumHunting</name>
-                        <script>walkLoop_pause = true
-disableTrigger(&quot;Name_Line&quot;)
-disableTrigger(&quot;Exit_Line&quot;)
-disableTrigger(&quot;SlumHunting&quot;)
-enableTrigger(&quot;SlumHold&quot;)
-send(&quot;attack &quot; .. matches[1])</script>
-                        <triggerType>0</triggerType>
-                        <conditonLineDelta>0</conditonLineDelta>
-                        <mStayOpen>0</mStayOpen>
-                        <mCommand></mCommand>
-                        <packageName></packageName>
-                        <mFgColor>#ff0000</mFgColor>
-                        <mBgColor>#ffff00</mBgColor>
-                        <mSoundFile></mSoundFile>
-                        <colorTriggerFgColor>#000000</colorTriggerFgColor>
-                        <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                        <regexCodeList>
-                            <string>orc</string>
-                            <string>thug</string>
-                            <string>cultist</string>
-                        </regexCodeList>
-                        <regexCodePropertyList>
-                            <integer>0</integer>
-                            <integer>0</integer>
-                            <integer>0</integer>
-                        </regexCodePropertyList>
-                    </Trigger>
-                    <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                        <name>SlumHold</name>
-                        <script>disableTrigger(&quot;SlumHold&quot;)
-enableTrigger(&quot;SlumHunting&quot;)
-enableTrigger(&quot;Name_Line&quot;)
-walkLoop_pause = false</script>
-                        <triggerType>0</triggerType>
-                        <conditonLineDelta>0</conditonLineDelta>
-                        <mStayOpen>0</mStayOpen>
-                        <mCommand></mCommand>
-                        <packageName></packageName>
-                        <mFgColor>#ff0000</mFgColor>
-                        <mBgColor>#ffff00</mBgColor>
-                        <mSoundFile></mSoundFile>
-                        <colorTriggerFgColor>#000000</colorTriggerFgColor>
-                        <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                        <regexCodeList>
-                            <string>Combat Off</string>
-                        </regexCodeList>
-                        <regexCodePropertyList>
-                            <integer>0</integer>
-                        </regexCodePropertyList>
-                    </Trigger>
-                </TriggerGroup>
+                </Trigger>
             </TriggerGroup>
             <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                 <name>Chat</name>
@@ -498,7 +354,7 @@ appendBuffer(&quot;chat&quot;)</script>
                 <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList/>
                 <regexCodePropertyList/>
-                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="yes">
+                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="yes">
                     <name>Name_Line</name>
                     <script>--handle list
 if matches[1]:findPattern(&quot;Quantity&quot;) ~= nil then
@@ -560,9 +416,39 @@ enableTrigger(&quot;Name_Line&quot;)</script>
                     </regexCodePropertyList>
                 </Trigger>
             </TriggerGroup>
+            <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <name>Experience</name>
+                <script>setGauge(&quot;EXP&quot;,tonumber(matches[2]),tonumber(matches[5]),&quot;Exp &quot;..matches[2]..&quot;/&quot;..matches[5])
+</script>
+                <triggerType>0</triggerType>
+                <conditonLineDelta>0</conditonLineDelta>
+                <mStayOpen>0</mStayOpen>
+                <mCommand></mCommand>
+                <packageName></packageName>
+                <mFgColor>#ff0000</mFgColor>
+                <mBgColor>#ffff00</mBgColor>
+                <mSoundFile></mSoundFile>
+                <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                <regexCodeList>
+                    <string>Exp:\s(\d+) Level: (\d+) Exp needed for next level: (\d+) \((\d+)\) </string>
+                </regexCodeList>
+                <regexCodePropertyList>
+                    <integer>1</integer>
+                </regexCodePropertyList>
+            </Trigger>
         </TriggerGroup>
     </TriggerPackage>
-    <TimerPackage/>
+    <TimerPackage>
+        <Timer isActive="no" isFolder="no" isTempTimer="no" isOffsetTimer="no">
+            <name>combat</name>
+            <script>CombatTimer = true
+disableTimer(&quot;combat&quot;)</script>
+            <command></command>
+            <packageName></packageName>
+            <time>00:02:00.000</time>
+        </Timer>
+    </TimerPackage>
     <AliasPackage>
         <AliasGroup isActive="yes" isFolder="yes">
             <name>MajorMud</name>
@@ -578,9 +464,9 @@ enableTrigger(&quot;Name_Line&quot;)</script>
                 <regex>^stats$</regex>
             </Alias>
             <Alias isActive="yes" isFolder="no">
-                <name>Disable Direction Escapes</name>
-                <script>disableRetreats()
-enableTrigger(&quot;check health&quot;)</script>
+                <name>Disable Direction Retreats</name>
+                <script>retreatSequence = nil
+</script>
                 <command></command>
                 <packageName></packageName>
                 <regex>^disable retreats$</regex>
@@ -601,7 +487,9 @@ enableTrigger(trigName)</script>
                 <regex></regex>
                 <Alias isActive="yes" isFolder="no">
                     <name>Prep For Town Arena</name>
-                    <script>tablePreps[matches[2]]()</script>
+                    <script>prepedFor = matches[2]
+tablePreps[matches[2]]()
+echo(&quot;Prepared for &quot;..matches[2]..&quot;\n&quot;)</script>
                     <command></command>
                     <packageName></packageName>
                     <regex>^prep (.*)$</regex>
@@ -630,6 +518,30 @@ autoEnterTrigger = nil
                     <command></command>
                     <packageName></packageName>
                     <regex>^disable auto enter$</regex>
+                </Alias>
+                <Alias isActive="yes" isFolder="no">
+                    <name>UnPrep for Town Area</name>
+                    <script>if autoEnterTrigger ~= nil then
+	echo(tostring(autoEnterTrigger)..&quot; disabled&quot;)
+	disableTrigger(autoEnterTrigger)
+	autoEnterTrigger = nil
+else
+	echo(&quot;Auto enter already disabled\n&quot;)
+end
+
+if prepedFor ~= nil then
+	disableTrigger(prepedFor..&quot;Hunt&quot;)
+	disableTrigger(&quot;huntHold&quot;)
+	prepedFor = nil
+	retreatSequence = &quot;i&quot;
+	disableTimer(&quot;Combat&quot;)
+	CombatTimer = false
+else
+	echo(&quot;Already unpreped\n&quot;)
+end</script>
+                    <command></command>
+                    <packageName></packageName>
+                    <regex>^unprep$</regex>
                 </Alias>
             </AliasGroup>
             <AliasGroup isActive="yes" isFolder="yes">
@@ -717,19 +629,17 @@ end
 
 autoEnterTrigger = nil
 maxHP = 0
+prepedFor = nil
+retreatSequence = &quot;i&quot;
 
 function health(hp, direction)
 	if tonumber(hp) &lt;= HP_panic or tonumber(hp) &lt; 10 then
-		walkLoop_run = false 
-		if direction ~= nil then
-			send(direction..&quot;;rest&quot;)
-			changeRoom(direction)
-			disableRetreats()
-			disableTrigger(&quot;check health&quot;)
+		walkLoop_run = false
+		if HP_panicHangup then
+			disconnect()
+		else
+			retreatSequence()
 			enableTrigger(&quot;panic&quot;)
-			if HP_panicHangup then
-				disconnect()
-			end
 		end
 		bg (&quot;red&quot;)
 		echo (&quot;PANIC!&quot;)
@@ -739,9 +649,8 @@ function health(hp, direction)
 	if tonumber(hp) &lt; HP_retreat and tonumber(hp) &gt; HP_panic then
 		echo(&quot;RETREAT!&quot;)
 		walkLoop_pause = true
-		if direction ~= nil then 	send(direction) changeRoom(direction) end
+		retreatSequence()
 		send(&quot;rest&quot;)
-		disableRetreats()
 		enableTrigger(&quot;healing&quot;)
 		if autoEnterTrigger ~= nil then
 			bg(&quot;DarkGreen&quot;)
@@ -751,9 +660,28 @@ function health(hp, direction)
 		end
 	end
 	
+	if CombatTimer then 
+		HuntHold() 
+	end
+
 	if tonumber(hp) &gt; maxHP then maxHP = tonumber(hp) end
 	HP = tonumber(hp)
 	setGauge(&quot;HP&quot;, hp, maxHP, &quot;HP: &quot;..HP..&quot;/&quot;..maxHP)
+end
+
+function retreatSequence()
+	if retreatSequence == &quot;i&quot; then 
+		send(inverseDirection(last_movement)) 
+		changeRoom(inverseDirection(last_movement))
+	elseif retreatSequence ~= nil then
+		send(retreatSequence)
+		local retreats = split(retreatSequence,&quot;;&quot;)
+		for k,v in pairs(retreats) do
+			changeRoom(v)
+		end  
+	end
+	retreatSequence = &quot;i&quot;
+	disableTrigger(&quot;check health&quot;)
 end
 
 walkLoop_run = false --keep stepping through loop
@@ -775,12 +703,6 @@ function walkLoop(loop)
 	else
 		enableTrigger(&quot;Name_Line&quot;)
 	end
-end
-
-function disableRetreats()
-	disableTrigger(&quot;retreat up&quot;)
-	disableTrigger(&quot;retreat east&quot;)
-	disableTrigger(&quot;retreat reverse&quot;)
 end</script>
                 <eventHandlerList/>
             </Script>
@@ -795,7 +717,7 @@ end</script>
 </script>
                 <eventHandlerList/>
                 <Script isActive="yes" isFolder="no">
-                    <name>Enter</name>
+                    <name>Towns</name>
                     <packageName></packageName>
                     <script>-------------------------------------------------
 --         Put your Lua functions here.        --
@@ -805,10 +727,8 @@ end</script>
 
 function enterNewHavenArena()
 	HP_panicHangup = false
-	disableTrigger(&quot;huntingHold&quot;)
-	enableTrigger(&quot;hunting&quot;)
-	echo(&quot;hunting enabled\n&quot;)
-	disableTrigger(&quot;auto enter NewHaven&quot;)
+	enterCommon()
+	disableTrigger(&quot;auto enter newhaven&quot;)
 	last_movement = &quot;d&quot;
 	send(&quot;d&quot;)
 end
@@ -816,8 +736,6 @@ end
 function strollSlums()
 	HP_panicHangup = true
 	enterCommon()
-	disableTrigger(&quot;SlumHold&quot;)
-	enableTrigger(&quot;SlumHunting&quot;)
 	echo(&quot;hunting enabled\n&quot;)
 end
 
@@ -827,11 +745,36 @@ function disableSlums()
 end
 
 function enterCommon()
+	disableTrigger(&quot;huntHold&quot;)
+	enableTrigger(prepedFor..&quot;Hunt&quot;)
+	echo(&quot;hunting enabled\n&quot;)
 	disableTrigger(&quot;healing&quot;)
-	disableTrigger(&quot;check health&quot;)
-	echo(&quot;check health disabled\n&quot;)
-	enableTrigger(&quot;retreat reverse&quot;)
+	enableTrigger(&quot;check health&quot;)
+	echo(&quot;health enabled\n&quot;)
+	retreatSequence = i
 	echo(&quot;retreat enabled\n&quot;)
+end
+
+function HuntHold()
+	huntTrig = prepedFor..&quot;Hunt&quot;
+	echo(huntTrig)
+	CombatTimer = false
+	disableTimer(&quot;Combat&quot;)
+	disableTrigger(&quot;huntHold&quot;)
+	enableTrigger(prepedFor..&quot;Hunt&quot;)
+	enableTrigger(&quot;Name_Line&quot;)
+	walkLoop_pause = false
+end
+
+function Hunt(monster)
+	walkLoop_pause = true
+	disableTrigger(&quot;Name_Line&quot;)
+	disableTrigger(&quot;Exit_Line&quot;)
+	disableTrigger(prepedFor..&quot;Hunt&quot;)
+	enableTrigger(&quot;huntHold&quot;)
+	send(&quot;attack &quot; .. monster)
+	CombatTimer = false
+	enableTimer(&quot;Combat&quot;)
 end</script>
                     <eventHandlerList/>
                 </Script>
@@ -947,7 +890,8 @@ HP_autoEnter = 40</script>
 
 WindowWidth, WindowHeight = getMainWindowSize();
 createConsole(&quot;chat&quot;, 9, 57, 20, WindowWidth-415,0)
-createGauge(&quot;HP&quot;, 100, 25, WindowWidth-520, 0, &quot;HEALTH&quot;, &quot;green&quot;)
+createGauge(&quot;HP&quot;, 100, 25, WindowWidth-520, 0, &quot;HEALTH&quot;, &quot;dark_green&quot;)
+createGauge(&quot;EXP&quot;, 100, 25, WindowWidth-520, 25, &quot;EXP&quot;, &quot;PaleTurquoise&quot;)
 
 local HBox = Geyser.HBox:new({name=&quot;HBox&quot;, x=WindowWidth-415, y=WindowHeight-400, width=400, height=400,})
 local mapper = Geyser.Mapper:new({name = &quot;mapper&quot;},HBox)
@@ -959,6 +903,8 @@ function resizeEvent( event, x, y )
 	if WindowHeight-400 &lt; 200 then resizeWindow(&quot;chat&quot;,400,WindowHeight-400) end
 	
 	moveWindow(&quot;HP&quot;,WindowWidth-520,0)
+	moveWindow(&quot;EXP&quot;,WindowWidth-520,25)
+
 	HBox:move(WindowWidth-415,WindowHeight-400)
 end
 
