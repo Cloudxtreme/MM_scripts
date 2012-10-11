@@ -237,7 +237,7 @@ end</script>
                             <integer>0</integer>
                         </regexCodePropertyList>
                     </Trigger>
-                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                    <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>bearHunt</name>
                         <script>Hunt(&quot;bear&quot;)</script>
                         <triggerType>0</triggerType>
@@ -397,17 +397,10 @@ if matches[1]:findPattern(&quot;%d&quot;) ~= nil or matches[1]:find(&quot;You&qu
 
 disableTrigger(&quot;Name_Line&quot;)
 enableTrigger(&quot;Exit_Line&quot;)
-loc = split(matches[1],&quot;,&quot;)
-land = string.trim(loc[0])
-room = string.trim(loc[1])
 
 if manual_map then return end
 
---if table.size(loc) == 0 then
-	enteredRoom(matches[1],nil)
---else
---	enteredRoom(room,land)
---end</script>
+enteredRoom(matches[1],nil)</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>1</conditonLineDelta>
                     <mStayOpen>0</mStayOpen>
@@ -468,10 +461,9 @@ enableTrigger(&quot;Name_Line&quot;)</script>
                     <integer>1</integer>
                 </regexCodePropertyList>
             </Trigger>
-            <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="no">
+            <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="no">
                 <name>Damage</name>
                 <script>damage = damage + tonumber(matches[2])
-echo(damage)
 echo(&quot;DAMAGE&quot;,&quot;DAMAGE: &quot;..damage)</script>
                 <triggerType>0</triggerType>
                 <conditonLineDelta>0</conditonLineDelta>
@@ -682,17 +674,15 @@ end
 -- Note that you can also use external Scripts --
 -------------------------------------------------
 
-autoEnterTrigger = nil
 maxHP = 0
-prepedFor = nil
-retreatSequence = &quot;i&quot;
 
 registerAnonymousEventHandler(&quot;sysLoadEvent&quot;, &quot;Startup&quot;)
 
 function Startup()
 	UIStartup()
 	mapStartup()
-	
+	setTownGlobals()
+
 	enableTrigger(&quot;check health&quot;)
 end
 
@@ -782,16 +772,13 @@ end</script>
 </script>
                 <eventHandlerList/>
                 <Script isActive="yes" isFolder="no">
-                    <name>Towns</name>
+                    <name>Routines</name>
                     <packageName></packageName>
                     <script>-------------------------------------------------
 --         Put your Lua functions here.        --
 --                                             --
 -- Note that you can also use external Scripts --
 -------------------------------------------------
-
-CombatTimer = false
-ignoreTimer = false
 
 function enterNewHavenArena()
 	HP_panicHangup = false
@@ -872,7 +859,7 @@ end</script>
                     <eventHandlerList/>
                 </Script>
                 <Script isActive="yes" isFolder="no">
-                    <name>Tables</name>
+                    <name>Variables</name>
                     <packageName></packageName>
                     <script>-------------------------------------------------
 --         Put your Lua functions here.        --
@@ -880,18 +867,26 @@ end</script>
 -- Note that you can also use external Scripts --
 -------------------------------------------------
 
-tablePreps = {
-	[&quot;newhaven&quot;] = function (x) enterNewHavenArena() end,
-	[&quot;slums&quot;] = function (x) strollSlums() end,
-	[&quot;bear&quot;] = function (x) enterBearCavern() end,
-}
+function setTownGlobals()
+	CombatTimer = false
+	ignoreTimer = false
+	autoEnterTrigger = nil
+	prepedFor = nil
+	retreatSequence = &quot;i&quot;
 
-tableAutoEnter = {
-	[&quot;newhaven&quot;] = &quot;auto enter newhaven&quot;,
-	[&quot;slums&quot;] = &quot;auto Stroll Slums&quot;,
-}
+	tablePreps = {
+		[&quot;newhaven&quot;] = function (x) enterNewHavenArena() end,
+		[&quot;slums&quot;] = function (x) strollSlums() end,
+		[&quot;bear&quot;] = function (x) enterBearCavern() end,
+	}
 
-slumsLoop = { &quot;s&quot;,&quot;s&quot;,&quot;e&quot;,&quot;e&quot;,&quot;e&quot;,&quot;e&quot;,&quot;n&quot;,&quot;n&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot; }</script>
+	tableAutoEnter = {
+		[&quot;newhaven&quot;] = &quot;auto enter newhaven&quot;,
+		[&quot;slums&quot;] = &quot;auto Stroll Slums&quot;,
+	}
+
+	slumsLoop = { &quot;s&quot;,&quot;s&quot;,&quot;e&quot;,&quot;e&quot;,&quot;e&quot;,&quot;e&quot;,&quot;n&quot;,&quot;n&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot; }
+end</script>
                     <eventHandlerList/>
                 </Script>
             </ScriptGroup>
@@ -1012,7 +1007,7 @@ function UIStartup()
 	setBackgroundColor(&quot;DAMAGE&quot;,254,186,173,255)
 	hideWindow(&quot;DAMAGE&quot;)
 
-	local HBox = Geyser.HBox:new({name=&quot;HBox&quot;, x=WindowWidth-415, y=WindowHeight-400, width=400, height=400,})
+	HBox = Geyser.HBox:new({name=&quot;HBox&quot;, x=WindowWidth-415, y=WindowHeight-400, width=400, height=400,})
 	local mapper = Geyser.Mapper:new({name = &quot;mapper&quot;},HBox)
 end
 
@@ -1290,9 +1285,9 @@ function findAreaID(areaname)
 end
 
 function split(str,c)
-	aCount = 0
-	array = {}
-	a = string.find(str, c)
+	local aCount = 0
+	local array = {}
+	local a = string.find(str, c)
 
 	while a do
 		array[aCount] = string.sub(str, 1, a - 1)
