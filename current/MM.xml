@@ -118,7 +118,7 @@ if tonumber(hp) &gt;= HP_healthSpell and tonumber(hp) &lt; HP_autoEnter then
 		send(&quot;rest&quot;)
 	end
 	disableTrigger(&quot;healing&quot;)
-	tempTimer(7, [[enableTrigger(&quot;check health&quot;)]])
+	tempTimer(7, [[enableTrigger(&quot;healing&quot;)]])
 	echo(&quot;Healing until &quot;..HP_autoEnter..&quot;\n&quot;)
 else
 	if tonumber(hp) &gt; HP_autoEnter then
@@ -292,7 +292,7 @@ disableTrigger(&quot;auto Stroll Slums&quot;)</script>
                         <integer>1</integer>
                     </regexCodePropertyList>
                 </Trigger>
-                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>huntHold</name>
                     <script>HuntHold()</script>
                     <triggerType>0</triggerType>
@@ -333,8 +333,10 @@ appendBuffer(&quot;chat&quot;)</script>
                     <string>say</string>
                     <string>gossip</string>
                     <string>whisper</string>
+                    <string>telepaths</string>
                 </regexCodeList>
                 <regexCodePropertyList>
+                    <integer>0</integer>
                     <integer>0</integer>
                     <integer>0</integer>
                     <integer>0</integer>
@@ -441,7 +443,7 @@ enableTrigger(&quot;Name_Line&quot;)</script>
         </TriggerGroup>
     </TriggerPackage>
     <TimerPackage>
-        <Timer isActive="no" isFolder="no" isTempTimer="no" isOffsetTimer="no">
+        <Timer isActive="yes" isFolder="no" isTempTimer="no" isOffsetTimer="no">
             <name>Combat</name>
             <script>CombatTimer = true
 disableTimer(&quot;combat&quot;)</script>
@@ -488,7 +490,9 @@ enableTrigger(trigName)</script>
                 <regex></regex>
                 <Alias isActive="yes" isFolder="no">
                     <name>Prep For Town Arena</name>
-                    <script>prepedFor = matches[2]
+                    <script>if current_room == nil then echo(&quot;I don't know where I am.\n&quot;) return end
+
+prepedFor = matches[2]
 tablePreps[matches[2]]()
 echo(&quot;Prepared for &quot;..matches[2]..&quot;\n&quot;)</script>
                     <command></command>
@@ -497,7 +501,9 @@ echo(&quot;Prepared for &quot;..matches[2]..&quot;\n&quot;)</script>
                 </Alias>
                 <Alias isActive="yes" isFolder="no">
                     <name>Auto Enter Arena</name>
-                    <script>--disable any existing auto enters
+                    <script>if current_room == nil then echo(&quot;I don't know where I am.\n&quot;) return end
+
+--disable any existing auto enters
 autoEnterTrigger = nil
 for key,value in pairs(tableAutoEnter) do
 	disableTrigger(value)
@@ -524,7 +530,7 @@ autoEnterTrigger = nil
                 <Alias isActive="yes" isFolder="no">
                     <name>UnPrep for Town Area</name>
                     <script>if autoEnterTrigger ~= nil then
-	echo(tostring(autoEnterTrigger)..&quot; disabled&quot;)
+	echo(tostring(autoEnterTrigger)..&quot; disabled\n&quot;)
 	disableTrigger(autoEnterTrigger)
 	autoEnterTrigger = nil
 else
@@ -534,11 +540,11 @@ end
 if prepedFor ~= nil then
 	disableTrigger(prepedFor..&quot;Hunt&quot;)
 	disableTrigger(&quot;huntHold&quot;)
+	echo(prepedFor..&quot; unpreped\n&quot;)
 	prepedFor = nil
 	retreatSequence = &quot;i&quot;
 	disableTimer(&quot;Combat&quot;)
 	CombatTimer = false
-	echo(prepedFor..&quot; unpreped\n&quot;)
 else
 	echo(&quot;Already unpreped\n&quot;)
 end</script>
@@ -923,7 +929,7 @@ function resizeEvent( event, x, y )
 	WindowWidth, WindowHeight = getMainWindowSize();
 	-- move chat window
 	moveWindow(&quot;chat&quot;,WindowWidth-415,0)
-	if WindowHeight-400 &lt; 200 then resizeWindow(&quot;chat&quot;,400,WindowHeight-400) end
+	if WindowHeight-400 &lt; 300 then resizeWindow(&quot;chat&quot;,400,WindowHeight-400) else resizeWindow(&quot;chat&quot;,400,300) end
 	
 	moveWindow(&quot;HP&quot;,WindowWidth-520,0)
 	moveWindow(&quot;EXP&quot;,WindowWidth-520,25)
