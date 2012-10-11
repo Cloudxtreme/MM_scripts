@@ -124,7 +124,7 @@ else
 	if tonumber(hp) &gt; HP_autoEnter then
 		disableTrigger(&quot;healing&quot;)
 		enableTrigger(&quot;check health&quot;)
-		checkHealth(hp)
+		health(hp)
 	end
 end</script>
                     <triggerType>0</triggerType>
@@ -176,8 +176,10 @@ end</script>
                     <regexCodeList>
                         <string>room</string>
                         <string>you</string>
+                        <string>here</string>
                     </regexCodeList>
                     <regexCodePropertyList>
+                        <integer>0</integer>
                         <integer>0</integer>
                         <integer>0</integer>
                     </regexCodePropertyList>
@@ -235,12 +237,37 @@ end</script>
                             <integer>0</integer>
                         </regexCodePropertyList>
                     </Trigger>
+                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                        <name>bearHunt</name>
+                        <script>Hunt(&quot;bear&quot;)</script>
+                        <triggerType>0</triggerType>
+                        <conditonLineDelta>0</conditonLineDelta>
+                        <mStayOpen>0</mStayOpen>
+                        <mCommand></mCommand>
+                        <packageName></packageName>
+                        <mFgColor>#ff0000</mFgColor>
+                        <mBgColor>#ffff00</mBgColor>
+                        <mSoundFile></mSoundFile>
+                        <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                        <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                        <regexCodeList>
+                            <string>bear</string>
+                        </regexCodeList>
+                        <regexCodePropertyList>
+                            <integer>0</integer>
+                        </regexCodePropertyList>
+                    </Trigger>
                 </TriggerGroup>
                 <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>auto enter newhaven</name>
                     <script>if tonumber(matches[2]) &gt;= HP_autoEnter then
-	autoEnterTrigger = &quot;auto enter newhaven&quot;
-	tablePreps[&quot;newhaven&quot;]()
+	if current_room ~= 9 then
+		echo(&quot;Must be above NewHaven arena\n&quot;)
+	else
+		autoEnterTrigger = &quot;auto enter newhaven&quot;
+		tablePreps[&quot;newhaven&quot;]()
+		disableTrigger(&quot;auto enter newhaven&quot;)
+	end
 end
 	</script>
                     <triggerType>0</triggerType>
@@ -263,8 +290,8 @@ end
                 <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>auto Stroll Slums</name>
                     <script>if tonumber(matches[2]) &gt;= HP_autoEnter then
-	autoEnterTrigger = &quot;Stroll Slums&quot;
-	if current_room ~= 289 then 
+	if current_room ~= 289 then
+		autoEnterTrigger = &quot;Stroll Slums&quot; 
 		echo(&quot;Loop must start at Slum Street Crossroads\nLoop will be unpaused\n&quot;) 
 		walkLoop_pause = false
 	else
@@ -273,8 +300,8 @@ end
 		walkLoop_pause = false
 		walkLoop(slumsLoop)
 	end
-end
-disableTrigger(&quot;auto Stroll Slums&quot;)</script>
+	disableTrigger(&quot;auto Stroll Slums&quot;)
+end</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
                     <mStayOpen>0</mStayOpen>
@@ -292,9 +319,10 @@ disableTrigger(&quot;auto Stroll Slums&quot;)</script>
                         <integer>1</integer>
                     </regexCodePropertyList>
                 </Trigger>
-                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>huntHold</name>
-                    <script>HuntHold()</script>
+                    <script>HuntHold()
+damage = 0</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
                     <mStayOpen>0</mStayOpen>
@@ -357,7 +385,7 @@ appendBuffer(&quot;chat&quot;)</script>
                 <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList/>
                 <regexCodePropertyList/>
-                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="yes">
+                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="yes">
                     <name>Name_Line</name>
                     <script>--handle list
 if matches[1]:findPattern(&quot;Quantity&quot;) ~= nil then
@@ -440,10 +468,32 @@ enableTrigger(&quot;Name_Line&quot;)</script>
                     <integer>1</integer>
                 </regexCodePropertyList>
             </Trigger>
+            <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="no">
+                <name>Damage</name>
+                <script>damage = damage + tonumber(matches[2])
+echo(damage)
+echo(&quot;DAMAGE&quot;,&quot;DAMAGE: &quot;..damage)</script>
+                <triggerType>0</triggerType>
+                <conditonLineDelta>0</conditonLineDelta>
+                <mStayOpen>0</mStayOpen>
+                <mCommand></mCommand>
+                <packageName></packageName>
+                <mFgColor>#ff0000</mFgColor>
+                <mBgColor>#ffff00</mBgColor>
+                <mSoundFile></mSoundFile>
+                <colorTriggerFgColor>#800000</colorTriggerFgColor>
+                <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                <regexCodeList>
+                    <string>You\s.*\s(\d+)\s.*damage\!$</string>
+                </regexCodeList>
+                <regexCodePropertyList>
+                    <integer>1</integer>
+                </regexCodePropertyList>
+            </Trigger>
         </TriggerGroup>
     </TriggerPackage>
     <TimerPackage>
-        <Timer isActive="yes" isFolder="no" isTempTimer="no" isOffsetTimer="no">
+        <Timer isActive="no" isFolder="no" isTempTimer="no" isOffsetTimer="no">
             <name>Combat</name>
             <script>CombatTimer = true
 disableTimer(&quot;combat&quot;)</script>
@@ -492,6 +542,8 @@ enableTrigger(trigName)</script>
                     <name>Prep For Town Arena</name>
                     <script>if current_room == nil then echo(&quot;I don't know where I am.\n&quot;) return end
 
+if prepedFor ~= nil then unPrep() end
+
 prepedFor = matches[2]
 tablePreps[matches[2]]()
 echo(&quot;Prepared for &quot;..matches[2]..&quot;\n&quot;)</script>
@@ -538,13 +590,7 @@ else
 end
 
 if prepedFor ~= nil then
-	disableTrigger(prepedFor..&quot;Hunt&quot;)
-	disableTrigger(&quot;huntHold&quot;)
-	echo(prepedFor..&quot; unpreped\n&quot;)
-	prepedFor = nil
-	retreatSequence = &quot;i&quot;
-	disableTimer(&quot;Combat&quot;)
-	CombatTimer = false
+	unPrep()
 else
 	echo(&quot;Already unpreped\n&quot;)
 end</script>
@@ -641,6 +687,15 @@ maxHP = 0
 prepedFor = nil
 retreatSequence = &quot;i&quot;
 
+registerAnonymousEventHandler(&quot;sysLoadEvent&quot;, &quot;Startup&quot;)
+
+function Startup()
+	UIStartup()
+	mapStartup()
+	
+	enableTrigger(&quot;check health&quot;)
+end
+
 function health(hp, direction)
 	if tonumber(hp) &lt;= HP_panic or tonumber(hp) &lt; 10 then
 		walkLoop_run = false
@@ -669,7 +724,8 @@ function health(hp, direction)
 		end
 	end
 	
-	if CombatTimer then 
+	if CombatTimer then
+		echo(&quot;Combat Timer expired\n&quot;) 
 		HuntHold() 
 	end
 
@@ -734,12 +790,27 @@ end</script>
 -- Note that you can also use external Scripts --
 -------------------------------------------------
 
+CombatTimer = false
+ignoreTimer = false
+
 function enterNewHavenArena()
 	HP_panicHangup = false
 	enterCommon()
 	disableTrigger(&quot;auto enter newhaven&quot;)
 	last_movement = &quot;d&quot;
-	send(&quot;d&quot;)
+	send(last_movement)
+	changeRoom(last_movement)
+end
+
+function enterBearCavern()
+	HP_panicHangup = false
+	enterCommon()
+	retreatSequence = &quot;s;s;u&quot;
+	send(&quot;d;n;n&quot;)
+	changeRoom(&quot;d&quot;)
+	changeRoom(&quot;n&quot;)
+	changeRoom(&quot;n&quot;)
+	ignoreTimer = true
 end
 
 function strollSlums()
@@ -764,6 +835,17 @@ function enterCommon()
 	echo(&quot;retreat enabled\n&quot;)
 end
 
+function unPrep()
+	disableTrigger(prepedFor..&quot;Hunt&quot;)
+	disableTrigger(&quot;huntHold&quot;)
+	echo(prepedFor..&quot; unpreped\n&quot;)
+	prepedFor = nil
+	retreatSequence = &quot;i&quot;
+	disableTimer(&quot;Combat&quot;)
+	CombatTimer = false
+	ignoreTimer = false
+end
+
 function HuntHold()
 	CombatTimer = false
 	disableTimer(&quot;Combat&quot;)
@@ -771,6 +853,7 @@ function HuntHold()
 	enableTrigger(prepedFor..&quot;Hunt&quot;)
 	enableTrigger(&quot;Name_Line&quot;)
 	walkLoop_pause = false
+	hideWindow(&quot;DAMAGE&quot;)
 end
 
 function Hunt(monster)
@@ -781,7 +864,10 @@ function Hunt(monster)
 	enableTrigger(&quot;huntHold&quot;)
 	send(&quot;attack &quot; .. monster)
 	CombatTimer = false
-	enableTimer(&quot;Combat&quot;)
+	if not ignoreTimer then enableTimer(&quot;Combat&quot;) end
+	showWindow(&quot;DAMAGE&quot;)
+	damage = 0
+	echo(&quot;DAMAGE&quot;,&quot;DAMAGE: &quot;..damage)
 end</script>
                     <eventHandlerList/>
                 </Script>
@@ -797,6 +883,7 @@ end</script>
 tablePreps = {
 	[&quot;newhaven&quot;] = function (x) enterNewHavenArena() end,
 	[&quot;slums&quot;] = function (x) strollSlums() end,
+	[&quot;bear&quot;] = function (x) enterBearCavern() end,
 }
 
 tableAutoEnter = {
@@ -916,14 +1003,18 @@ HP_autoEnter = 38</script>
 -- Note that you can also use external Scripts --
 -------------------------------------------------
 
+function UIStartup()
+	WindowWidth, WindowHeight = getMainWindowSize();
+	createConsole(&quot;chat&quot;, 9, 57, 20, WindowWidth-415,0)
+	createGauge(&quot;HP&quot;, 100, 25, WindowWidth-520, 0, &quot;HEALTH&quot;, &quot;dark_green&quot;)
+	createGauge(&quot;EXP&quot;, 100, 25, WindowWidth-520, 25, &quot;EXP&quot;, &quot;PaleTurquoise&quot;)
+	createLabel(&quot;DAMAGE&quot;, WindowWidth-520, 50, 100, 25, 1)
+	setBackgroundColor(&quot;DAMAGE&quot;,254,186,173,255)
+	hideWindow(&quot;DAMAGE&quot;)
 
-WindowWidth, WindowHeight = getMainWindowSize();
-createConsole(&quot;chat&quot;, 9, 57, 20, WindowWidth-415,0)
-createGauge(&quot;HP&quot;, 100, 25, WindowWidth-520, 0, &quot;HEALTH&quot;, &quot;dark_green&quot;)
-createGauge(&quot;EXP&quot;, 100, 25, WindowWidth-520, 25, &quot;EXP&quot;, &quot;PaleTurquoise&quot;)
-
-local HBox = Geyser.HBox:new({name=&quot;HBox&quot;, x=WindowWidth-415, y=WindowHeight-400, width=400, height=400,})
-local mapper = Geyser.Mapper:new({name = &quot;mapper&quot;},HBox)
+	local HBox = Geyser.HBox:new({name=&quot;HBox&quot;, x=WindowWidth-415, y=WindowHeight-400, width=400, height=400,})
+	local mapper = Geyser.Mapper:new({name = &quot;mapper&quot;},HBox)
+end
 
 function resizeEvent( event, x, y )
 	WindowWidth, WindowHeight = getMainWindowSize();
@@ -933,6 +1024,7 @@ function resizeEvent( event, x, y )
 	
 	moveWindow(&quot;HP&quot;,WindowWidth-520,0)
 	moveWindow(&quot;EXP&quot;,WindowWidth-520,25)
+	moveWindow(&quot;DAMAGE&quot;,WindowWidth-520,50)
 
 	HBox:move(WindowWidth-415,WindowHeight-400)
 end
@@ -952,7 +1044,6 @@ registerAnonymousEventHandler(&quot;sysWindowResizeEvent&quot;, &quot;resizeEven
 mudlet = mudlet or {}; mudlet.mapper_script = true
 
 registerAnonymousEventHandler(&quot;setPlayerLoc&quot;, &quot;setPlayerLocation&quot;)
-registerAnonymousEventHandler(&quot;sysLoadEvent&quot;, &quot;mapStartup&quot;)
 
 function mapStartup()
 	last_movement = nil
@@ -963,9 +1054,6 @@ function mapStartup()
 	loadMap()
 	addMapEvent(&quot;I'm Here&quot;, &quot;setPlayerLoc&quot;)
 	echo(&quot;Default map loaded\n&quot;)
-
-	disableRetreats()
-	enableTrigger(&quot;check health&quot;)
 end
 
 function setPlayerLocation(evet, list, rm)
@@ -1050,9 +1138,11 @@ end
 
 function changeRoom(direction)
 	exits = getRoomExits(current_room)
-	if table.contains(exits,longDirection(last_movement)) then
-		local rid = exits[longDirection(last_movement)]
+	if table.contains(exits,longDirection(direction)) then
+		local rid = exits[longDirection(direction)]
 		setRoom(rid)
+	else
+		echo(&quot;No exit to the &quot;..longDirection(direction)..&quot;\n&quot;)
 	end
 end
 
