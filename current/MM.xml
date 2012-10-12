@@ -110,10 +110,10 @@ end</script>
                     <name>healing</name>
                     <script>hp = matches[2]
 if tonumber(hp) &gt;= HP_healthSpell and tonumber(hp) &lt; HP_autoEnter then
-	if HP_maheAvail then
-		send(&quot;cast mihe;rest&quot;)
-	elseif HP_miheAvail then
-		send(&quot;cast mihe;rest&quot;)
+	if HP_maheAvail ~= nil then
+		send(HP_maheAvail..&quot;;rest&quot;)
+	elseif HP_miheAvail ~= nil then
+		send(HP_miheAvail..&quot;;rest&quot;)
 	else
 		send(&quot;rest&quot;)
 	end
@@ -516,14 +516,15 @@ enableTimer(&quot;AtTheTone&quot;)</script>
         </Timer>
         <Timer isActive="yes" isFolder="no" isTempTimer="no" isOffsetTimer="no">
             <name>expCalc</name>
-            <script>local expPerHour = totExp * 6
+            <script>local expPerHour = totExp * 12
 disableTimer(&quot;expCalc&quot;)
 cecho(&quot;                    &lt;:SteelBlue&gt;========= Exp per Hour: &quot;..expPerHour..&quot; =========\n&quot;)
+echo(&quot;EXPpHR&quot;,expPerHour..&quot; Exp/hr&quot;)
 enableTimer(&quot;expCalc&quot;)
 totExp = 0</script>
             <command></command>
             <packageName></packageName>
-            <time>00:10:00.000</time>
+            <time>00:05:00.000</time>
         </Timer>
     </TimerPackage>
     <AliasPackage>
@@ -936,18 +937,20 @@ end</script>
 -------------------------------------------------
 
 --When should panic set in?
-HP_panic = 10
+HP_panic = 15
 --Should I hang up of panic?
 HP_panicHangup = true
 --When should I retreat from room?
-HP_retreat = 20
+HP_retreat = 25
 --When should I start using health spells?
 HP_healthSpell = 25
 --Which health spells are available?
-HP_maheAvail = false
-HP_miheAvail = true
+HP_maheAvail = &quot;c mihe&quot;
+HP_miheAvail = nil
 --When can I automatically re-enter battle?
-HP_autoEnter = 35</script>
+HP_autoEnter = 35
+
+uname = &quot;etherealsilence&quot;</script>
                     <eventHandlerList/>
                 </Script>
                 <Script isActive="no" isFolder="no">
@@ -958,7 +961,7 @@ HP_autoEnter = 35</script>
 -------------------------------------------------
 
 --When should panic set in?
-HP_panic = 10
+HP_panic = 15
 --Should I hang up of panic?
 HP_panicHangup = true
 --When should I retreat from room?
@@ -966,10 +969,12 @@ HP_retreat = 25
 --When should I start using health spells?
 HP_healthSpell = 20
 --Which health spells are available?
-HP_maheAvail = false
-HP_miheAvail = true
+HP_maheAvail = &quot;c mihe&quot;
+HP_miheAvail = nil
 --When can I automatically re-enter battle?
-HP_autoEnter = 35</script>
+HP_autoEnter = 35
+
+uname = &quot;pileoworthless&quot;</script>
                     <eventHandlerList/>
                 </Script>
                 <Script isActive="yes" isFolder="no">
@@ -988,8 +993,8 @@ HP_retreat = 25
 --When should I start using health spells?
 HP_healthSpell = 20
 --Which health spells are available?
-HP_maheAvail = false
-HP_miheAvail = false
+HP_maheAvail = &quot;c mend&quot;
+HP_miheAvail = nil
 --When can I automatically re-enter battle?
 HP_autoEnter = 40
 
@@ -1008,12 +1013,12 @@ HP_panic = 15
 --Should I hang up of panic?
 HP_panicHangup = true
 --When should I retreat from room?
-HP_retreat = 20
+HP_retreat = 25
 --When should I start using health spells?
 HP_healthSpell = 20
 --Which health spells are available?
-HP_maheAvail = false
-HP_miheAvail = false
+HP_maheAvail = &quot;invoke swan&quot;
+HP_miheAvail = nil
 --When can I automatically re-enter battle?
 HP_autoEnter = 38
 
@@ -1049,7 +1054,9 @@ function UIStartup()
 	createConsole(&quot;chat&quot;, 9, 57, 20, WindowWidth-415,0)
 	createGauge(&quot;HP&quot;, 100, 25, WindowWidth-520, 0, &quot;HEALTH&quot;, &quot;dark_green&quot;)
 	createGauge(&quot;EXP&quot;, 100, 25, WindowWidth-520, 25, &quot;EXP&quot;, &quot;PaleTurquoise&quot;)
-	createLabel(&quot;DAMAGE&quot;, WindowWidth-520, 50, 100, 25, 1)
+	createLabel(&quot;EXPpHR&quot;, WindowWidth-520, 50, 100, 25, 1)
+	setBackgroundColor(&quot;EXPpHR&quot;, 218, 165, 32, 255)
+	createLabel(&quot;DAMAGE&quot;, WindowWidth-520, 75, 100, 25, 1)
 	setBackgroundColor(&quot;DAMAGE&quot;,254,186,173,255)
 	hideWindow(&quot;DAMAGE&quot;)
 
@@ -1065,7 +1072,8 @@ function resizeEvent( event, x, y )
 	
 	moveWindow(&quot;HP&quot;,WindowWidth-520,0)
 	moveWindow(&quot;EXP&quot;,WindowWidth-520,25)
-	moveWindow(&quot;DAMAGE&quot;,WindowWidth-520,50)
+	moveWindow(&quot;EXPpHR&quot;,WindowWidth-520,50)
+	moveWindow(&quot;DAMAGE&quot;,WindowWidth-520,75)
 
 	HBox:move(WindowWidth-415,WindowHeight-400)
 end
@@ -1364,6 +1372,14 @@ end</script>
             <script>reConn()</script>
             <command></command>
             <keyCode>16777275</keyCode>
+            <keyModifier>0</keyModifier>
+        </Key>
+        <Key isActive="yes" isFolder="no">
+            <name>Gossip</name>
+            <packageName></packageName>
+            <script>printCmdLine(&quot;gos &quot;)</script>
+            <command></command>
+            <keyCode>39</keyCode>
             <keyModifier>0</keyModifier>
         </Key>
     </KeyPackage>

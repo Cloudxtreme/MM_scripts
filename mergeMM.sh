@@ -14,7 +14,5 @@ sed -i "s/4\.5,\[\[send(\&quot;\&quot/4\.5,\[\[send(\&quot;$pass\&quot/" holder
 # replace current profile
 mv holder $profile
 
-# find most recent map
-#profile=$(find ./map/ -name *dat | sort -n | tail -1)
-
-#cp ./map/mm $profile
+# make usable copy of profile
+cp $profile ./current/copy

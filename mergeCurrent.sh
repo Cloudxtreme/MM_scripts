@@ -28,3 +28,6 @@ cd ..
 
 #update git
 git add map
+
+# make usable copy of profile
+cp $profile ./current/copy
