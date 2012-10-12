@@ -493,6 +493,25 @@ disableTimer(&quot;combat&quot;)</script>
             <packageName></packageName>
             <time>00:01:00.000</time>
         </Timer>
+        <Timer isActive="yes" isFolder="no" isTempTimer="no" isOffsetTimer="no">
+            <name>Heartbeat</name>
+            <script>disableTimer(&quot;Heartbeat&quot;)
+echo(&quot;RECON&quot;)
+reConn()
+enableTimer(&quot;Heartbeat&quot;)</script>
+            <command></command>
+            <packageName></packageName>
+            <time>00:10:00.000</time>
+        </Timer>
+        <Timer isActive="yes" isFolder="no" isTempTimer="no" isOffsetTimer="no">
+            <name>AtTheTone</name>
+            <script>disableTimer(&quot;AtTheTone&quot;)
+cecho(&quot;                    &lt;:dark_olive_green&gt;========= &quot;..getTime(true)..&quot; =========\n&quot;)
+enableTimer(&quot;AtTheTone&quot;)</script>
+            <command></command>
+            <packageName></packageName>
+            <time>00:03:00.000</time>
+        </Timer>
     </TimerPackage>
     <AliasPackage>
         <AliasGroup isActive="yes" isFolder="yes">
@@ -507,14 +526,6 @@ disableTimer(&quot;combat&quot;)</script>
                 <command></command>
                 <packageName></packageName>
                 <regex>^stats$</regex>
-            </Alias>
-            <Alias isActive="yes" isFolder="no">
-                <name>Disable Direction Retreats</name>
-                <script>retreatSequence = nil
-</script>
-                <command></command>
-                <packageName></packageName>
-                <regex>^disable retreats$</regex>
             </Alias>
             <Alias isActive="yes" isFolder="no">
                 <name>Enable Trigger</name>
@@ -590,6 +601,21 @@ end</script>
                     <packageName></packageName>
                     <regex>^unprep$</regex>
                 </Alias>
+                <Alias isActive="yes" isFolder="no">
+                    <name>Disable Loop</name>
+                    <script>walkLoop_run = false</script>
+                    <command></command>
+                    <packageName></packageName>
+                    <regex>^disable\sloop$</regex>
+                </Alias>
+                <Alias isActive="yes" isFolder="no">
+                    <name>Disable Direction Retreats</name>
+                    <script>retreatSequence = nil
+</script>
+                    <command></command>
+                    <packageName></packageName>
+                    <regex>^disable retreats$</regex>
+                </Alias>
             </AliasGroup>
             <AliasGroup isActive="yes" isFolder="yes">
                 <name>mapper</name>
@@ -634,23 +660,6 @@ HP_panicHangup = matches[2]
                 <packageName></packageName>
                 <regex>^disable trigger (.*)$</regex>
             </Alias>
-            <Alias isActive="yes" isFolder="no">
-                <name>Disable Town</name>
-                <script>if matches[2]:find(&quot;slums&quot;) then disableSlums() 
-else echo(&quot;Town not found\n&quot;)
-end
-</script>
-                <command></command>
-                <packageName></packageName>
-                <regex>^disable\stown\s(.*)$</regex>
-            </Alias>
-            <Alias isActive="yes" isFolder="no">
-                <name>Disable Loop</name>
-                <script>walkLoop_run = false</script>
-                <command></command>
-                <packageName></packageName>
-                <regex>^disable\sloop$</regex>
-            </Alias>
         </AliasGroup>
     </AliasPackage>
     <ActionPackage/>
@@ -691,6 +700,7 @@ function health(hp, direction)
 		walkLoop_run = false
 		if HP_panicHangup then
 			disconnect()
+			disableTimmer(&quot;Heartbeat&quot;)
 		else
 			doRetreat()
 			enableTrigger(&quot;panic&quot;)
@@ -722,6 +732,8 @@ function health(hp, direction)
 	if tonumber(hp) &gt; maxHP then maxHP = tonumber(hp) end
 	HP = tonumber(hp)
 	setGauge(&quot;HP&quot;, hp, maxHP, &quot;HP: &quot;..HP..&quot;/&quot;..maxHP)
+	disableTimer(&quot;Heartbeat&quot;)
+	enableTimer(&quot;Heartbeat&quot;)
 end
 
 function doRetreat()
@@ -963,7 +975,9 @@ HP_healthSpell = 20
 HP_maheAvail = false
 HP_miheAvail = false
 --When can I automatically re-enter battle?
-HP_autoEnter = 40</script>
+HP_autoEnter = 40
+
+uname = &quot;captain&quot;</script>
                     <eventHandlerList/>
                 </Script>
                 <Script isActive="no" isFolder="no">
@@ -985,7 +999,23 @@ HP_healthSpell = 20
 HP_maheAvail = false
 HP_miheAvail = false
 --When can I automatically re-enter battle?
-HP_autoEnter = 38</script>
+HP_autoEnter = 38
+
+uname = &quot;unhappy&quot;</script>
+                    <eventHandlerList/>
+                </Script>
+                <Script isActive="yes" isFolder="no">
+                    <name>Recon</name>
+                    <packageName></packageName>
+                    <script>function reConn()
+	reconnect()
+	tempTimer(4,[[send(&quot;]]..uname..[[&quot;)]])
+	tempTimer(4.5,[[send(&quot;&quot;)]])
+	tempTimer(6,[[send(&quot;c&quot;)]])
+	tempTimer(6.5,[[send(&quot;m&quot;)]])
+	tempTimer(7,[[send(&quot;e&quot;)]])
+	tempTimer(7.2,[[send(&quot;c&quot;)]])
+end</script>
                     <eventHandlerList/>
                 </Script>
             </ScriptGroup>
@@ -1310,6 +1340,14 @@ end</script>
             <script>disconnect()</script>
             <command></command>
             <keyCode>16777264</keyCode>
+            <keyModifier>0</keyModifier>
+        </Key>
+        <Key isActive="yes" isFolder="no">
+            <name>Recon</name>
+            <packageName></packageName>
+            <script>reConn()</script>
+            <command></command>
+            <keyCode>16777275</keyCode>
             <keyModifier>0</keyModifier>
         </Key>
     </KeyPackage>

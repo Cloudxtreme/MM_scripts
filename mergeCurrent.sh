@@ -7,6 +7,9 @@ cp $profile ./current/MM.xml
 # remove HostPackage information
 sed -i '/<Host/,/<\/HostPackage>/d' ./current/MM.xml
 
+# remove password from auto connect
+sed -i 's/4\.5,\[\[send(\&quot;.*\&quot/4\.5,\[\[send(\&quot;\&quot/' ./current/MM.xml
+
 # find most recent map
 profile=$(find ./map/ -name *dat | sort -n | tail -1)
 
@@ -16,6 +19,11 @@ cp $profile ./map/mm
 # remove old map files
 cd map
 rm `ls -t | awk 'NR>6'`
+cd ..
+
+# remove old config files
+cd current
+rm `ls -t | awk 'NR>11'`
 cd ..
 
 #update git
