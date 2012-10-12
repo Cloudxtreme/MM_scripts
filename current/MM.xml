@@ -443,6 +443,8 @@ enableTrigger(&quot;Name_Line&quot;)</script>
             <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                 <name>Experience</name>
                 <script>setGauge(&quot;EXP&quot;,tonumber(matches[2]),tonumber(matches[5]),&quot;Exp &quot;..matches[2]..&quot;/&quot;..matches[5])
+totExp = totExp + (tonumber(matches[2]) - prevExp)
+prevExp = tonumber(matches[2])
 </script>
                 <triggerType>0</triggerType>
                 <conditonLineDelta>0</conditonLineDelta>
@@ -511,6 +513,17 @@ enableTimer(&quot;AtTheTone&quot;)</script>
             <command></command>
             <packageName></packageName>
             <time>00:03:00.000</time>
+        </Timer>
+        <Timer isActive="yes" isFolder="no" isTempTimer="no" isOffsetTimer="no">
+            <name>expCalc</name>
+            <script>local expPerHour = totExp * 6
+disableTimer(&quot;expCalc&quot;)
+cecho(&quot;                    &lt;:SteelBlue&gt;========= Exp per Hour: &quot;..expPerHour..&quot; =========\n&quot;)
+enableTimer(&quot;expCalc&quot;)
+totExp = 0</script>
+            <command></command>
+            <packageName></packageName>
+            <time>00:10:00.000</time>
         </Timer>
     </TimerPackage>
     <AliasPackage>
@@ -693,6 +706,9 @@ function Startup()
 	setTownGlobals()
 
 	enableTrigger(&quot;check health&quot;)
+
+	prevExp = 0
+	totExp = 0
 end
 
 function health(hp, direction)
