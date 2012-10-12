@@ -1,6 +1,9 @@
 # find most recent profile
 profile=$(find ./current/ -name *#* | sort -n | tail -1)
 
+# make usable copy of profile
+./copyProfiles.sh
+
 # copy to master file
 cp $profile ./current/MM.xml
 
@@ -8,7 +11,7 @@ cp $profile ./current/MM.xml
 sed -i '/<Host/,/<\/HostPackage>/d' ./current/MM.xml
 
 # remove password from auto connect
-sed -i 's/4\.5,\[\[send(\&quot;.*\&quot/4\.5,\[\[send(\&quot;\&quot/' ./current/MM.xml
+sed -i 's/7\.5,\[\[send(\&quot;.*\&quot/7\.5,\[\[send(\&quot;\&quot/' ./current/MM.xml
 
 # find most recent map
 profile=$(find ./map/ -name *dat | sort -n | tail -1)
@@ -23,11 +26,8 @@ cd ..
 
 # remove old config files
 cd current
-rm `ls -t | awk 'NR>11'`
+rm `ls -t | awk 'NR>12'`
 cd ..
 
 #update git
 git add map
-
-# make usable copy of profile
-cp $profile ./current/copy

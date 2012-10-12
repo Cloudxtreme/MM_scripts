@@ -1,8 +1,32 @@
 === ALIASES ===
-stat 			~ list out all sorts of details
-disable trigger escape		~ disable arena auto escapes
-enable trigger <trigger name>	~ enable trigger
+stats 				~ list out all sorts of details
 
-auto enter <town name> 	~ will auto enter arena after retreat (must be one step from arena)
-prep <town name> 		~ handles the setup and entrance into an arena
-disable auto enter		~ Disables arena aut
+enable trigger <trigger name>		~ enable trigger
+disable trigger <trigger name>	~ disable trigger
+
+auto enter <town name> 		~ will auto enter arena after retreat (must be one step from arena)
+disable auto enter			~ Disables arena auto enter
+prep <town name> 			~ handles the setup and entrance into an arena
+unprep				~ Disables arena auto enter and prep
+disable retreats			~ disable arena auto retreat
+disable loop			~ stops the autowalk loop
+panic hangup <true|false>		~ sets whether a disconnect should be used in panic
+
+=== Map Commands ===
+map auto <on|off>		~ En/Disables auto mapping mode
+map manual <on|off>		~ En/Disables manual mapping mode
+map load			~ loads map
+map save			~ saves map
+map create area <name>	~ creates new area and starting room
+map delete all		~ deletes everything map related
+map delete area <name>	~ deletes area and contained rooms
+map delete room <number>	~ deletes room
+map rename room <name>	~ changes the name of current room
+map find room <name>	~ provides all rooms whose name contains the search item
+map describe room <number>	~ provides name and area of room
+map where am i		~ describes the current room
+map goto <number>		~ walks from current room to destination
+
+=== KEYS ===
+F1	~ Disconnect
+F12	~ Auto connect

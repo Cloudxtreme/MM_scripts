@@ -213,8 +213,8 @@ end</script>
                             <integer>0</integer>
                         </regexCodePropertyList>
                     </Trigger>
-                    <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                        <name>slumHunt</name>
+                    <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                        <name>slumsHunt</name>
                         <script>Hunt(matches[1])</script>
                         <triggerType>0</triggerType>
                         <conditonLineDelta>0</conditonLineDelta>
@@ -393,7 +393,7 @@ if matches[1]:findPattern(&quot;Quantity&quot;) ~= nil then
 	tempTimer(1, [[enableTrigger(&quot;Name_Line&quot;)]])
 	return
 end
-if matches[1]:findPattern(&quot;%d&quot;) ~= nil or matches[1]:find(&quot;You&quot;) ~= nil or matches[1]:find(&quot;you&quot;) ~= nil then return end
+if matches[1]:findPattern(&quot;%d&quot;) ~= nil or matches[1]:find(&quot;You&quot;) ~= nil or matches[1]:find(&quot;you&quot;) ~= nil or matches[1]:find(&quot;The&quot;) ~= nil then return end
 
 disableTrigger(&quot;Name_Line&quot;)
 enableTrigger(&quot;Exit_Line&quot;)
@@ -484,6 +484,26 @@ echo(&quot;DAMAGE&quot;,&quot;DAMAGE: &quot;..damage)</script>
                     <integer>1</integer>
                 </regexCodePropertyList>
             </Trigger>
+            <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <name>Auto Follow</name>
+                <script>send(&quot;follow &quot;..matches[2])</script>
+                <triggerType>0</triggerType>
+                <conditonLineDelta>0</conditonLineDelta>
+                <mStayOpen>0</mStayOpen>
+                <mCommand></mCommand>
+                <packageName></packageName>
+                <mFgColor>#ff0000</mFgColor>
+                <mBgColor>#ffff00</mBgColor>
+                <mSoundFile></mSoundFile>
+                <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                <regexCodeList>
+                    <string>^(.*)\shas\sinvited\syou </string>
+                </regexCodeList>
+                <regexCodePropertyList>
+                    <integer>1</integer>
+                </regexCodePropertyList>
+            </Trigger>
         </TriggerGroup>
     </TriggerPackage>
     <TimerPackage>
@@ -516,7 +536,7 @@ enableTimer(&quot;AtTheTone&quot;)</script>
         </Timer>
         <Timer isActive="yes" isFolder="no" isTempTimer="no" isOffsetTimer="no">
             <name>expCalc</name>
-            <script>local expPerHour = totExp * 12
+            <script>local expPerHour = totExp * 6
 disableTimer(&quot;expCalc&quot;)
 cecho(&quot;                    &lt;:SteelBlue&gt;========= Exp per Hour: &quot;..expPerHour..&quot; =========\n&quot;)
 echo(&quot;EXPpHR&quot;,expPerHour..&quot; Exp/hr&quot;)
@@ -524,7 +544,7 @@ enableTimer(&quot;expCalc&quot;)
 totExp = 0</script>
             <command></command>
             <packageName></packageName>
-            <time>00:05:00.000</time>
+            <time>00:10:00.000</time>
         </Timer>
     </TimerPackage>
     <AliasPackage>
@@ -832,7 +852,6 @@ end
 function strollSlums()
 	HP_panicHangup = true
 	enterCommon()
-	echo(&quot;hunting enabled\n&quot;)
 end
 
 function disableSlums()
@@ -1031,11 +1050,11 @@ uname = &quot;unhappy&quot;</script>
                     <script>function reConn()
 	reconnect()
 	tempTimer(4,[[send(&quot;]]..uname..[[&quot;)]])
-	tempTimer(4.5,[[send(&quot;&quot;)]])
-	tempTimer(6,[[send(&quot;c&quot;)]])
-	tempTimer(6.5,[[send(&quot;m&quot;)]])
-	tempTimer(7,[[send(&quot;e&quot;)]])
-	tempTimer(7.2,[[send(&quot;c&quot;)]])
+	tempTimer(7.5,[[send(&quot;&quot;)]])
+	tempTimer(9,[[send(&quot;c&quot;)]])
+	tempTimer(9.5,[[send(&quot;m&quot;)]])
+	tempTimer(10,[[send(&quot;e&quot;)]])
+	tempTimer(10.2,[[send(&quot;c&quot;)]])
 end</script>
                     <eventHandlerList/>
                 </Script>
@@ -1313,8 +1332,8 @@ function targetPosition()
 		if last_movement:find(&quot;s&quot;) ~= nil then y = y - 2 end
 		if last_movement:find(&quot;e&quot;) ~= nil then x = x + 2 end
 		if last_movement:find(&quot;w&quot;) ~= nil then x = x - 2 end
-		if last_movement:find(&quot;u&quot;) ~= nil then z = z + 2
-		elseif last_movement:find(&quot;d&quot;) ~= nil then z = z - 2
+		if last_movement:find(&quot;u&quot;) ~= nil then z = z + 1
+		elseif last_movement:find(&quot;d&quot;) ~= nil then z = z - 1
 		end
 
 		return x,y,z

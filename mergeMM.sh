@@ -9,10 +9,10 @@ sed -n '/<TriggerPackage>/,/MudletPackage>/p' ./current/MM.xml >> holder
 
 # add in autoconnect pass
 pass=$(awk 'NR==2' password)
-sed -i "s/4\.5,\[\[send(\&quot;\&quot/4\.5,\[\[send(\&quot;$pass\&quot/" holder
+sed -i "s/7\.5,\[\[send(\&quot;\&quot/7\.5,\[\[send(\&quot;$pass\&quot/" holder
 
 # replace current profile
 mv holder $profile
 
 # make usable copy of profile
-cp $profile ./current/copy
+./copyProfiles.sh
