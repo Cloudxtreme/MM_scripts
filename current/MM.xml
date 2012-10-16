@@ -722,6 +722,11 @@ maxHP = 0
 registerAnonymousEventHandler(&quot;sysLoadEvent&quot;, &quot;Startup&quot;)
 
 function Startup()
+	if getMudletHomeDir():find(&quot;unhappy&quot;) then mystic()
+	elseif getMudletHomeDir():find(&quot;ethereal&quot;) then cleric()
+	elseif getMudletHomeDir():find(&quot;pile&quot;) then paladin()
+	else ranger() end
+
 	UIStartup()
 	mapStartup()
 	setTownGlobals()
@@ -948,13 +953,14 @@ end</script>
 -------------------------------------------------
 </script>
                 <eventHandlerList/>
-                <Script isActive="no" isFolder="no">
+                <Script isActive="yes" isFolder="no">
                     <name>cleric</name>
                     <packageName></packageName>
                     <script>-------------------------------------------------
 -- Definition of cleric specific variables.    --
 -------------------------------------------------
 
+function cleric()
 --When should panic set in?
 HP_panic = 15
 --Should I hang up of panic?
@@ -969,16 +975,20 @@ HP_miheAvail = nil
 --When can I automatically re-enter battle?
 HP_autoEnter = 35
 
-uname = &quot;etherealsilence&quot;</script>
+	uname = &quot;etherealsilence&quot;
+
+	echo(&quot;Using cleric varibs\n&quot;)
+end</script>
                     <eventHandlerList/>
                 </Script>
-                <Script isActive="no" isFolder="no">
+                <Script isActive="yes" isFolder="no">
                     <name>paladin</name>
                     <packageName></packageName>
                     <script>-------------------------------------------------
 -- Definition of paladin specific variables.   --
 -------------------------------------------------
 
+function paladin()
 --When should panic set in?
 HP_panic = 15
 --Should I hang up of panic?
@@ -993,7 +1003,10 @@ HP_miheAvail = nil
 --When can I automatically re-enter battle?
 HP_autoEnter = 35
 
-uname = &quot;pileoworthless&quot;</script>
+	uname = &quot;pileoworthless&quot;
+
+	echo(&quot;Using paladin varibs\n&quot;)
+end</script>
                     <eventHandlerList/>
                 </Script>
                 <Script isActive="yes" isFolder="no">
@@ -1003,6 +1016,7 @@ uname = &quot;pileoworthless&quot;</script>
 -- Definition of paladin specific variables.   --
 -------------------------------------------------
 
+function ranger()
 --When should panic set in?
 HP_panic = 15
 --Should I hang up of panic?
@@ -1017,16 +1031,20 @@ HP_miheAvail = nil
 --When can I automatically re-enter battle?
 HP_autoEnter = 40
 
-uname = &quot;captain&quot;</script>
+	uname = &quot;captain&quot;
+
+	echo(&quot;Using ranger varibs\n&quot;)
+end</script>
                     <eventHandlerList/>
                 </Script>
-                <Script isActive="no" isFolder="no">
+                <Script isActive="yes" isFolder="no">
                     <name>Mystic</name>
                     <packageName></packageName>
                     <script>-------------------------------------------------
 -- Definition of mystci specific variables.   --
 -------------------------------------------------
 
+function mystic()
 --When should panic set in?
 HP_panic = 15
 --Should I hang up of panic?
@@ -1041,7 +1059,10 @@ HP_miheAvail = nil
 --When can I automatically re-enter battle?
 HP_autoEnter = 38
 
-uname = &quot;unhappy&quot;</script>
+	uname = &quot;unhappy&quot;
+
+	echo(&quot;Using mystic varibs\n&quot;)
+end</script>
                     <eventHandlerList/>
                 </Script>
                 <Script isActive="yes" isFolder="no">
