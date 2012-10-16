@@ -176,12 +176,12 @@ end</script>
                     <regexCodeList>
                         <string>room</string>
                         <string>you</string>
-                        <string>here</string>
+                        <string>\shere</string>
                     </regexCodeList>
                     <regexCodePropertyList>
                         <integer>0</integer>
                         <integer>0</integer>
-                        <integer>0</integer>
+                        <integer>1</integer>
                     </regexCodePropertyList>
                     <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>newhavenHunt</name>
@@ -261,7 +261,7 @@ end</script>
                             <integer>0</integer>
                         </regexCodePropertyList>
                     </Trigger>
-                    <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                    <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>darkcavernHunt</name>
                         <script>Hunt(matches[1])</script>
                         <triggerType>0</triggerType>
@@ -275,14 +275,22 @@ end</script>
                         <colorTriggerFgColor>#000000</colorTriggerFgColor>
                         <colorTriggerBgColor>#000000</colorTriggerBgColor>
                         <regexCodeList>
-                            <string>bat\s</string>
+                            <string>\sbat</string>
                             <string>spider</string>
                             <string>cleric</string>
                             <string>priest</string>
                             <string>cultist</string>
+                            <string>abomination</string>
+                            <string>worm</string>
+                            <string>paladin</string>
+                            <string>hellhound</string>
                         </regexCodeList>
                         <regexCodePropertyList>
                             <integer>1</integer>
+                            <integer>0</integer>
+                            <integer>0</integer>
+                            <integer>0</integer>
+                            <integer>0</integer>
                             <integer>0</integer>
                             <integer>0</integer>
                             <integer>0</integer>
@@ -330,7 +338,7 @@ end
 		walkLoop_count = 1
 		walkLoop_run = true
 		walkLoop_pause = false
-		walkLoop(slumsLoop)
+		walkLoop(slumsLoop,4)
 	end
 	disableTrigger(&quot;auto Stroll Slums&quot;)
 end</script>
@@ -370,6 +378,38 @@ damage = 0</script>
                     </regexCodeList>
                     <regexCodePropertyList>
                         <integer>0</integer>
+                    </regexCodePropertyList>
+                </Trigger>
+                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                    <name>autoStrollCaveWorm</name>
+                    <script>if tonumber(matches[2]) &gt;= HP_autoEnter then
+	if current_room ~= 656 then
+		--autoEnterTrigger = &quot;Stroll Slums&quot; 
+		echo(&quot;Loop must start at Slum Street Crossroads\nLoop will be unpaused\n&quot;) 
+		walkLoop_pause = false
+	else
+		walkLoop_count = 1
+		walkLoop_run = true
+		walkLoop_pause = false
+		walkLoop(darkcavern3Loop,10)
+	end
+	disableTrigger(&quot;autoStrollCaveWorm&quot;)
+end</script>
+                    <triggerType>0</triggerType>
+                    <conditonLineDelta>0</conditonLineDelta>
+                    <mStayOpen>0</mStayOpen>
+                    <mCommand></mCommand>
+                    <packageName></packageName>
+                    <mFgColor>#ff0000</mFgColor>
+                    <mBgColor>#ffff00</mBgColor>
+                    <mSoundFile></mSoundFile>
+                    <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                    <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                    <regexCodeList>
+                        <string>^\[HP=(\d+)</string>
+                    </regexCodeList>
+                    <regexCodePropertyList>
+                        <integer>1</integer>
                     </regexCodePropertyList>
                 </Trigger>
             </TriggerGroup>
@@ -417,7 +457,7 @@ appendBuffer(&quot;chat&quot;)</script>
                 <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList/>
                 <regexCodePropertyList/>
-                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="yes">
+                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="yes">
                     <name>Name_Line</name>
                     <script>--handle list
 if matches[1]:findPattern(&quot;Quantity&quot;) ~= nil then
@@ -454,7 +494,7 @@ enteredRoom(matches[1],nil)</script>
                         <integer>1</integer>
                     </regexCodePropertyList>
                 </Trigger>
-                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="no">
+                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="no">
                     <name>Exit_Line</name>
                     <script>disableTrigger(&quot;Exit_Line&quot;)
 enableTrigger(&quot;Name_Line&quot;)</script>
@@ -777,12 +817,13 @@ function health(hp, direction)
 	if tonumber(hp) &lt;= HP_panic or tonumber(hp) &lt; 10 then
 		walkLoop_run = false
 		if HP_panicHangup then
+			disableTimer(&quot;Heartbeat&quot;)
+			disableTrigger(&quot;check health&quot;)
 			disconnect()
-			disableTimmer(&quot;Heartbeat&quot;)
 		else
 			doRetreat()
-			enableTrigger(&quot;panic&quot;)
 		end
+		enableTrigger(&quot;panic&quot;)
 		bg (&quot;red&quot;)
 		echo (&quot;PANIC!&quot;)
 		bg (&quot;black&quot;)
@@ -833,18 +874,18 @@ walkLoop_run = false --keep stepping through loop
 walkLoop_pause = false --temporarily stop running steps
 walkLoop_count = 1 --current step
 
-function walkLoop(loop)
+function walkLoop(loop,time)
 	if not walkLoop_pause and HP &gt; HP_autoEnter then 
 		send(loop[walkLoop_count]) 
 		last_movement = loop[walkLoop_count]
 		walkLoop_count = walkLoop_count + 1
 		if walkLoop_count &gt; table.size(loop) then walkLoop_count =  1 end
+		changeRoom(last_movement)
 	end
  
 	if walkLoop_run then
-		changeRoom(last_movement)
 		disableTrigger(&quot;Name_Line&quot;)
-		tempTimer(4,function() walkLoop(loop) end)
+		tempTimer(time,function() walkLoop(loop,time) end)
 	else
 		enableTrigger(&quot;Name_Line&quot;)
 	end
@@ -976,6 +1017,7 @@ function setTownGlobals()
 	}
 
 	slumsLoop = { &quot;s&quot;,&quot;s&quot;,&quot;e&quot;,&quot;e&quot;,&quot;e&quot;,&quot;e&quot;,&quot;n&quot;,&quot;n&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot; }
+	darkcavern3Loop = { &quot;nw&quot;,&quot;nw&quot;,&quot;w&quot;,&quot;s&quot;,&quot;n&quot;,&quot;e&quot;,&quot;se&quot;,&quot;se&quot;,&quot;s&quot;,&quot;s&quot;,&quot;sw&quot;,&quot;ne&quot;,&quot;n&quot;,&quot;n&quot; }
 end</script>
                     <eventHandlerList/>
                 </Script>
