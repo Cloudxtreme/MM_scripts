@@ -177,11 +177,15 @@ end</script>
                         <string>room</string>
                         <string>you</string>
                         <string>\shere</string>
+                        <string>from</string>
+                        <string>damage!</string>
                     </regexCodeList>
                     <regexCodePropertyList>
                         <integer>0</integer>
                         <integer>0</integer>
                         <integer>1</integer>
+                        <integer>0</integer>
+                        <integer>0</integer>
                     </regexCodePropertyList>
                     <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>newhavenHunt</name>
@@ -294,6 +298,62 @@ end</script>
                             <integer>0</integer>
                             <integer>0</integer>
                             <integer>0</integer>
+                            <integer>0</integer>
+                        </regexCodePropertyList>
+                    </Trigger>
+                    <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                        <name>darkwoodforestHunt</name>
+                        <script>Hunt(matches[1])</script>
+                        <triggerType>0</triggerType>
+                        <conditonLineDelta>0</conditonLineDelta>
+                        <mStayOpen>0</mStayOpen>
+                        <mCommand></mCommand>
+                        <packageName></packageName>
+                        <mFgColor>#ff0000</mFgColor>
+                        <mBgColor>#ffff00</mBgColor>
+                        <mSoundFile></mSoundFile>
+                        <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                        <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                        <regexCodeList>
+                            <string>dog</string>
+                            <string>goblin</string>
+                            <string>bandit</string>
+                            <string>\sorc</string>
+                            <string>spider</string>
+                            <string>druid</string>
+                            <string>bugbear\scaptain</string>
+                            <string>thug</string>
+                        </regexCodeList>
+                        <regexCodePropertyList>
+                            <integer>0</integer>
+                            <integer>0</integer>
+                            <integer>0</integer>
+                            <integer>1</integer>
+                            <integer>0</integer>
+                            <integer>0</integer>
+                            <integer>1</integer>
+                            <integer>0</integer>
+                        </regexCodePropertyList>
+                    </Trigger>
+                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                        <name>narrowplateauHunt</name>
+                        <script>Hunt(matches[1])</script>
+                        <triggerType>0</triggerType>
+                        <conditonLineDelta>0</conditonLineDelta>
+                        <mStayOpen>0</mStayOpen>
+                        <mCommand></mCommand>
+                        <packageName></packageName>
+                        <mFgColor>#ff0000</mFgColor>
+                        <mBgColor>#ffff00</mBgColor>
+                        <mSoundFile></mSoundFile>
+                        <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                        <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                        <regexCodeList>
+                            <string>\sroc</string>
+                            <string>huntsman</string>
+                        </regexCodeList>
+                        <regexCodePropertyList>
+                            <integer>1</integer>
                             <integer>0</integer>
                         </regexCodePropertyList>
                     </Trigger>
@@ -457,7 +517,7 @@ appendBuffer(&quot;chat&quot;)</script>
                 <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList/>
                 <regexCodePropertyList/>
-                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="yes">
+                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="yes">
                     <name>Name_Line</name>
                     <script>--handle list
 if matches[1]:findPattern(&quot;Quantity&quot;) ~= nil then
@@ -494,7 +554,7 @@ enteredRoom(matches[1],nil)</script>
                         <integer>1</integer>
                     </regexCodePropertyList>
                 </Trigger>
-                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="no">
+                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="no">
                     <name>Exit_Line</name>
                     <script>disableTrigger(&quot;Exit_Line&quot;)
 enableTrigger(&quot;Name_Line&quot;)</script>
@@ -655,11 +715,8 @@ enableTrigger(trigName)</script>
                     <name>Prep For Town Arena</name>
                     <script>if current_room == nil then echo(&quot;I don't know where I am.\n&quot;) return end
 
-if prepedFor ~= nil then unPrep() end
-
-prepedFor = matches[2]
-tablePreps[matches[2]]()
-echo(&quot;Prepared for &quot;..matches[2]..&quot;\n&quot;)</script>
+prepFor(matches[2])
+</script>
                     <command></command>
                     <packageName></packageName>
                     <regex>^prep (.*)$</regex>
@@ -979,12 +1036,31 @@ function Hunt(monster)
 	disableTrigger(&quot;Exit_Line&quot;)
 	disableTrigger(prepedFor..&quot;Hunt&quot;)
 	enableTrigger(&quot;huntHold&quot;)
+	if preSpell ~= nil then send(preSpell) end
 	send(&quot;attack &quot; .. monster)
 	CombatTimer = false
 	if not ignoreTimer then enableTimer(&quot;Combat&quot;) end
 	showWindow(&quot;DAMAGE&quot;)
 	damage = 0
 	echo(&quot;DAMAGE&quot;,&quot;DAMAGE: &quot;..damage)
+end
+
+function AutoPrep()
+	if current_room == 690 and prepedFor ~= &quot;darkwoodforest&quot; then
+		prepFor(&quot;darkwoodforest&quot;)
+	elseif current_room == 286 and prepedFor ~= &quot;slums&quot; then
+		prepFor(&quot;slums&quot;)
+	elseif (current_room == 190 or current_room == 285) and prepedFor ~= nil then
+		unPrep()
+	end
+end
+
+function prepFor(town)
+	if prepedFor ~= nil then unPrep() end
+
+	prepedFor = town
+	tablePreps[town]()
+	echo(&quot;Prepared for &quot;..town..&quot;\n&quot;)
 end</script>
                     <eventHandlerList/>
                 </Script>
@@ -1009,6 +1085,8 @@ function setTownGlobals()
 		[&quot;slums&quot;] = function (x) strollSlums() end,
 		[&quot;bear&quot;] = function (x) enterBearCavern() end,
 		[&quot;darkcavern&quot;] = function (x) enterDarkCavern() end,
+		[&quot;darkwoodforest&quot;] = function (x) enterCommon() end,
+		[&quot;narrowplateau&quot;] = function (x) enterCommon() end,
 	}
 
 	tableAutoEnter = {
@@ -1079,6 +1157,7 @@ HP_healthSpell = 20
 --Which health spells are available?
 HP_maheAvail = &quot;c mihe&quot;
 HP_miheAvail = nil
+preSpell = &quot;c chant&quot;
 --When can I automatically re-enter battle?
 HP_autoEnter = 35
 
@@ -1135,6 +1214,7 @@ HP_healthSpell = 20
 --Which health spells are available?
 HP_maheAvail = &quot;invoke swan&quot;
 HP_miheAvail = nil
+	preSpell = &quot;i tiger&quot;
 --When can I automatically re-enter battle?
 HP_autoEnter = 38
 
@@ -1237,10 +1317,18 @@ function doSpeedWalk()
 	echo(&quot;Path we need to take: &quot; .. table.concat(speedWalkDir, &quot;, &quot;) .. &quot;\n&quot;)
 	echo(&quot;Rooms we'll pass through: &quot; .. table.concat(speedWalkPath, &quot;, &quot;) .. &quot;\n&quot;)
 	for i,v in ipairs(speedWalkDir) do
-		tempTimer(i, [[send(&quot;]]..v..[[&quot;)]])
+		tempTimer(i + .5, [[send(&quot;]]..v..[[&quot;) changeRoom(&quot;]]..v..[[&quot;)]])
 	end
-	tempTimer(table.size(speedWalkPath) + 2, [[enableTrigger(&quot;Name_Line&quot;)]])
-	setRoom(speedWalkPath[table.size(speedWalkPath)])
+
+	amIspeedwalking(speedWalkPath[table.size(speedWalkPath)])
+end
+
+function amIspeedwalking(final_room)
+	if current_room ~= final_room then
+		tempTimer(2.5, [[amIspeedwalking(]]..final_room..[[)]])
+	else
+		tempTimer(2, [[enableTrigger(&quot;Name_Line&quot;)]])
+	end
 end
 
 function enteredRoom(room_name,area_name)
@@ -1317,6 +1405,7 @@ end
 function setRoom(room_id)
 	current_room = room_id
 	centerview(room_id)
+	AutoPrep()
 end
 
 function describeRoom(room_id)
