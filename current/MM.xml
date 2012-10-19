@@ -58,7 +58,7 @@
                 </regexCodePropertyList>
                 <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>check health</name>
-                    <script>health(matches[2])</script>
+                    <script>health(tonumber(matches[2]))</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
                     <mStayOpen>0</mStayOpen>
@@ -70,7 +70,7 @@
                     <colorTriggerFgColor>#000000</colorTriggerFgColor>
                     <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
-                        <string>^\[HP=(\d+)</string>
+                        <string>^\[HP=(.+)/</string>
                     </regexCodeList>
                     <regexCodePropertyList>
                         <integer>1</integer>
@@ -100,7 +100,7 @@ end</script>
                     <colorTriggerFgColor>#000000</colorTriggerFgColor>
                     <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
-                        <string>^\[HP=(\d+)</string>
+                        <string>^\[HP=(.+)/</string>
                     </regexCodeList>
                     <regexCodePropertyList>
                         <integer>1</integer>
@@ -120,6 +120,8 @@ if tonumber(hp) &gt;= HP_healthSpell and tonumber(hp) &lt; HP_autoEnter then
 	disableTrigger(&quot;healing&quot;)
 	tempTimer(7, [[enableTrigger(&quot;healing&quot;)]])
 	echo(&quot;Healing until &quot;..HP_autoEnter..&quot;\n&quot;)
+elseif tonumber(hp) &lt; HP_panic then
+	Panic()
 else
 	if tonumber(hp) &gt; HP_autoEnter then
 		disableTrigger(&quot;healing&quot;)
@@ -138,7 +140,7 @@ end</script>
                     <colorTriggerFgColor>#000000</colorTriggerFgColor>
                     <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
-                        <string>^\[HP=(\d+)</string>
+                        <string>^\[HP=(.+)/</string>
                     </regexCodeList>
                     <regexCodePropertyList>
                         <integer>1</integer>
@@ -872,18 +874,7 @@ end
 
 function health(hp, direction)
 	if tonumber(hp) &lt;= HP_panic or tonumber(hp) &lt; 10 then
-		walkLoop_run = false
-		if HP_panicHangup then
-			disableTimer(&quot;Heartbeat&quot;)
-			disableTrigger(&quot;check health&quot;)
-			disconnect()
-		else
-			doRetreat()
-		end
-		enableTrigger(&quot;panic&quot;)
-		bg (&quot;red&quot;)
-		echo (&quot;PANIC!&quot;)
-		bg (&quot;black&quot;)
+		Panic()
 	end
 
 	if tonumber(hp) &lt; HP_retreat and tonumber(hp) &gt; HP_panic then
@@ -910,6 +901,22 @@ function health(hp, direction)
 	setGauge(&quot;HP&quot;, hp, maxHP, &quot;HP: &quot;..HP..&quot;/&quot;..maxHP)
 	disableTimer(&quot;Heartbeat&quot;)
 	enableTimer(&quot;Heartbeat&quot;)
+end
+
+function Panic()
+	walkLoop_run = false
+	if HP_panicHangup then
+		disableTimer(&quot;Heartbeat&quot;)
+		disableTrigger(&quot;check health&quot;)
+		disableTrigger(&quot;healing&quot;)
+		disconnect()
+	else
+		doRetreat()
+	end
+	enableTrigger(&quot;panic&quot;)
+	bg (&quot;red&quot;)
+	echo (&quot;PANIC!&quot;)
+	bg (&quot;black&quot;)
 end
 
 function doRetreat()
@@ -1214,7 +1221,7 @@ HP_healthSpell = 20
 --Which health spells are available?
 HP_maheAvail = &quot;invoke swan&quot;
 HP_miheAvail = nil
-	preSpell = &quot;i tiger&quot;
+	preSpell = &quot;invoke tiger&quot;
 --When can I automatically re-enter battle?
 HP_autoEnter = 38
 
