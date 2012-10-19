@@ -335,7 +335,7 @@ end</script>
                             <integer>0</integer>
                         </regexCodePropertyList>
                     </Trigger>
-                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                    <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>narrowplateauHunt</name>
                         <script>Hunt(matches[1])</script>
                         <triggerType>0</triggerType>
@@ -1312,6 +1312,8 @@ function setPlayerLocation(evet, list, rm)
 end
 
 function doSpeedWalk()
+	if current_room == nil then echo(&quot;I don't know where I am\n&quot;) return end
+
 	auto_map = false
 	disableTrigger(&quot;Name_Line&quot;)
 	echo(&quot;Path we need to take: &quot; .. table.concat(speedWalkDir, &quot;, &quot;) .. &quot;\n&quot;)
