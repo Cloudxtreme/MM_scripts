@@ -56,7 +56,7 @@
                 <regexCodePropertyList>
                     <integer>0</integer>
                 </regexCodePropertyList>
-                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>check health</name>
                     <script>health(tonumber(matches[2]))</script>
                     <triggerType>0</triggerType>
@@ -76,7 +76,7 @@
                         <integer>1</integer>
                     </regexCodePropertyList>
                 </Trigger>
-                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>panic</name>
                     <script>if tonumber(matches[2]) &gt; HP_panic and tonumber(matches[2]) &gt; 10 then
 	disableTrigger(&quot;panic&quot;)
@@ -391,9 +391,11 @@ end
                     <name>auto Stroll Slums</name>
                     <script>if tonumber(matches[2]) &gt;= HP_autoEnter then
 	if current_room ~= 289 and current_room ~= 427 then
-		autoEnterTrigger = &quot;Stroll Slums&quot; 
-		echo(&quot;Loop must start at Slum Street Crossroads\nLoop will be unpaused\n&quot;) 
+		gotoRoom(289)
+		walkLoop_count = 1
+		walkLoop_run = true
 		walkLoop_pause = false
+		walkLoop(slumsLoop,4)
 	elseif current_room == 427 then
 		walkLoop_count = 1
 		walkLoop_run = true
@@ -404,7 +406,7 @@ end
 		walkLoop_run = true
 		walkLoop_pause = false
 		walkLoop(slumsLoop,4)
-	end
+	end 
 	disableTrigger(&quot;auto Stroll Slums&quot;)
 end</script>
                     <triggerType>0</triggerType>
@@ -424,7 +426,7 @@ end</script>
                         <integer>1</integer>
                     </regexCodePropertyList>
                 </Trigger>
-                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>huntHold</name>
                     <script>HuntHold()
 damage = 0</script>
@@ -699,10 +701,30 @@ echo(&quot;DAMAGE&quot;,&quot;DAMAGE: &quot;..damage)</script>
                     <integer>1</integer>
                 </regexCodePropertyList>
             </Trigger>
+            <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <name>AutoInvite</name>
+                <script>tempTimer(660,[[send(&quot;invite ethereal;invite pile;invite unhappy;invite captain&quot;)]])</script>
+                <triggerType>0</triggerType>
+                <conditonLineDelta>0</conditonLineDelta>
+                <mStayOpen>0</mStayOpen>
+                <mCommand></mCommand>
+                <packageName></packageName>
+                <mFgColor>#005500</mFgColor>
+                <mBgColor>#ffff00</mBgColor>
+                <mSoundFile></mSoundFile>
+                <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                <regexCodeList>
+                    <string>*ANSI RECOMMENDED*</string>
+                </regexCodeList>
+                <regexCodePropertyList>
+                    <integer>0</integer>
+                </regexCodePropertyList>
+            </Trigger>
         </TriggerGroup>
     </TriggerPackage>
     <TimerPackage>
-        <Timer isActive="yes" isFolder="no" isTempTimer="no" isOffsetTimer="no">
+        <Timer isActive="no" isFolder="no" isTempTimer="no" isOffsetTimer="no">
             <name>Combat</name>
             <script>CombatTimer = true
 disableTimer(&quot;combat&quot;)</script>
@@ -1384,7 +1406,7 @@ function doSpeedWalk()
 	echo(&quot;Path we need to take: &quot; .. table.concat(speedWalkDir, &quot;, &quot;) .. &quot;\n&quot;)
 	echo(&quot;Rooms we'll pass through: &quot; .. table.concat(speedWalkPath, &quot;, &quot;) .. &quot;\n&quot;)
 	for i,v in ipairs(speedWalkDir) do
-		tempTimer(i + .5, [[send(&quot;]]..v..[[&quot;) changeRoom(&quot;]]..v..[[&quot;)]])
+		tempTimer(i + .5, [[send(&quot;]]..v..[[&quot;) changeRoom(&quot;]]..v:sub(1,1)..[[&quot;)]])
 	end
 
 	amIspeedwalking(speedWalkPath[table.size(speedWalkPath)])
@@ -1541,7 +1563,7 @@ function mapControl(inst)
 	elseif inst:find(&quot;where am i&quot;) then
 		if current_room ~= nil then describeRoom(current_room)
 		else echo(&quot;I don't know where I am.\n&quot;) end
-	elseif inst:find(&quot;goto&quot;) ~= nil then goto(inst:sub(6,inst:len()))
+	elseif inst:find(&quot;goto&quot;) ~= nil then gotoRoom(inst:sub(6,inst:len()))
 	elseif inst == &quot;manual on&quot; then manual_map = true auto_map = false echo(&quot;manual mapping enabled\n&quot;)
 	elseif inst == &quot;manual off&quot; then manual_map = false echo(&quot;manual mapping disabled\n&quot;)
 	elseif inst == &quot;auto on&quot; then auto_map = true manual_map = false echo(&quot;auto mapping enabled\n&quot;)
