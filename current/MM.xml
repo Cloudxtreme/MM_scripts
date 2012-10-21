@@ -162,7 +162,7 @@ end</script>
                 <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList/>
                 <regexCodePropertyList/>
-                <TriggerGroup isActive="no" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>Hunts</name>
                     <script></script>
                     <triggerType>0</triggerType>
@@ -617,8 +617,10 @@ if littleDir == &quot;n&quot; or littleDir == &quot;s&quot; then
 		littleDir = littleDir..&quot;w&quot;
 	end
 end
+disableTrigger(&quot;Name_Line&quot;)
 changeRoom(littleDir)
-</script>
+last_movement = littleDir
+enableTrigger(&quot;Exit_Line&quot;)</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
                     <mStayOpen>0</mStayOpen>
@@ -1137,9 +1139,9 @@ function Hunt(monster)
 end
 
 function AutoPrep()
-	if current_room == 690 or current_room == 286 then
+	if current_room == 690 or current_room == 286 or current_room == 937 then
 		prep()
-	elseif (current_room == 190 or current_room == 285) then
+	elseif (current_room == 190 or current_room == 285 or current_room == 116) and isActive(&quot;Hunts&quot;,&quot;trigger&quot;) then
 		unPrep()
 	end
 end</script>
@@ -1202,11 +1204,11 @@ end</script>
 
 function cleric()
 --When should panic set in?
-HP_panic = 15
+HP_panic = 20
 --Should I hang up of panic?
 HP_panicHangup = true
 --When should I retreat from room?
-HP_retreat = 25
+HP_retreat = 30
 --When should I start using health spells?
 HP_healthSpell = 25
 --Which health spells are available?
@@ -1231,11 +1233,11 @@ end</script>
 
 function paladin()
 --When should panic set in?
-HP_panic = 15
+HP_panic = 20
 --Should I hang up of panic?
 HP_panicHangup = true
 --When should I retreat from room?
-HP_retreat = 25
+HP_retreat = 30
 --When should I start using health spells?
 HP_healthSpell = 20
 --Which health spells are available?
@@ -1260,11 +1262,11 @@ end</script>
 
 function ranger()
 --When should panic set in?
-HP_panic = 15
+HP_panic = 20
 --Should I hang up of panic?
 HP_panicHangup = true
 --When should I retreat from room?
-HP_retreat = 25
+HP_retreat = 30
 --When should I start using health spells?
 HP_healthSpell = 20
 --Which health spells are available?
@@ -1290,13 +1292,13 @@ end</script>
 
 function mystic()
 --When should panic set in?
-HP_panic = 15
+	HP_panic = 20
 --Should I hang up of panic?
-HP_panicHangup = true
+	HP_panicHangup = true
 --When should I retreat from room?
-HP_retreat = 25
+	HP_retreat = 30
 --When should I start using health spells?
-HP_healthSpell = 20
+	HP_healthSpell = 25
 --Which health spells are available?
 HP_maheAvail = &quot;invoke swan&quot;
 HP_miheAvail = nil
@@ -1405,8 +1407,14 @@ function doSpeedWalk()
 	disableTrigger(&quot;Name_Line&quot;)
 	echo(&quot;Path we need to take: &quot; .. table.concat(speedWalkDir, &quot;, &quot;) .. &quot;\n&quot;)
 	echo(&quot;Rooms we'll pass through: &quot; .. table.concat(speedWalkPath, &quot;, &quot;) .. &quot;\n&quot;)
+	local vSub = nil
 	for i,v in ipairs(speedWalkDir) do
-		tempTimer(i + .5, [[send(&quot;]]..v..[[&quot;) changeRoom(&quot;]]..v:sub(1,1)..[[&quot;)]])
+		if v:find(&quot;n&quot;) or v:find(&quot;s&quot;) then
+			vSub = v
+		else
+			vSub = v:sub(1,1) --up and down come as full words
+		end
+		tempTimer(i + .5, [[send(&quot;]]..v..[[&quot;) changeRoom(&quot;]]..vSub..[[&quot;)]])
 	end
 
 	amIspeedwalking(speedWalkPath[table.size(speedWalkPath)])
@@ -1482,7 +1490,7 @@ function createRoom(room_name,area_name)
 end
 
 function changeRoom(direction)
-	exits = getRoomExits(current_room)
+	local exits = getRoomExits(current_room)
 	if table.contains(exits,longDirection(direction)) then
 		local rid = exits[longDirection(direction)]
 		setRoom(rid)
@@ -1503,7 +1511,7 @@ end
 
 function findRoom(room_name)
 	local room_list = searchRoom(room_name)
-	if table.size(room_list) == 1 then
+	if table.size(room_list) ~= 0 then
 		for rid,rname in pairs(room_list) do describeRoom(rid) end
 	else
 		echo(&quot;Room not found\n&quot;)
