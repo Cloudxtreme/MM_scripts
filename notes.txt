@@ -5,11 +5,14 @@ enable trigger <trigger name>		~ enable trigger
 disable trigger <trigger name>	~ disable trigger
 
 auto enter <town name> 		~ will auto enter arena after retreat (must be one step from arena)
-disable auto enter			~ Disables arena auto enter
-prep <town name> 			~ handles the setup and entrance into an arena
-unprep				~ Disables arena auto enter and prep
-disable retreats			~ disable arena auto retreat
+disable auto enter			~ disables arena auto enter
+prep	 			~ handles setup for auto-attacking monsters
+unprep				~ disables arena auto enter and prep
+disable retreats			~ disable auto retreat
 disable loop			~ stops the autowalk loop
+roam <direction>			~ roams in specified direction, reverses at wall
+disable roam			~ stops roaming
+
 panic hangup <true|false>		~ sets whether a disconnect should be used in panic
 
 === Map Commands ===
@@ -30,3 +33,4 @@ map goto <number>		~ walks from current room to destination
 === KEYS ===
 F1	~ Disconnect
 F12	~ Auto connect
+'	~ gossip

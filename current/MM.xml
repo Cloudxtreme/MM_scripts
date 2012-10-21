@@ -56,7 +56,7 @@
                 <regexCodePropertyList>
                     <integer>0</integer>
                 </regexCodePropertyList>
-                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>check health</name>
                     <script>health(tonumber(matches[2]))</script>
                     <triggerType>0</triggerType>
@@ -76,7 +76,7 @@
                         <integer>1</integer>
                     </regexCodePropertyList>
                 </Trigger>
-                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>panic</name>
                     <script>if tonumber(matches[2]) &gt; HP_panic and tonumber(matches[2]) &gt; 10 then
 	disableTrigger(&quot;panic&quot;)
@@ -162,7 +162,7 @@ end</script>
                 <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList/>
                 <regexCodePropertyList/>
-                <TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <TriggerGroup isActive="no" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>Hunts</name>
                     <script></script>
                     <triggerType>0</triggerType>
@@ -424,7 +424,7 @@ end</script>
                         <integer>1</integer>
                     </regexCodePropertyList>
                 </Trigger>
-                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>huntHold</name>
                     <script>HuntHold()
 damage = 0</script>
@@ -566,7 +566,8 @@ enteredRoom(matches[1],nil)</script>
                 <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="no">
                     <name>Exit_Line</name>
                     <script>disableTrigger(&quot;Exit_Line&quot;)
-enableTrigger(&quot;Name_Line&quot;)</script>
+enableTrigger(&quot;Name_Line&quot;)
+</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
                     <mStayOpen>0</mStayOpen>
@@ -579,6 +580,55 @@ enableTrigger(&quot;Name_Line&quot;)</script>
                     <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
                         <string>^Obvious\sexits:\s(.*)</string>
+                    </regexCodeList>
+                    <regexCodePropertyList>
+                        <integer>1</integer>
+                    </regexCodePropertyList>
+                </Trigger>
+                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                    <name>Roam</name>
+                    <script>roam(matches[2])</script>
+                    <triggerType>0</triggerType>
+                    <conditonLineDelta>0</conditonLineDelta>
+                    <mStayOpen>0</mStayOpen>
+                    <mCommand></mCommand>
+                    <packageName></packageName>
+                    <mFgColor>#ff0000</mFgColor>
+                    <mBgColor>#ffff00</mBgColor>
+                    <mSoundFile></mSoundFile>
+                    <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                    <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                    <regexCodeList>
+                        <string>^Obvious\sexits:\s(.*)</string>
+                    </regexCodeList>
+                    <regexCodePropertyList>
+                        <integer>1</integer>
+                    </regexCodePropertyList>
+                </Trigger>
+                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                    <name>Followed</name>
+                    <script>local littleDir = matches[2]:sub(1,1)
+if littleDir == &quot;n&quot; or littleDir == &quot;s&quot; then
+	if matches[2]:find(&quot;e&quot;) then
+		littleDir = littleDir..&quot;e&quot;
+	elseif matches[2]:find(&quot;w&quot;) then
+		littleDir = littleDir..&quot;w&quot;
+	end
+end
+changeRoom(littleDir)
+</script>
+                    <triggerType>0</triggerType>
+                    <conditonLineDelta>0</conditonLineDelta>
+                    <mStayOpen>0</mStayOpen>
+                    <mCommand></mCommand>
+                    <packageName></packageName>
+                    <mFgColor>#ff0000</mFgColor>
+                    <mBgColor>#ffff00</mBgColor>
+                    <mSoundFile></mSoundFile>
+                    <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                    <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                    <regexCodeList>
+                        <string>Following\syour\sParty\sleader\s(.*)\s--$</string>
                     </regexCodeList>
                     <regexCodePropertyList>
                         <integer>1</integer>
@@ -652,7 +702,7 @@ echo(&quot;DAMAGE&quot;,&quot;DAMAGE: &quot;..damage)</script>
         </TriggerGroup>
     </TriggerPackage>
     <TimerPackage>
-        <Timer isActive="no" isFolder="no" isTempTimer="no" isOffsetTimer="no">
+        <Timer isActive="yes" isFolder="no" isTempTimer="no" isOffsetTimer="no">
             <name>Combat</name>
             <script>CombatTimer = true
 disableTimer(&quot;combat&quot;)</script>
@@ -796,6 +846,21 @@ end</script>
                     <packageName></packageName>
                     <regex>^disable\sretreat$</regex>
                 </Alias>
+                <Alias isActive="yes" isFolder="no">
+                    <name>Roam</name>
+                    <script>roamDirection = matches[2]
+send(matches[2])</script>
+                    <command></command>
+                    <packageName></packageName>
+                    <regex>^roam\s(.+)$</regex>
+                </Alias>
+                <Alias isActive="yes" isFolder="no">
+                    <name>Disable Roam</name>
+                    <script>roamDirection = nil</script>
+                    <command></command>
+                    <packageName></packageName>
+                    <regex>^disable\sroam$</regex>
+                </Alias>
             </AliasGroup>
             <AliasGroup isActive="yes" isFolder="yes">
                 <name>mapper</name>
@@ -876,6 +941,7 @@ function Startup()
 	UIStartup()
 	mapStartup()
 	setTownGlobals()
+	walkStartup()
 
 	enableTrigger(&quot;check health&quot;)
 
@@ -917,10 +983,10 @@ end
 function Panic()
 	walkLoop_run = false
 	if HP_panicHangup then
-		disableTimer(&quot;Heartbeat&quot;)
 		disableTrigger(&quot;check health&quot;)
 		disableTrigger(&quot;healing&quot;)
 		disconnect()
+		disableTimer(&quot;Heartbeat&quot;)
 	else
 		doRetreat()
 	end
@@ -943,27 +1009,6 @@ function doRetreat()
 	end
 	retreatSequence = &quot;i&quot;
 	disableTrigger(&quot;check health&quot;)
-end
-
-walkLoop_run = false --keep stepping through loop
-walkLoop_pause = false --temporarily stop running steps
-walkLoop_count = 1 --current step
-
-function walkLoop(loop,time)
-	if not walkLoop_pause and HP &gt; HP_autoEnter then 
-		send(loop[walkLoop_count]) 
-		last_movement = loop[walkLoop_count]
-		walkLoop_count = walkLoop_count + 1
-		if walkLoop_count &gt; table.size(loop) then walkLoop_count =  1 end
-		changeRoom(last_movement)
-	end
- 
-	if walkLoop_run then
-		disableTrigger(&quot;Name_Line&quot;)
-		tempTimer(time,function() walkLoop(loop,time) end)
-	else
-		enableTrigger(&quot;Name_Line&quot;)
-	end
 end</script>
                 <eventHandlerList/>
             </Script>
@@ -1582,6 +1627,77 @@ function split(str,c)
 		str = array[aCount]
 	end
 	return array
+end</script>
+                <eventHandlerList/>
+            </Script>
+            <Script isActive="yes" isFolder="no">
+                <name>AutoWalk</name>
+                <packageName></packageName>
+                <script>-------------------------------------------------
+--         Put your Lua functions here.        --
+--                                             --
+-- Note that you can also use external Scripts --
+-------------------------------------------------
+
+function walkStartup()
+	walkLoop_run = false --keep stepping through loop
+	walkLoop_pause = false --temporarily stop running steps
+	walkLoop_count = 1 --current step
+
+	roamDirection = nil --direction to roam
+end
+
+function walkLoop(loop,time)
+	if not walkLoop_pause and HP &gt; HP_autoEnter then 
+		send(loop[walkLoop_count]) 
+		last_movement = loop[walkLoop_count]
+		walkLoop_count = walkLoop_count + 1
+		if walkLoop_count &gt; table.size(loop) then walkLoop_count =  1 end
+		changeRoom(last_movement)
+	end
+ 
+	if walkLoop_run then
+		disableTrigger(&quot;Name_Line&quot;)
+		tempTimer(time,function() walkLoop(loop,time) end)
+	else
+		enableTrigger(&quot;Name_Line&quot;)
+	end
+end
+
+function roam(exits)
+	if roamDirection == nil then return end
+
+		local found = false
+		local availExits = split(exits,&quot; &quot;)
+		for k,v in pairs(availExits) do
+			local littleExit = v:sub(1,1)
+			if littleExit == &quot;n&quot; or littleExit == &quot;s&quot; then
+				if v:find(&quot;e&quot;) then
+					littleExit = littleExit..&quot;e&quot;
+				elseif v:find(&quot;w&quot;) then
+					littleExit = littleExit..&quot;w&quot;
+				end
+			end
+			if littleExit == roamDirection then found = true end
+		end
+
+		if found then
+			tempTimer(5, [[doRoam()]])
+		else
+			roamDirection = inverseDirection(roamDirection)
+			tempTimer(5, [[doRoam()]])
+		end	
+end
+
+function doRoam()
+	if roamDirection == nil then return end
+
+	if walkLoop_pause then
+		tempTimer(5,[[doRoam()]])
+	else
+		send(roamDirection) 
+		last_movement = roamDirection
+	end
 end</script>
                 <eventHandlerList/>
             </Script>
