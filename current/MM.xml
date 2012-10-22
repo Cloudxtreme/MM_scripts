@@ -86,7 +86,7 @@
 		bg(&quot;DarkGreen&quot;)
 		echo(&quot;enabling &quot;..tostring(autoEnterTrigger))
 		bg(&quot;black&quot;)
-		enableTrigger(autoEnterTrigger)
+		autoEnterTable[autoEnterTrigger]()
 	end
 end</script>
                     <triggerType>0</triggerType>
@@ -162,7 +162,7 @@ end</script>
                 <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList/>
                 <regexCodePropertyList/>
-                <TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <TriggerGroup isActive="no" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>Hunts</name>
                     <script></script>
                     <triggerType>0</triggerType>
@@ -357,74 +357,6 @@ end</script>
                     </Trigger>
                 </TriggerGroup>
                 <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                    <name>auto enter newhaven</name>
-                    <script>if tonumber(matches[2]) &gt;= HP_autoEnter then
-	if current_room ~= 9 then
-		echo(&quot;Must be above NewHaven arena\n&quot;)
-	else
-		last_movement = &quot;d&quot;
-		send(last_movement)
-		changeRoom(last_movement)
-	end
-end
-	</script>
-                    <triggerType>0</triggerType>
-                    <conditonLineDelta>0</conditonLineDelta>
-                    <mStayOpen>0</mStayOpen>
-                    <mCommand></mCommand>
-                    <packageName></packageName>
-                    <mFgColor>#ff0000</mFgColor>
-                    <mBgColor>#ffff00</mBgColor>
-                    <mSoundFile></mSoundFile>
-                    <colorTriggerFgColor>#000000</colorTriggerFgColor>
-                    <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                    <regexCodeList>
-                        <string>^\[HP=(\d+)</string>
-                    </regexCodeList>
-                    <regexCodePropertyList>
-                        <integer>1</integer>
-                    </regexCodePropertyList>
-                </Trigger>
-                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                    <name>auto Stroll Slums</name>
-                    <script>if tonumber(matches[2]) &gt;= HP_autoEnter then
-	if current_room ~= 289 and current_room ~= 427 then
-		gotoRoom(289)
-		walkLoop_count = 1
-		walkLoop_run = true
-		walkLoop_pause = false
-		walkLoop(slumsLoop,4)
-	elseif current_room == 427 then
-		walkLoop_count = 1
-		walkLoop_run = true
-		walkLoop_pause = false
-		walkLoop(slums2Loop,10)
-	else
-		walkLoop_count = 1
-		walkLoop_run = true
-		walkLoop_pause = false
-		walkLoop(slumsLoop,4)
-	end 
-	disableTrigger(&quot;auto Stroll Slums&quot;)
-end</script>
-                    <triggerType>0</triggerType>
-                    <conditonLineDelta>0</conditonLineDelta>
-                    <mStayOpen>0</mStayOpen>
-                    <mCommand></mCommand>
-                    <packageName></packageName>
-                    <mFgColor>#ff0000</mFgColor>
-                    <mBgColor>#ffff00</mBgColor>
-                    <mSoundFile></mSoundFile>
-                    <colorTriggerFgColor>#000000</colorTriggerFgColor>
-                    <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                    <regexCodeList>
-                        <string>^\[HP=(\d+)</string>
-                    </regexCodeList>
-                    <regexCodePropertyList>
-                        <integer>1</integer>
-                    </regexCodePropertyList>
-                </Trigger>
-                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>huntHold</name>
                     <script>HuntHold()
 damage = 0</script>
@@ -449,21 +381,9 @@ damage = 0</script>
                         <integer>0</integer>
                     </regexCodePropertyList>
                 </Trigger>
-                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                    <name>autoStrollCaveWorm</name>
-                    <script>if tonumber(matches[2]) &gt;= HP_autoEnter then
-	if current_room ~= 656 then
-		--autoEnterTrigger = &quot;Stroll Slums&quot; 
-		echo(&quot;Loop must start at Slum Street Crossroads\nLoop will be unpaused\n&quot;) 
-		walkLoop_pause = false
-	else
-		walkLoop_count = 1
-		walkLoop_run = true
-		walkLoop_pause = false
-		walkLoop(darkcavern3Loop,10)
-	end
-	disableTrigger(&quot;autoStrollCaveWorm&quot;)
-end</script>
+                <TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                    <name>Auto Enters</name>
+                    <script></script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
                     <mStayOpen>0</mStayOpen>
@@ -474,16 +394,11 @@ end</script>
                     <mSoundFile></mSoundFile>
                     <colorTriggerFgColor>#000000</colorTriggerFgColor>
                     <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                    <regexCodeList>
-                        <string>^\[HP=(\d+)</string>
-                    </regexCodeList>
-                    <regexCodePropertyList>
-                        <integer>1</integer>
-                    </regexCodePropertyList>
-                </Trigger>
-                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                    <name>auto enter bear</name>
-                    <script>if tonumber(matches[2]) &gt;= HP_autoEnter then
+                    <regexCodeList/>
+                    <regexCodePropertyList/>
+                    <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                        <name>auto enter bear</name>
+                        <script>if tonumber(matches[2]) &gt;= HP_autoEnter then
 	if current_room ~= 9 then
 		echo(&quot;Must be above NewHaven arena\n&quot;)
 	else
@@ -493,25 +408,128 @@ end</script>
 		changeRoom(&quot;d&quot;)
 		changeRoom(&quot;n&quot;)
 		changeRoom(&quot;n&quot;)
+		autoEnterTrigger = &quot;bear&quot;
 	end
+	disableTrigger(&quot;auto enter bear&quot;)
 end</script>
-                    <triggerType>0</triggerType>
-                    <conditonLineDelta>0</conditonLineDelta>
-                    <mStayOpen>0</mStayOpen>
-                    <mCommand></mCommand>
-                    <packageName></packageName>
-                    <mFgColor>#ff0000</mFgColor>
-                    <mBgColor>#ffff00</mBgColor>
-                    <mSoundFile></mSoundFile>
-                    <colorTriggerFgColor>#000000</colorTriggerFgColor>
-                    <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                    <regexCodeList>
-                        <string>^\[HP=(\d+)</string>
-                    </regexCodeList>
-                    <regexCodePropertyList>
-                        <integer>0</integer>
-                    </regexCodePropertyList>
-                </Trigger>
+                        <triggerType>0</triggerType>
+                        <conditonLineDelta>0</conditonLineDelta>
+                        <mStayOpen>0</mStayOpen>
+                        <mCommand></mCommand>
+                        <packageName></packageName>
+                        <mFgColor>#ff0000</mFgColor>
+                        <mBgColor>#ffff00</mBgColor>
+                        <mSoundFile></mSoundFile>
+                        <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                        <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                        <regexCodeList>
+                            <string>^\[HP=(\d+)</string>
+                        </regexCodeList>
+                        <regexCodePropertyList>
+                            <integer>0</integer>
+                        </regexCodePropertyList>
+                    </Trigger>
+                    <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                        <name>autoStrollCaveWorm</name>
+                        <script>if tonumber(matches[2]) &gt;= HP_autoEnter then
+	if current_room ~= 656 then
+		echo(&quot;Loop must start at Slum Street Crossroads\nLoop will be unpaused\n&quot;) 
+		walkLoop_pause = false
+	else
+		walkLoop_count = 1
+		walkLoop_run = true
+		walkLoop_pause = false
+		walkLoop(darkcavern3Loop,10)
+		autoEnterTrigger = &quot;caveworm&quot;
+	end
+	disableTrigger(&quot;autoStrollCaveWorm&quot;)
+end</script>
+                        <triggerType>0</triggerType>
+                        <conditonLineDelta>0</conditonLineDelta>
+                        <mStayOpen>0</mStayOpen>
+                        <mCommand></mCommand>
+                        <packageName></packageName>
+                        <mFgColor>#ff0000</mFgColor>
+                        <mBgColor>#ffff00</mBgColor>
+                        <mSoundFile></mSoundFile>
+                        <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                        <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                        <regexCodeList>
+                            <string>^\[HP=(\d+)</string>
+                        </regexCodeList>
+                        <regexCodePropertyList>
+                            <integer>1</integer>
+                        </regexCodePropertyList>
+                    </Trigger>
+                    <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                        <name>auto Stroll Slums</name>
+                        <script>if tonumber(matches[2]) &gt;= HP_autoEnter then
+	if current_room ~= 289 and current_room ~= 427 then
+		echo(&quot;not in proper room\n&quot;)
+	elseif current_room == 427 then
+		walkLoop_count = 1
+		walkLoop_run = true
+		walkLoop_pause = false
+		walkLoop(slums2Loop,10)
+		autoEnterTrigger = &quot;bodyguardslums&quot;
+	else
+		walkLoop_count = 1
+		walkLoop_run = true
+		walkLoop_pause = false
+		walkLoop(slumsLoop,4)
+		autoEnterTrigger = &quot;slums&quot;
+	end 
+	disableTrigger(&quot;auto Stroll Slums&quot;)
+end</script>
+                        <triggerType>0</triggerType>
+                        <conditonLineDelta>0</conditonLineDelta>
+                        <mStayOpen>0</mStayOpen>
+                        <mCommand></mCommand>
+                        <packageName></packageName>
+                        <mFgColor>#ff0000</mFgColor>
+                        <mBgColor>#ffff00</mBgColor>
+                        <mSoundFile></mSoundFile>
+                        <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                        <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                        <regexCodeList>
+                            <string>^\[HP=(\d+)</string>
+                        </regexCodeList>
+                        <regexCodePropertyList>
+                            <integer>1</integer>
+                        </regexCodePropertyList>
+                    </Trigger>
+                    <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                        <name>auto enter newhaven</name>
+                        <script>if tonumber(matches[2]) &gt;= HP_autoEnter then
+	if current_room ~= 9 then
+		echo(&quot;Must be above NewHaven arena\n&quot;)
+	else
+		last_movement = &quot;d&quot;
+		send(last_movement)
+		changeRoom(last_movement)
+		autoEnterTrigger = &quot;newhaven&quot;
+	end
+	disableTrigger(&quot;auto enter newhaven&quot;)
+end
+	</script>
+                        <triggerType>0</triggerType>
+                        <conditonLineDelta>0</conditonLineDelta>
+                        <mStayOpen>0</mStayOpen>
+                        <mCommand></mCommand>
+                        <packageName></packageName>
+                        <mFgColor>#ff0000</mFgColor>
+                        <mBgColor>#ffff00</mBgColor>
+                        <mSoundFile></mSoundFile>
+                        <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                        <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                        <regexCodeList>
+                            <string>^\[HP=(\d+)</string>
+                        </regexCodeList>
+                        <regexCodePropertyList>
+                            <integer>1</integer>
+                        </regexCodePropertyList>
+                    </Trigger>
+                </TriggerGroup>
             </TriggerGroup>
             <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                 <name>Chat</name>
@@ -867,8 +885,7 @@ prep()
 
 --disable any existing auto enters
 if autoEnterTrigger ~= nil then
-	disableTrigger(value)
-	autoEnterTrigger = nul
+	autoEnterTrigger = nil
 end
 
 --enable correct auto enter
@@ -897,7 +914,6 @@ end
                     <name>UnPrep for Monsters</name>
                     <script>if autoEnterTrigger ~= nil then
 	echo(tostring(autoEnterTrigger)..&quot; disabled\n&quot;)
-	disableTrigger(autoEnterTrigger)
 	autoEnterTrigger = nil
 else
 	echo(&quot;Auto enter already disabled\n&quot;)
@@ -1045,7 +1061,7 @@ function health(hp, direction)
 			bg(&quot;DarkGreen&quot;)
 			echo(&quot;Enabling &quot;..tostring(autoEnterTrigger))
 			bg(&quot;black&quot;)
-			enableTrigger(autoEnterTrigger)
+			autoEnterTable[autoEnterTrigger]()
 		end
 	end
 	
@@ -1117,14 +1133,6 @@ function enterArena(room,trigger)
 	prep()
 	gotoRoom(room)
 	enableTrigger(trigger&quot;auto enter newhaven&quot;)
-	send(&quot;rest&quot;)
-end
-
-function enterDarkCavern()
-	HP_panicHangup = true
-	prep()
-	gotoRoom(656) 
-	enableTrigger(&quot;autoStrollCaveWorm&quot;) 
 	send(&quot;rest&quot;)
 end
 
@@ -1213,6 +1221,7 @@ function setTownGlobals()
 		[&quot;slums&quot;] = function (x) enterArena(289,&quot;auto Stroll Slums&quot;) end,
 		[&quot;bear&quot;] = function (x) enterArena(9,&quot;auto enter bear&quot;) end,
 		[&quot;bodyguard slums&quot;] = function (x) enterArena(427,&quot;auto Stroll Slums&quot;) end,
+		[&quot;cave worm&quot;] = function (x) enterArena(656,&quot;autoStrollCaveWorm&quot;) end,
 	}
 
 	slums2Loop = { &quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;e&quot;,&quot;e&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;e&quot;,&quot;e&quot; }
