@@ -176,16 +176,14 @@ end</script>
                     <colorTriggerFgColor>#000000</colorTriggerFgColor>
                     <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
-                        <string>room</string>
-                        <string>you</string>
                         <string>Also\shere</string>
                         <string>from</string>
                         <string>damage!</string>
+                        <string>but</string>
                     </regexCodeList>
                     <regexCodePropertyList>
-                        <integer>0</integer>
-                        <integer>0</integer>
                         <integer>1</integer>
+                        <integer>0</integer>
                         <integer>0</integer>
                         <integer>0</integer>
                     </regexCodePropertyList>
@@ -705,7 +703,10 @@ echo(&quot;DAMAGE&quot;,&quot;DAMAGE: &quot;..damage)</script>
             </Trigger>
             <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                 <name>AutoInvite</name>
-                <script>tempTimer(660,[[send(&quot;invite ethereal;invite pile;invite unhappy;invite captain&quot;)]])</script>
+                <script>tempTimer(660,[[send(&quot;invite ethereal;invite pile;invite unhappy;invite captain&quot;)]])
+
+-- Auto Enter scripts
+tempTimer(700,[[tableAutoEnter[&quot;bodyguard slums&quot;]()]])</script>
                 <triggerType>0</triggerType>
                 <conditonLineDelta>0</conditonLineDelta>
                 <mStayOpen>0</mStayOpen>
@@ -718,6 +719,27 @@ echo(&quot;DAMAGE&quot;,&quot;DAMAGE: &quot;..damage)</script>
                 <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList>
                     <string>*ANSI RECOMMENDED*</string>
+                </regexCodeList>
+                <regexCodePropertyList>
+                    <integer>0</integer>
+                </regexCodePropertyList>
+            </Trigger>
+            <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <name>Cleanup</name>
+                <script>walkLoop_run = false
+tempTimer(60,[[disconnect()]])</script>
+                <triggerType>0</triggerType>
+                <conditonLineDelta>0</conditonLineDelta>
+                <mStayOpen>0</mStayOpen>
+                <mCommand></mCommand>
+                <packageName></packageName>
+                <mFgColor>#ff0000</mFgColor>
+                <mBgColor>#ffff00</mBgColor>
+                <mSoundFile></mSoundFile>
+                <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                <regexCodeList>
+                    <string>sorry</string>
                 </regexCodeList>
                 <regexCodePropertyList>
                     <integer>0</integer>
@@ -809,13 +831,13 @@ prep()
                     <script>if current_room == nil then echo(&quot;I don't know where I am.\n&quot;) return end
 
 --disable any existing auto enters
-autoEnterTrigger = nil
-for key,value in pairs(tableAutoEnter) do
+if autoEnterTrigger ~= nil then
 	disableTrigger(value)
+	autoEnterTrigger = nul
 end
 
 --enable correct auto enter
-enableTrigger(tableAutoEnter[matches[2]])
+tableAutoEnter[matches[2]]()
 
 </script>
                     <command></command>
@@ -1080,6 +1102,14 @@ function strollSlums()
 	enterCommon()
 end
 
+function strollBodyguardSlums()
+	HP_panicHangup = true
+	prep()
+	gotoRoom(427) 
+	enableTrigger(&quot;auto Stroll Slums&quot;) 
+	send(&quot;rest&quot;)
+end
+
 function enterDarkCavern()
 	HP_panicHangup = true
 	enterCommon()
@@ -1164,18 +1194,11 @@ function setTownGlobals()
 	preSpellCount = 0
 	attackNum = 1
 
-	tablePreps = {
+	tableAutoEnter = {
 		[&quot;newhaven&quot;] = function (x) enterNewHavenArena() end,
 		[&quot;slums&quot;] = function (x) strollSlums() end,
 		[&quot;bear&quot;] = function (x) enterBearCavern() end,
-		[&quot;darkcavern&quot;] = function (x) enterDarkCavern() end,
-		[&quot;darkwoodforest&quot;] = function (x) enterCommon() end,
-		[&quot;narrowplateau&quot;] = function (x) enterCommon() end,
-	}
-
-	tableAutoEnter = {
-		[&quot;newhaven&quot;] = &quot;auto enter newhaven&quot;,
-		[&quot;slums&quot;] = &quot;auto Stroll Slums&quot;,
+		[&quot;bodyguard slums&quot;] = function (x) strollBodyguardSlums() end,
 	}
 
 	slums2Loop = { &quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;e&quot;,&quot;e&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;e&quot;,&quot;e&quot; }
@@ -1317,6 +1340,7 @@ end</script>
                     <name>Recon</name>
                     <packageName></packageName>
                     <script>function reConn()
+	walkLoop_pause = true
 	reconnect()
 	tempTimer(4,[[send(&quot;]]..uname..[[&quot;)]])
 	tempTimer(7.5,[[send(&quot;&quot;)]])
@@ -1679,7 +1703,7 @@ end
 
 function walkLoop(loop,time)
 	if not walkLoop_pause and HP &gt; HP_autoEnter then 
-		send(loop[walkLoop_count]) 
+		send(loop[walkLoop_count]..&quot;;rest&quot;) 
 		last_movement = loop[walkLoop_count]
 		walkLoop_count = walkLoop_count + 1
 		if walkLoop_count &gt; table.size(loop) then walkLoop_count =  1 end
