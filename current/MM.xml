@@ -362,9 +362,9 @@ end</script>
 	if current_room ~= 9 then
 		echo(&quot;Must be above NewHaven arena\n&quot;)
 	else
-		autoEnterTrigger = &quot;auto enter newhaven&quot;
-		tablePreps[&quot;newhaven&quot;]()
-		disableTrigger(&quot;auto enter newhaven&quot;)
+		last_movement = &quot;d&quot;
+		send(last_movement)
+		changeRoom(last_movement)
 	end
 end
 	</script>
@@ -479,6 +479,37 @@ end</script>
                     </regexCodeList>
                     <regexCodePropertyList>
                         <integer>1</integer>
+                    </regexCodePropertyList>
+                </Trigger>
+                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                    <name>auto enter bear</name>
+                    <script>if tonumber(matches[2]) &gt;= HP_autoEnter then
+	if current_room ~= 9 then
+		echo(&quot;Must be above NewHaven arena\n&quot;)
+	else
+		ignoreTimer = true
+		retreatSequence = &quot;s;s;u&quot;
+		send(&quot;d;n;n&quot;)
+		changeRoom(&quot;d&quot;)
+		changeRoom(&quot;n&quot;)
+		changeRoom(&quot;n&quot;)
+	end
+end</script>
+                    <triggerType>0</triggerType>
+                    <conditonLineDelta>0</conditonLineDelta>
+                    <mStayOpen>0</mStayOpen>
+                    <mCommand></mCommand>
+                    <packageName></packageName>
+                    <mFgColor>#ff0000</mFgColor>
+                    <mBgColor>#ffff00</mBgColor>
+                    <mSoundFile></mSoundFile>
+                    <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                    <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                    <regexCodeList>
+                        <string>^\[HP=(\d+)</string>
+                    </regexCodeList>
+                    <regexCodePropertyList>
+                        <integer>0</integer>
                     </regexCodePropertyList>
                 </Trigger>
             </TriggerGroup>
@@ -703,10 +734,14 @@ echo(&quot;DAMAGE&quot;,&quot;DAMAGE: &quot;..damage)</script>
             </Trigger>
             <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                 <name>AutoInvite</name>
-                <script>tempTimer(660,[[send(&quot;invite ethereal;invite pile;invite unhappy;invite captain&quot;)]])
+                <script>-- Auto Enter script:
+local autoEnter = &quot;bodyguard slums&quot;
 
--- Auto Enter scripts
-tempTimer(700,[[tableAutoEnter[&quot;bodyguard slums&quot;]()]])</script>
+tempTimer(660,[[send(&quot;invite ethereal;invite pile;invite unhappy;invite captain&quot;)]])
+
+if autoEnter ~= nil then
+	tempTimer(700,[[tableAutoEnter[&quot;]]..autoEnter..[[&quot;]()]])
+end</script>
                 <triggerType>0</triggerType>
                 <conditonLineDelta>0</conditonLineDelta>
                 <mStayOpen>0</mStayOpen>
@@ -1077,42 +1112,20 @@ end</script>
 -- Note that you can also use external Scripts --
 -------------------------------------------------
 
-function enterNewHavenArena()
+function enterArena(room,trigger)
 	HP_panicHangup = false
-	enterCommon()
-	disableTrigger(&quot;auto enter newhaven&quot;)
-	last_movement = &quot;d&quot;
-	send(last_movement)
-	changeRoom(last_movement)
-end
-
-function enterBearCavern()
-	HP_panicHangup = false
-	enterCommon()
-	retreatSequence = &quot;s;s;u&quot;
-	send(&quot;d;n;n&quot;)
-	changeRoom(&quot;d&quot;)
-	changeRoom(&quot;n&quot;)
-	changeRoom(&quot;n&quot;)
-	ignoreTimer = true
-end
-
-function strollSlums()
-	HP_panicHangup = true
-	enterCommon()
-end
-
-function strollBodyguardSlums()
-	HP_panicHangup = true
 	prep()
-	gotoRoom(427) 
-	enableTrigger(&quot;auto Stroll Slums&quot;) 
+	gotoRoom(room)
+	enableTrigger(trigger&quot;auto enter newhaven&quot;)
 	send(&quot;rest&quot;)
 end
 
 function enterDarkCavern()
 	HP_panicHangup = true
-	enterCommon()
+	prep()
+	gotoRoom(656) 
+	enableTrigger(&quot;autoStrollCaveWorm&quot;) 
+	send(&quot;rest&quot;)
 end
 
 function prep()
@@ -1124,6 +1137,7 @@ function prep()
 	echo(&quot;health enabled\n&quot;)
 	retreatSequence = &quot;i&quot;
 	echo(&quot;retreat enabled\n&quot;)
+	ignoreTimer = false
 end
 
 function unPrep()
@@ -1195,10 +1209,10 @@ function setTownGlobals()
 	attackNum = 1
 
 	tableAutoEnter = {
-		[&quot;newhaven&quot;] = function (x) enterNewHavenArena() end,
-		[&quot;slums&quot;] = function (x) strollSlums() end,
-		[&quot;bear&quot;] = function (x) enterBearCavern() end,
-		[&quot;bodyguard slums&quot;] = function (x) strollBodyguardSlums() end,
+		[&quot;newhaven&quot;] = function (x) enterArena(9,&quot;auto enter newhaven&quot;) end,
+		[&quot;slums&quot;] = function (x) enterArena(289,&quot;auto Stroll Slums&quot;) end,
+		[&quot;bear&quot;] = function (x) enterArena(9,&quot;auto enter bear&quot;) end,
+		[&quot;bodyguard slums&quot;] = function (x) enterArena(427,&quot;auto Stroll Slums&quot;) end,
 	}
 
 	slums2Loop = { &quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;e&quot;,&quot;e&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;e&quot;,&quot;e&quot; }
