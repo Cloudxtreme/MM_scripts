@@ -180,15 +180,15 @@ end</script>
                         <string>Also\shere</string>
                         <string>from</string>
                         <string>damage!</string>
-                        <string>but</string>
                         <string>with\stheir</string>
+                        <string>lunges at</string>
                     </regexCodeList>
                     <regexCodePropertyList>
                         <integer>1</integer>
                         <integer>0</integer>
                         <integer>0</integer>
-                        <integer>0</integer>
                         <integer>1</integer>
+                        <integer>0</integer>
                     </regexCodePropertyList>
                     <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>newhavenHunt</name>
@@ -754,7 +754,7 @@ echo(&quot;DAMAGE&quot;,&quot;DAMAGE: &quot;..damage)</script>
                     <integer>1</integer>
                 </regexCodePropertyList>
             </Trigger>
-            <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+            <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                 <name>AutoInvite</name>
                 <script>-- Auto Enter script:
 local autoEnter = &quot;bodyguard slums&quot;
@@ -785,8 +785,7 @@ end</script>
                 <name>Cleanup</name>
                 <script>walkLoop_run = false
 tempTimer(60,[[disconnect()]])
-copy()
-appendBuffer(&quot;chat&quot;)</script>
+</script>
                 <triggerType>0</triggerType>
                 <conditonLineDelta>0</conditonLineDelta>
                 <mStayOpen>0</mStayOpen>
@@ -798,12 +797,10 @@ appendBuffer(&quot;chat&quot;)</script>
                 <colorTriggerFgColor>#000000</colorTriggerFgColor>
                 <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList>
-                    <string>sorry</string>
-                    <string>disconnect</string>
+                    <string>Sorry to interrupt here, but the server will be shutting</string>
                 </regexCodeList>
                 <regexCodePropertyList>
-                    <integer>0</integer>
-                    <integer>0</integer>
+                    <integer>1</integer>
                 </regexCodePropertyList>
             </Trigger>
         </TriggerGroup>
@@ -1019,6 +1016,17 @@ send(matches[1])</script>
                     <command></command>
                     <packageName></packageName>
                     <regex>^(l)$</regex>
+                </Alias>
+                <Alias isActive="yes" isFolder="no">
+                    <name>Special Exits</name>
+                    <script>changeRoom(matches[1])
+
+if not manual_map then
+	send(matches[1])
+end</script>
+                    <command></command>
+                    <packageName></packageName>
+                    <regex>^go\s(.*)$</regex>
                 </Alias>
             </AliasGroup>
             <Alias isActive="yes" isFolder="no">
@@ -1331,6 +1339,7 @@ HP_healthSpell = 20
 	HP_maheAvail = &quot;c mihe&quot;
 	HP_miheAvail = nil
 	preSpell = &quot;c chant&quot;
+	attackSeq = { &quot;c agon&quot;,&quot;attack&quot; }
 --When can I automatically re-enter battle?
 HP_autoEnter = 35
 
@@ -1414,7 +1423,8 @@ end</script>
 	tempTimer(10.2,[[send(&quot;c&quot;)]])
 	disableTrigger(&quot;Name_Line&quot;) --prevent false movement on reconnect
 	tempTimer(20,[[enableTrigger(&quot;Name_Line&quot;)]])
-end</script>
+end
+</script>
                     <eventHandlerList/>
                 </Script>
             </ScriptGroup>
@@ -1584,12 +1594,25 @@ function createRoom(room_name,area_name)
 end
 
 function changeRoom(direction)
-	local exits = getRoomExits(current_room)
-	if table.contains(exits,longDirection(direction)) then
-		local rid = exits[longDirection(direction)]
-		setRoom(rid)
+	if direction:find(&quot;go&quot;) then
+		local exits = getSpecialExits(current_room)
+		for rid,command_table in pairs(exits) do
+			for command,locked in pairs(command_table) do 
+				if command:find(direction) then
+					setRoom(rid)
+					return
+				end
+			end
+		end
+		echo(&quot;No exit to the &quot;..direction..&quot;\n&quot;) -- if we get here, no exit found
 	else
-		echo(&quot;No exit to the &quot;..longDirection(direction)..&quot;\n&quot;)
+		local exits = getRoomExits(current_room)
+		if table.contains(exits,longDirection(direction)) then
+			local rid = exits[longDirection(direction)]
+			setRoom(rid)
+		else
+			echo(&quot;No exit to the &quot;..longDirection(direction)..&quot;\n&quot;)
+		end
 	end
 end
 
