@@ -636,7 +636,9 @@ enableTrigger(&quot;Name_Line&quot;)
                 </Trigger>
                 <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>Roam</name>
-                    <script>roam(matches[2])</script>
+                    <script>roam(matches[2])
+disableTimer(&quot;backtrack&quot;) 
+</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
                     <mStayOpen>0</mStayOpen>
@@ -839,6 +841,15 @@ totExp = 0</script>
             <command></command>
             <packageName></packageName>
             <time>00:10:00.000</time>
+        </Timer>
+        <Timer isActive="no" isFolder="no" isTempTimer="no" isOffsetTimer="no">
+            <name>backtrack</name>
+            <script>-- Try to keep map loaction correct, roll back move if move didn't happen
+walkLoop_run = false
+changeRoom(last_movement)</script>
+            <command></command>
+            <packageName></packageName>
+            <time>00:00:02.000</time>
         </Timer>
     </TimerPackage>
     <AliasPackage>
@@ -1725,12 +1736,13 @@ function walkStartup()
 end
 
 function walkLoop(loop,time)
-	if not walkLoop_pause and HP &gt; HP_autoEnter then 
+	if walkLoop_run and not walkLoop_pause and HP &gt; HP_autoEnter then 
 		send(loop[walkLoop_count]..&quot;;rest&quot;) 
 		last_movement = loop[walkLoop_count]
 		walkLoop_count = walkLoop_count + 1
 		if walkLoop_count &gt; table.size(loop) then walkLoop_count =  1 end
 		changeRoom(last_movement)
+		enableTimer(&quot;backtrack&quot;)
 	end
  
 	if walkLoop_run then
@@ -1774,6 +1786,7 @@ function doRoam()
 	else
 		send(roamDirection) 
 		last_movement = roamDirection
+		enableTimer(&quot;backtrack&quot;)
 	end
 end</script>
                 <eventHandlerList/>
