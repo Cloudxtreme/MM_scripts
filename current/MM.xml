@@ -58,7 +58,7 @@
                 </regexCodePropertyList>
                 <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>check health</name>
-                    <script>health(tonumber(matches[2]))
+                    <script>health(tonumber(matches[2]),tonumber(matches[3]))
 </script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
@@ -71,7 +71,7 @@
                     <colorTriggerFgColor>#000000</colorTriggerFgColor>
                     <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
-                        <string>^\[HP=(\-*\d+)</string>
+                        <string>^\[HP=(\-*\d+)/..=(\d+)</string>
                     </regexCodeList>
                     <regexCodePropertyList>
                         <integer>1</integer>
@@ -637,7 +637,7 @@ enableTrigger(&quot;Name_Line&quot;)
                 </Trigger>
                 <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>NewRoom</name>
-                    <script>roam(matches[2])
+                    <script>if not matches[1]:find(&quot;very dark&quot;) then roam(matches[2]) end
 disableTimer(&quot;backtrack&quot;)
 walkCount = walkCount + 1 
 </script>
@@ -653,9 +653,11 @@ walkCount = walkCount + 1
                     <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
                         <string>^Obvious\sexits:\s(.*)</string>
+                        <string>The room is very dark</string>
                     </regexCodeList>
                     <regexCodePropertyList>
                         <integer>1</integer>
+                        <integer>0</integer>
                     </regexCodePropertyList>
                 </Trigger>
                 <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
@@ -754,7 +756,7 @@ echo(&quot;DAMAGE&quot;,&quot;DAMAGE: &quot;..damage)</script>
                     <integer>1</integer>
                 </regexCodePropertyList>
             </Trigger>
-            <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+            <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                 <name>AutoInvite</name>
                 <script>-- Auto Enter script:
 local autoEnter = &quot;bodyguard slums&quot;
@@ -953,7 +955,8 @@ end</script>
                 <Alias isActive="yes" isFolder="no">
                     <name>Disable Loop</name>
                     <script>walkLoop_run = false
-walkLoop_pause = false</script>
+walkLoop_pause = false
+autoEnterTrigger = nil</script>
                     <command></command>
                     <packageName></packageName>
                     <regex>^disable\sloop$</regex>
@@ -1087,23 +1090,24 @@ function Startup()
 
 	prevExp = 0
 	totExp = 0
+	magicPower = 0
 end
 
-function health(hp, direction)
+function health(hp, ability)
+	magicPower = ability
+
 	if tonumber(hp) &lt;= HP_panic or tonumber(hp) &lt; 10 then
 		Panic()
 	end
 
 	if tonumber(hp) &lt; HP_retreat and tonumber(hp) &gt; HP_panic then
-		echo(&quot;RETREAT!&quot;)
+		cecho(&quot;&lt;black:sky_blue&gt;RETREAT!&quot;)
 		walkLoop_run = false
 		doRetreat()
 		send(&quot;rest&quot;)
 		enableTrigger(&quot;healing&quot;)
 		if autoEnterTrigger ~= nil then
-			bg(&quot;DarkGreen&quot;)
-			echo(&quot;Enabling &quot;..tostring(autoEnterTrigger))
-			bg(&quot;black&quot;)
+			cecho(&quot;&lt;:DarkGreen&gt;Enabling &quot;..tostring(autoEnterTrigger))
 			tableAutoEnter[autoEnterTrigger]()
 		end
 	end
@@ -1131,9 +1135,7 @@ function Panic()
 		doRetreat()
 	end
 	enableTrigger(&quot;panic&quot;)
-	bg (&quot;red&quot;)
-	echo (&quot;PANIC!&quot;)
-	bg (&quot;black&quot;)
+	cecho (&quot;&lt;:red&gt;PANIC!&quot;)
 end
 
 function doRetreat()
@@ -1226,7 +1228,9 @@ function Hunt(monster)
 	if preSpell ~= nil and preSpellCount == 4 then send(preSpell) preSpellCount = 0
 	else preSpellCount = preSpellCount + 1 end
 	if attackSeq == nil then send(&quot;attack &quot; .. string.trim(monster))
-	else 
+	else
+		if attackSeq[attackNum]:sub(1,1) == &quot;i&quot; or attackSeq[attackNum]:sub(1,1) == &quot;c&quot; then
+			tempTimer(2,function (x) stopMagic(monster) end) end
 		send(attackSeq[attackNum]..&quot; &quot;..string.trim(monster))
 		attackNum = attackNum + 1
 		if attackNum &gt; table.size(attackSeq) then attackNum = 1 end
@@ -1237,6 +1241,17 @@ function Hunt(monster)
 	showWindow(&quot;DAMAGE&quot;)
 	damage = 0
 	echo(&quot;DAMAGE&quot;,&quot;DAMAGE: &quot;..damage)
+end
+
+function stopMagic(monster)
+	if isActive(&quot;huntHold&quot;,&quot;trigger&quot;) == 0 then return
+	elseif magicPower &lt; minMagic then
+		disableTrigger(&quot;huntHold&quot;)
+		send(&quot;attack &quot;..monster)
+		tempTimer(2,[[enableTrigger(&quot;huntHold&quot;)]])
+	else
+		tempTimer(2,function (x) stopMagic(monster) end)
+	end
 end
 
 function AutoPrep()
@@ -1299,19 +1314,27 @@ end</script>
 
 function cleric()
 --When should panic set in?
-HP_panic = 20
+	HP_panic = 20
+
 --Should I hang up of panic?
-HP_panicHangup = true
+	HP_panicHangup = true
+
 --When should I retreat from room?
-HP_retreat = 30
+	HP_retreat = 30
+
 --When should I start using health spells?
-HP_healthSpell = 25
+	HP_healthSpell = 25
+
 --Which health spells are available?
-HP_maheAvail = &quot;c mihe&quot;
-HP_miheAvail = nil
+	HP_maheAvail = &quot;c mahe&quot;
+	HP_miheAvail = &quot;c mihe&quot;
+
+--Handle attacking	
+	minMagic = 8
 	attackSeq = { &quot;attack&quot;,&quot;c hamm&quot; }
+
 --When can I automatically re-enter battle?
-HP_autoEnter = 35
+	HP_autoEnter = 45
 
 	uname = &quot;etherealsilence&quot;
 
@@ -1336,12 +1359,14 @@ HP_retreat = 30
 --When should I start using health spells?
 HP_healthSpell = 20
 --Which health spells are available?
-	HP_maheAvail = &quot;c mihe&quot;
-	HP_miheAvail = nil
+	HP_maheAvail = &quot;c mahe&quot;
+	HP_miheAvail = &quot;c mihe&quot;
 	preSpell = &quot;c chant&quot;
+
+	minMagic = 8
 	attackSeq = { &quot;c agon&quot;,&quot;attack&quot; }
 --When can I automatically re-enter battle?
-HP_autoEnter = 35
+HP_autoEnter = 45
 
 	uname = &quot;pileoworthless&quot;
 
@@ -1366,10 +1391,13 @@ HP_retreat = 30
 --When should I start using health spells?
 HP_healthSpell = 20
 --Which health spells are available?
-HP_maheAvail = &quot;c mend&quot;
-HP_miheAvail = nil
+	--HP_maheAvail = &quot;c rhel&quot;
+	HP_maheAvail = nil
+	HP_miheAvail = &quot;c mend&quot;
 	preSpell = nil
-	attackSeq = { &quot;c vine&quot;,&quot;bash&quot; }
+	
+	minMagic = 8
+	attackSeq = { &quot;c chao&quot;,&quot;bash&quot; }
 --When can I automatically re-enter battle?
 HP_autoEnter = 40
 
@@ -1399,7 +1427,7 @@ function mystic()
 HP_maheAvail = &quot;invoke swan&quot;
 HP_miheAvail = nil
 	preSpell = &quot;invoke tiger&quot;
-	attackSeq = { &quot;attack&quot; }
+	attackSeq = { &quot;punch&quot;,&quot;attack&quot; }
 --When can I automatically re-enter battle?
 HP_autoEnter = 38
 
@@ -1510,12 +1538,12 @@ function doSpeedWalk()
 	echo(&quot;Rooms we'll pass through: &quot; .. table.concat(speedWalkPath, &quot;, &quot;) .. &quot;\n&quot;)
 	local vSub = nil
 	for i,v in ipairs(speedWalkDir) do
-		if v:sub(1,1) == &quot;n&quot; or v:sub(1,1) == &quot;s&quot; then
-			vSub = v
-		else
+		if v:sub(1,1) == &quot;u&quot; or v:sub(1,1) == &quot;d&quot; then
 			vSub = v:sub(1,1) --up and down come as full words
+		else
+			vSub = v
 		end
-		tempTimer(i + .5, [[send(&quot;]]..v..[[&quot;) changeRoom(&quot;]]..vSub..[[&quot;)]])
+		tempTimer(i * 1.2, [[send(&quot;]]..v..[[&quot;) changeRoom(&quot;]]..vSub..[[&quot;)]])
 	end
 
 	walkCount = 0
@@ -1751,7 +1779,7 @@ function findAreaID(areaname)
   -- 'false' and a message that there are than one are matches
   local returnid, fullareaname
   for area, id in pairs(list) do
-    if area:find(areaname, 1, true) then
+    if area == areaname then
       if returnid then return false, &quot;more than one area matches&quot; end
       returnid = id; fullareaname = area
     end
@@ -1795,7 +1823,8 @@ function walkStartup()
 end
 
 function walkLoop(loop,time)
-	if walkLoop_run and not walkLoop_pause and HP &gt; HP_autoEnter then 
+	if walkLoop_run and not walkLoop_pause and HP &gt; HP_autoEnter then
+		cecho(&quot;&lt;lawn_green&gt;Walk loop &quot;..loop[walkLoop_count]..&quot;\n&quot;)
 		send(loop[walkLoop_count]..&quot;;rest&quot;) 
 		last_movement = loop[walkLoop_count]
 		walkLoop_count = walkLoop_count + 1
@@ -1814,7 +1843,6 @@ end
 
 function roam(exits)
 	if roamDirection == nil then return end
-
 		local found = false
 		local availExits = split(exits,&quot; &quot;)
 		for k,v in pairs(availExits) do
@@ -1843,6 +1871,7 @@ function doRoam()
 	if walkLoop_pause then
 		tempTimer(5,[[doRoam()]])
 	else
+		cecho(&quot;&lt;lawn_green&gt;Roam &quot;..roamDirection..&quot;\n&quot;)
 		send(roamDirection) 
 		last_movement = roamDirection
 		enableTimer(&quot;backtrack&quot;)
