@@ -58,7 +58,8 @@
                 </regexCodePropertyList>
                 <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>check health</name>
-                    <script>health(tonumber(matches[2]))</script>
+                    <script>health(tonumber(matches[2]))
+</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
                     <mStayOpen>0</mStayOpen>
@@ -86,7 +87,7 @@
 		bg(&quot;DarkGreen&quot;)
 		echo(&quot;enabling &quot;..tostring(autoEnterTrigger))
 		bg(&quot;black&quot;)
-		autoEnterTable[autoEnterTrigger]()
+		tableAutoEnter[autoEnterTrigger]()
 	end
 end</script>
                     <triggerType>0</triggerType>
@@ -162,7 +163,7 @@ end</script>
                 <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList/>
                 <regexCodePropertyList/>
-                <TriggerGroup isActive="no" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>Hunts</name>
                     <script></script>
                     <triggerType>0</triggerType>
@@ -180,12 +181,14 @@ end</script>
                         <string>from</string>
                         <string>damage!</string>
                         <string>but</string>
+                        <string>with\stheir</string>
                     </regexCodeList>
                     <regexCodePropertyList>
                         <integer>1</integer>
                         <integer>0</integer>
                         <integer>0</integer>
                         <integer>0</integer>
+                        <integer>1</integer>
                     </regexCodePropertyList>
                     <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>newhavenHunt</name>
@@ -279,7 +282,7 @@ end</script>
                         <colorTriggerFgColor>#000000</colorTriggerFgColor>
                         <colorTriggerBgColor>#000000</colorTriggerBgColor>
                         <regexCodeList>
-                            <string>\sbat</string>
+                            <string>\sbat\s</string>
                             <string>spider</string>
                             <string>cleric</string>
                             <string>priest</string>
@@ -464,22 +467,20 @@ end</script>
                     <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>auto Stroll Slums</name>
                         <script>if tonumber(matches[2]) &gt;= HP_autoEnter then
+	disableTrigger(&quot;auto Stroll Slums&quot;)
 	if current_room ~= 289 and current_room ~= 427 then
-		echo(&quot;not in proper room\n&quot;)
+		enableTrigger(&quot;auto Stroll Slums&quot;)
 	elseif current_room == 427 then
 		walkLoop_count = 1
 		walkLoop_run = true
-		walkLoop_pause = false
 		walkLoop(slums2Loop,10)
-		autoEnterTrigger = &quot;bodyguardslums&quot;
+		autoEnterTrigger = &quot;bodyguard slums&quot;
 	else
 		walkLoop_count = 1
 		walkLoop_run = true
-		walkLoop_pause = false
-		walkLoop(slumsLoop,4)
+		walkLoop(slumsLoop,5)
 		autoEnterTrigger = &quot;slums&quot;
-	end 
-	disableTrigger(&quot;auto Stroll Slums&quot;)
+	end
 end</script>
                         <triggerType>0</triggerType>
                         <conditonLineDelta>0</conditonLineDelta>
@@ -635,9 +636,10 @@ enableTrigger(&quot;Name_Line&quot;)
                     </regexCodePropertyList>
                 </Trigger>
                 <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                    <name>Roam</name>
+                    <name>NewRoom</name>
                     <script>roam(matches[2])
-disableTimer(&quot;backtrack&quot;) 
+disableTimer(&quot;backtrack&quot;)
+walkCount = walkCount + 1 
 </script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
@@ -779,10 +781,12 @@ end</script>
                     <integer>0</integer>
                 </regexCodePropertyList>
             </Trigger>
-            <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+            <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                 <name>Cleanup</name>
                 <script>walkLoop_run = false
-tempTimer(60,[[disconnect()]])</script>
+tempTimer(60,[[disconnect()]])
+copy()
+appendBuffer(&quot;chat&quot;)</script>
                 <triggerType>0</triggerType>
                 <conditonLineDelta>0</conditonLineDelta>
                 <mStayOpen>0</mStayOpen>
@@ -795,8 +799,10 @@ tempTimer(60,[[disconnect()]])</script>
                 <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList>
                     <string>sorry</string>
+                    <string>disconnect</string>
                 </regexCodeList>
                 <regexCodePropertyList>
+                    <integer>0</integer>
                     <integer>0</integer>
                 </regexCodePropertyList>
             </Trigger>
@@ -806,26 +812,25 @@ tempTimer(60,[[disconnect()]])</script>
         <Timer isActive="no" isFolder="no" isTempTimer="no" isOffsetTimer="no">
             <name>Combat</name>
             <script>CombatTimer = true
-disableTimer(&quot;combat&quot;)</script>
+disableTimer(&quot;combat&quot;)
+send(&quot;rest&quot;)</script>
             <command></command>
             <packageName></packageName>
             <time>00:01:00.000</time>
         </Timer>
         <Timer isActive="yes" isFolder="no" isTempTimer="no" isOffsetTimer="no">
             <name>Heartbeat</name>
-            <script>disableTimer(&quot;Heartbeat&quot;)
-echo(&quot;RECON&quot;)
+            <script>echo(&quot;RECON&quot;)
 reConn()
-enableTimer(&quot;Heartbeat&quot;)</script>
+</script>
             <command></command>
             <packageName></packageName>
             <time>00:10:00.000</time>
         </Timer>
         <Timer isActive="yes" isFolder="no" isTempTimer="no" isOffsetTimer="no">
             <name>AtTheTone</name>
-            <script>disableTimer(&quot;AtTheTone&quot;)
-cecho(&quot;                    &lt;:dark_olive_green&gt;========= &quot;..getTime(true)..&quot; =========\n&quot;)
-enableTimer(&quot;AtTheTone&quot;)</script>
+            <script>cecho(&quot;                    &lt;:dark_olive_green&gt;========= &quot;..getTime(true)..&quot; =========\n&quot;)
+</script>
             <command></command>
             <packageName></packageName>
             <time>00:03:00.000</time>
@@ -833,10 +838,8 @@ enableTimer(&quot;AtTheTone&quot;)</script>
         <Timer isActive="yes" isFolder="no" isTempTimer="no" isOffsetTimer="no">
             <name>expCalc</name>
             <script>local expPerHour = totExp * 6
-disableTimer(&quot;expCalc&quot;)
 cecho(&quot;                    &lt;:SteelBlue&gt;========= Exp per Hour: &quot;..expPerHour..&quot; =========\n&quot;)
 echo(&quot;EXPpHR&quot;,expPerHour..&quot; Exp/hr&quot;)
-enableTimer(&quot;expCalc&quot;)
 totExp = 0</script>
             <command></command>
             <packageName></packageName>
@@ -846,10 +849,21 @@ totExp = 0</script>
             <name>backtrack</name>
             <script>-- Try to keep map loaction correct, roll back move if move didn't happen
 walkLoop_run = false
-changeRoom(last_movement)</script>
+changeRoom(inverseDirection(last_movement))
+disableTimer(&quot;backtrack&quot;)
+echo(&quot;I didn't move, reverting position.\n&quot;)</script>
             <command></command>
             <packageName></packageName>
-            <time>00:00:02.000</time>
+            <time>00:00:04.500</time>
+        </Timer>
+        <Timer isActive="no" isFolder="no" isTempTimer="no" isOffsetTimer="no">
+            <name>debug print</name>
+            <script>echo(&quot;walk loop pause: &quot;..tostring(walkLoop_pause)..&quot; walk loop run: &quot;..tostring(walkLoop_run)..&quot;\n&quot;)
+echo(&quot;walk count: &quot;..walkCount..&quot; speed walk steps: &quot;..table.size(speedWalkPath)..&quot;\n&quot;)
+</script>
+            <command></command>
+            <packageName></packageName>
+            <time>00:00:05.000</time>
         </Timer>
     </TimerPackage>
     <AliasPackage>
@@ -930,7 +944,7 @@ else
 	echo(&quot;Auto enter already disabled\n&quot;)
 end
 
-if isActive(&quot;Hunts&quot;, &quot;trigger&quot;) then
+if isActive(&quot;Hunts&quot;, &quot;trigger&quot;) == 1 then
 	unPrep()
 else
 	echo(&quot;Already unpreped\n&quot;)
@@ -941,7 +955,8 @@ end</script>
                 </Alias>
                 <Alias isActive="yes" isFolder="no">
                     <name>Disable Loop</name>
-                    <script>walkLoop_run = false</script>
+                    <script>walkLoop_run = false
+walkLoop_pause = false</script>
                     <command></command>
                     <packageName></packageName>
                     <regex>^disable\sloop$</regex>
@@ -995,6 +1010,15 @@ end</script>
                     <command></command>
                     <packageName></packageName>
                     <regex>^map\s(.*)$</regex>
+                </Alias>
+                <Alias isActive="yes" isFolder="no">
+                    <name>Movement Blocker</name>
+                    <script>disableTrigger(&quot;Name_Line&quot;)
+enableTrigger(&quot;Exit_Line&quot;)
+send(matches[1])</script>
+                    <command></command>
+                    <packageName></packageName>
+                    <regex>^(l)$</regex>
                 </Alias>
             </AliasGroup>
             <Alias isActive="yes" isFolder="no">
@@ -1072,7 +1096,7 @@ function health(hp, direction)
 			bg(&quot;DarkGreen&quot;)
 			echo(&quot;Enabling &quot;..tostring(autoEnterTrigger))
 			bg(&quot;black&quot;)
-			autoEnterTable[autoEnterTrigger]()
+			tableAutoEnter[autoEnterTrigger]()
 		end
 	end
 	
@@ -1140,11 +1164,15 @@ end</script>
 -------------------------------------------------
 
 function enterArena(room,trigger)
-	HP_panicHangup = false
-	prep()
-	gotoRoom(room)
-	enableTrigger(trigger&quot;auto enter newhaven&quot;)
-	send(&quot;rest&quot;)
+	if isActive(&quot;check health&quot;,&quot;trigger&quot;) == 1 then
+		prep()
+		if current_room ~= room then gotoRoom(room) end
+		enableTrigger(trigger)
+		send(&quot;rest&quot;)
+	else
+		tempTimer(30,function (x) enterArena(room,trigger) end)
+		echo(&quot;waiting to auto start\n&quot;)
+	end
 end
 
 function prep()
@@ -1157,6 +1185,8 @@ function prep()
 	retreatSequence = &quot;i&quot;
 	echo(&quot;retreat enabled\n&quot;)
 	ignoreTimer = false
+	HP_panicHangup = true
+	echo(&quot;defaulted timer and hangup\n&quot;)
 end
 
 function unPrep()
@@ -1202,9 +1232,9 @@ function Hunt(monster)
 end
 
 function AutoPrep()
-	if current_room == 690 or current_room == 286 or current_room == 937 then
+	if (current_room == 690 or current_room == 286 or current_room == 937) and isActive(&quot;Hunts&quot;,&quot;trigger&quot;) == 0 then
 		prep()
-	elseif (current_room == 190 or current_room == 285 or current_room == 116) and isActive(&quot;Hunts&quot;,&quot;trigger&quot;) then
+	elseif (current_room == 190 or current_room == 285 or current_room == 116) and isActive(&quot;Hunts&quot;,&quot;trigger&quot;) == 1 then
 		unPrep()
 	end
 end</script>
@@ -1382,6 +1412,8 @@ end</script>
 	tempTimer(9.5,[[send(&quot;m&quot;)]])
 	tempTimer(10,[[send(&quot;e&quot;)]])
 	tempTimer(10.2,[[send(&quot;c&quot;)]])
+	disableTrigger(&quot;Name_Line&quot;) --prevent false movement on reconnect
+	tempTimer(20,[[enableTrigger(&quot;Name_Line&quot;)]])
 end</script>
                     <eventHandlerList/>
                 </Script>
@@ -1445,6 +1477,7 @@ function mapStartup()
 	current_room = nil
 	manual_map = false
 	auto_map = false
+	walkCount = 0
 
 	loadMap()
 	addMapEvent(&quot;I'm Here&quot;, &quot;setPlayerLoc&quot;)
@@ -1467,7 +1500,7 @@ function doSpeedWalk()
 	echo(&quot;Rooms we'll pass through: &quot; .. table.concat(speedWalkPath, &quot;, &quot;) .. &quot;\n&quot;)
 	local vSub = nil
 	for i,v in ipairs(speedWalkDir) do
-		if v:find(&quot;n&quot;) or v:find(&quot;s&quot;) then
+		if v:sub(1,1) == &quot;n&quot; or v:sub(1,1) == &quot;s&quot; then
 			vSub = v
 		else
 			vSub = v:sub(1,1) --up and down come as full words
@@ -1475,14 +1508,17 @@ function doSpeedWalk()
 		tempTimer(i + .5, [[send(&quot;]]..v..[[&quot;) changeRoom(&quot;]]..vSub..[[&quot;)]])
 	end
 
-	amIspeedwalking(speedWalkPath[table.size(speedWalkPath)])
+	walkCount = 0
+	amIspeedwalking(table.size(speedWalkPath))
+	walkLoop_pause = true
 end
 
-function amIspeedwalking(final_room)
-	if current_room ~= final_room then
-		tempTimer(2.5, [[amIspeedwalking(]]..final_room..[[)]])
+function amIspeedwalking(walk_size)
+	if walkCount ~= walk_size then
+		tempTimer(2.5, [[amIspeedwalking(]]..walk_size..[[)]])
 	else
 		tempTimer(2, [[enableTrigger(&quot;Name_Line&quot;)]])
+		walkLoop_pause = false
 	end
 end
 
@@ -1747,7 +1783,7 @@ function walkLoop(loop,time)
  
 	if walkLoop_run then
 		disableTrigger(&quot;Name_Line&quot;)
-		tempTimer(time,function() walkLoop(loop,time) end)
+		tempTimer(time, function (x) walkLoop(loop,time) end)
 	else
 		enableTrigger(&quot;Name_Line&quot;)
 	end
