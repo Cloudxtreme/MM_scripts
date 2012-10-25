@@ -71,7 +71,7 @@
                     <colorTriggerFgColor>#000000</colorTriggerFgColor>
                     <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
-                        <string>^\[HP=(\-*\d+)/..=(\d+)</string>
+                        <string>^\[HP=(\-*\d+)/..+=(\d+)</string>
                     </regexCodeList>
                     <regexCodePropertyList>
                         <integer>1</integer>
@@ -163,7 +163,7 @@ end</script>
                 <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList/>
                 <regexCodePropertyList/>
-                <TriggerGroup isActive="no" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>Hunts</name>
                     <script></script>
                     <triggerType>0</triggerType>
@@ -182,6 +182,7 @@ end</script>
                         <string>damage!</string>
                         <string>with\stheir</string>
                         <string>lunges at</string>
+                        <string>with\sits</string>
                     </regexCodeList>
                     <regexCodePropertyList>
                         <integer>1</integer>
@@ -189,6 +190,7 @@ end</script>
                         <integer>0</integer>
                         <integer>1</integer>
                         <integer>0</integer>
+                        <integer>1</integer>
                     </regexCodePropertyList>
                     <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>newhavenHunt</name>
@@ -282,7 +284,7 @@ end</script>
                         <colorTriggerFgColor>#000000</colorTriggerFgColor>
                         <colorTriggerBgColor>#000000</colorTriggerBgColor>
                         <regexCodeList>
-                            <string>\sbat\s</string>
+                            <string>giant\sbat</string>
                             <string>spider</string>
                             <string>cleric</string>
                             <string>priest</string>
@@ -355,6 +357,36 @@ end</script>
                         </regexCodeList>
                         <regexCodePropertyList>
                             <integer>1</integer>
+                            <integer>0</integer>
+                        </regexCodePropertyList>
+                    </Trigger>
+                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                        <name>Graveyard</name>
+                        <script>Hunt(matches[1])</script>
+                        <triggerType>0</triggerType>
+                        <conditonLineDelta>0</conditonLineDelta>
+                        <mStayOpen>0</mStayOpen>
+                        <mCommand></mCommand>
+                        <packageName></packageName>
+                        <mFgColor>#ff0000</mFgColor>
+                        <mBgColor>#ffff00</mBgColor>
+                        <mSoundFile></mSoundFile>
+                        <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                        <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                        <regexCodeList>
+                            <string>mummy</string>
+                            <string>shade</string>
+                            <string>wight</string>
+                            <string>ghoul</string>
+                            <string>zombie</string>
+                            <string>skeleton</string>
+                        </regexCodeList>
+                        <regexCodePropertyList>
+                            <integer>0</integer>
+                            <integer>0</integer>
+                            <integer>0</integer>
+                            <integer>0</integer>
+                            <integer>0</integer>
                             <integer>0</integer>
                         </regexCodePropertyList>
                     </Trigger>
@@ -528,6 +560,33 @@ end
                         </regexCodeList>
                         <regexCodePropertyList>
                             <integer>1</integer>
+                        </regexCodePropertyList>
+                    </Trigger>
+                    <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                        <name>autoRoamGraveyard</name>
+                        <script>if tonumber(matches[2]) &gt;= HP_autoEnter then
+	disableTrigger(&quot;autoRoamGraveyard&quot;)
+	if current_room ~= 1040 then
+		enableTrigger(&quot;autoRoamGraveyard&quot;)
+	else
+		roamDirection = &quot;n&quot;
+	end
+end</script>
+                        <triggerType>0</triggerType>
+                        <conditonLineDelta>0</conditonLineDelta>
+                        <mStayOpen>0</mStayOpen>
+                        <mCommand></mCommand>
+                        <packageName></packageName>
+                        <mFgColor>#ff0000</mFgColor>
+                        <mBgColor>#ffff00</mBgColor>
+                        <mSoundFile></mSoundFile>
+                        <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                        <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                        <regexCodeList>
+                            <string>^\[HP=(\d+)</string>
+                        </regexCodeList>
+                        <regexCodePropertyList>
+                            <integer>0</integer>
                         </regexCodePropertyList>
                     </Trigger>
                 </TriggerGroup>
@@ -756,10 +815,10 @@ echo(&quot;DAMAGE&quot;,&quot;DAMAGE: &quot;..damage)</script>
                     <integer>1</integer>
                 </regexCodePropertyList>
             </Trigger>
-            <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+            <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                 <name>AutoInvite</name>
                 <script>-- Auto Enter script:
-local autoEnter = &quot;bodyguard slums&quot;
+local autoEnter = graveyard
 
 tempTimer(660,[[send(&quot;invite ethereal;invite pile;invite unhappy;invite captain&quot;)]])
 
@@ -986,7 +1045,7 @@ end</script>
                 <Alias isActive="yes" isFolder="no">
                     <name>Roam</name>
                     <script>roamDirection = matches[2]
-send(matches[2])</script>
+send(matches[2]) changeRoom(matches[2])</script>
                     <command></command>
                     <packageName></packageName>
                     <regex>^roam\s(.+)$</regex>
@@ -1044,6 +1103,13 @@ end</script>
                     <command></command>
                     <packageName></packageName>
                     <regex>^go\s(.*)$</regex>
+                </Alias>
+                <Alias isActive="yes" isFolder="no">
+                    <name>Stop Walk</name>
+                    <script>walkIt = false</script>
+                    <command></command>
+                    <packageName></packageName>
+                    <regex>^stop\swalk$</regex>
                 </Alias>
             </AliasGroup>
             <Alias isActive="yes" isFolder="no">
@@ -1269,9 +1335,9 @@ function stopMagic(monster)
 end
 
 function AutoPrep()
-	if (current_room == 690 or current_room == 286 or current_room == 937) and isActive(&quot;Hunts&quot;,&quot;trigger&quot;) == 0 then
+	if (current_room == 1007 or current_room == 690 or current_room == 286 or current_room == 937) and isActive(&quot;Hunts&quot;,&quot;trigger&quot;) == 0 then
 		prep()
-	elseif (current_room == 190 or current_room == 285 or current_room == 116) and isActive(&quot;Hunts&quot;,&quot;trigger&quot;) == 1 then
+	elseif (current_room == 37 or current_room == 190 or current_room == 285 or current_room == 116) and isActive(&quot;Hunts&quot;,&quot;trigger&quot;) == 1 then
 		unPrep()
 	end
 end</script>
@@ -1300,6 +1366,7 @@ function setTownGlobals()
 		[&quot;bear&quot;] = function (x) enterArena(9,&quot;auto enter bear&quot;) end,
 		[&quot;bodyguard slums&quot;] = function (x) enterArena(427,&quot;auto Stroll Slums&quot;) end,
 		[&quot;cave worm&quot;] = function (x) enterArena(656,&quot;autoStrollCaveWorm&quot;) end,
+		[&quot;graveyard&quot;] = function (x) enterArena(1040,&quot;autoRoamGraveyard&quot;) end,
 	}
 
 	slums2Loop = { &quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;e&quot;,&quot;e&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;e&quot;,&quot;e&quot; }
@@ -1547,22 +1614,31 @@ function doSpeedWalk()
 	if current_room == nil then echo(&quot;I don't know where I am\n&quot;) return end
 
 	auto_map = false
+	walkIt = true
 	disableTrigger(&quot;Name_Line&quot;)
 	echo(&quot;Path we need to take: &quot; .. table.concat(speedWalkDir, &quot;, &quot;) .. &quot;\n&quot;)
 	echo(&quot;Rooms we'll pass through: &quot; .. table.concat(speedWalkPath, &quot;, &quot;) .. &quot;\n&quot;)
 	local vSub = nil
 	for i,v in ipairs(speedWalkDir) do
-		if v:sub(1,1) == &quot;u&quot; or v:sub(1,1) == &quot;d&quot; then
-			vSub = v:sub(1,1) --up and down come as full words
-		else
-			vSub = v
-		end
-		tempTimer(i * 1.5, [[send(&quot;]]..v..[[&quot;) changeRoom(&quot;]]..vSub..[[&quot;)]])
+		tempTimer(i * 1.5, [[walkMap(&quot;]]..v..[[&quot;)]])
 	end
 
 	walkCount = 0
 	amIspeedwalking(table.size(speedWalkPath))
 	walkLoop_pause = true
+end
+
+function walkMap(direction)
+	if walkIt then
+		if direction:sub(1,1) == &quot;u&quot; or direction:sub(1,1) == &quot;d&quot; then
+			vSub = direction:sub(1,1) --up and down come as full words
+		else
+			vSub = direction
+		end
+		send(direction) changeRoom(vSub)
+	else
+		walkCount = table.size(speedWalkPath)
+	end
 end
 
 function amIspeedwalking(walk_size)
