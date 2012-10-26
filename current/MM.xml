@@ -72,8 +72,10 @@
                     <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
                         <string>^\[HP=(\-*\d+)/..+=(\d+)</string>
+                        <string>^\[HP=(\-*\d+)(]|\s)</string>
                     </regexCodeList>
                     <regexCodePropertyList>
+                        <integer>1</integer>
                         <integer>1</integer>
                     </regexCodePropertyList>
                 </Trigger>
@@ -123,6 +125,7 @@ if tonumber(hp) &gt;= HP_healthSpell and tonumber(hp) &lt; HP_autoEnter then
 	echo(&quot;Healing until &quot;..HP_autoEnter..&quot;\n&quot;)
 elseif tonumber(hp) &lt; HP_panic then
 	Panic()
+	disableTrigger(&quot;healing&quot;)
 else
 	if tonumber(hp) &gt; HP_autoEnter then
 		disableTrigger(&quot;healing&quot;)
@@ -323,7 +326,6 @@ end</script>
                             <string>bandit</string>
                             <string>druid</string>
                             <string>bugbear\scaptain</string>
-                            <string>kobold</string>
                             <string>wolf</string>
                             <string>warrior</string>
                         </regexCodeList>
@@ -333,7 +335,6 @@ end</script>
                             <integer>0</integer>
                             <integer>0</integer>
                             <integer>1</integer>
-                            <integer>0</integer>
                             <integer>0</integer>
                             <integer>0</integer>
                         </regexCodePropertyList>
@@ -360,7 +361,7 @@ end</script>
                             <integer>0</integer>
                         </regexCodePropertyList>
                     </Trigger>
-                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>Graveyard</name>
                         <script>Hunt(matches[1])</script>
                         <triggerType>0</triggerType>
@@ -368,7 +369,7 @@ end</script>
                         <mStayOpen>0</mStayOpen>
                         <mCommand></mCommand>
                         <packageName></packageName>
-                        <mFgColor>#ff0000</mFgColor>
+                        <mFgColor>#ff5500</mFgColor>
                         <mBgColor>#ffff00</mBgColor>
                         <mSoundFile></mSoundFile>
                         <colorTriggerFgColor>#000000</colorTriggerFgColor>
@@ -380,8 +381,10 @@ end</script>
                             <string>ghoul</string>
                             <string>zombie</string>
                             <string>skeleton</string>
+                            <string>spirit</string>
                         </regexCodeList>
                         <regexCodePropertyList>
+                            <integer>0</integer>
                             <integer>0</integer>
                             <integer>0</integer>
                             <integer>0</integer>
@@ -391,7 +394,7 @@ end</script>
                         </regexCodePropertyList>
                     </Trigger>
                 </TriggerGroup>
-                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>huntHold</name>
                     <script>HuntHold()
 damage = 0</script>
@@ -445,7 +448,6 @@ damage = 0</script>
 		changeRoom(&quot;d&quot;)
 		changeRoom(&quot;n&quot;)
 		changeRoom(&quot;n&quot;)
-		autoEnterTrigger = &quot;bear&quot;
 	end
 	disableTrigger(&quot;auto enter bear&quot;)
 end</script>
@@ -477,7 +479,6 @@ end</script>
 		walkLoop_run = true
 		walkLoop_pause = false
 		walkLoop(darkcavern3Loop,10)
-		autoEnterTrigger = &quot;caveworm&quot;
 	end
 	disableTrigger(&quot;autoStrollCaveWorm&quot;)
 end</script>
@@ -508,12 +509,10 @@ end</script>
 		walkLoop_count = 1
 		walkLoop_run = true
 		walkLoop(slums2Loop,10)
-		autoEnterTrigger = &quot;bodyguard slums&quot;
 	else
 		walkLoop_count = 1
 		walkLoop_run = true
 		walkLoop(slumsLoop,5)
-		autoEnterTrigger = &quot;slums&quot;
 	end
 end</script>
                         <triggerType>0</triggerType>
@@ -536,17 +535,17 @@ end</script>
                     <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>auto enter newhaven</name>
                         <script>if tonumber(matches[2]) &gt;= HP_autoEnter then
+	disableTrigger(&quot;auto enter newhaven&quot;)
 	if current_room ~= 9 then
 		echo(&quot;Must be above NewHaven arena\n&quot;)
+		enableTrigger(&quot;auto enter newhaven&quot;)
 	else
+		HP_panicHangup = false
 		last_movement = &quot;d&quot;
 		send(last_movement)
 		changeRoom(last_movement)
-		autoEnterTrigger = &quot;newhaven&quot;
 	end
-	disableTrigger(&quot;auto enter newhaven&quot;)
-end
-	</script>
+end</script>
                         <triggerType>0</triggerType>
                         <conditonLineDelta>0</conditonLineDelta>
                         <mStayOpen>0</mStayOpen>
@@ -571,7 +570,7 @@ end
 	if current_room ~= 1012 then
 		enableTrigger(&quot;autoRoamGraveyard&quot;)
 	else
-		roamDirection = &quot;e&quot;
+		roamDirection = &quot;n&quot;
 		send(roamDirection) changeRoom(roamDirection)
 	end
 end</script>
@@ -658,7 +657,7 @@ appendBuffer(&quot;chat&quot;)</script>
                 <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList/>
                 <regexCodePropertyList/>
-                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="yes">
+                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="yes">
                     <name>Name_Line</name>
                     <script>--handle list
 if matches[1]:findPattern(&quot;Quantity&quot;) ~= nil then
@@ -838,7 +837,7 @@ echo(&quot;DAMAGE&quot;,&quot;DAMAGE: &quot;..damage)</script>
                     <integer>1</integer>
                 </regexCodePropertyList>
             </Trigger>
-            <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+            <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                 <name>AutoInvite</name>
                 <script>-- Auto Enter script:
 local autoEnter = &quot;graveyard&quot;
@@ -910,7 +909,7 @@ tempTimer(60,[[disconnect()]])
         </TriggerGroup>
     </TriggerPackage>
     <TimerPackage>
-        <Timer isActive="no" isFolder="no" isTempTimer="no" isOffsetTimer="no">
+        <Timer isActive="yes" isFolder="no" isTempTimer="no" isOffsetTimer="no">
             <name>Combat</name>
             <script>CombatTimer = true
 disableTimer(&quot;combat&quot;)
@@ -1016,7 +1015,8 @@ if autoEnterTrigger ~= nil then
 end
 
 --enable correct auto enter
-tableAutoEnter[matches[2]]()
+autoEnterTrigger = matches[2]
+tableAutoEnter[autoEnterTrigger]()
 
 </script>
                     <command></command>
@@ -1030,7 +1030,6 @@ tableAutoEnter[matches[2]]()
 	autoEnterTrigger = nil
 	walkLoop_run = false
 	walkLoop_pause = false
-	autoEnterTrigger = nil
 	roamDirection = nil
 else
 	echo(&quot;Auto enter already disabled\n&quot;)
@@ -1069,7 +1068,8 @@ end</script>
                 <Alias isActive="yes" isFolder="no">
                     <name>Roam</name>
                     <script>roamDirection = matches[2]
-send(roamDirection) changeRoom(roamDirection)</script>
+send(roamDirection) 
+changeRoom(roamDirection)</script>
                     <command></command>
                     <packageName></packageName>
                     <regex>^roam\s(.+)$</regex>
@@ -1126,7 +1126,7 @@ if not manual_map then
 end</script>
                     <command></command>
                     <packageName></packageName>
-                    <regex>^go\s(.*)$</regex>
+                    <regex>^(go|push|pull)\s(.*)$</regex>
                 </Alias>
                 <Alias isActive="yes" isFolder="no">
                     <name>Stop Walk</name>
@@ -1183,6 +1183,7 @@ function Startup()
 	if getMudletHomeDir():find(&quot;unhappy&quot;) then mystic()
 	elseif getMudletHomeDir():find(&quot;ethereal&quot;) then cleric()
 	elseif getMudletHomeDir():find(&quot;pile&quot;) then paladin()
+	elseif getMudletHomeDir():find(&quot;godd&quot;) then witchunter()
 	else ranger() end
 
 	UIStartup()
@@ -1208,9 +1209,10 @@ function health(hp, ability)
 	if tonumber(hp) &lt; HP_retreat and tonumber(hp) &gt; HP_panic then
 		cecho(&quot;&lt;black:sky_blue&gt;RETREAT!&quot;)
 		walkLoop_run = false
+		disableTrigger(&quot;check health&quot;)
+		disableTrigger(&quot;healing&quot;)
 		doRetreat()
 		send(&quot;rest&quot;)
-		enableTrigger(&quot;healing&quot;)
 		if autoEnterTrigger ~= nil then
 			cecho(&quot;&lt;:DarkGreen&gt;Enabling &quot;..tostring(autoEnterTrigger))
 			tableAutoEnter[autoEnterTrigger]()
@@ -1231,9 +1233,9 @@ end
 
 function Panic()
 	walkLoop_run = false
+	disableTrigger(&quot;check health&quot;)
+	disableTrigger(&quot;healing&quot;)
 	if HP_panicHangup then
-		disableTrigger(&quot;check health&quot;)
-		disableTrigger(&quot;healing&quot;)
 		disconnect()
 		disableTimer(&quot;Heartbeat&quot;)
 		walkLoop_run = false
@@ -1256,8 +1258,7 @@ function doRetreat()
 			changeRoom(v)
 		end  
 	end
-	retreatSequence = &quot;i&quot;
-	disableTrigger(&quot;check health&quot;)
+	retreatSequence = nil
 end</script>
                 <eventHandlerList/>
             </Script>
@@ -1281,6 +1282,7 @@ end</script>
 -------------------------------------------------
 
 function enterArena(room,trigger)
+	if autoEnterTrigger == nil then return end
 	if isActive(&quot;check health&quot;,&quot;trigger&quot;) == 1 then
 		prep()
 		if current_room ~= room then gotoRoom(room) end
@@ -1564,6 +1566,44 @@ end
 </script>
                     <eventHandlerList/>
                 </Script>
+                <Script isActive="yes" isFolder="no">
+                    <name>witchunter</name>
+                    <packageName></packageName>
+                    <script>-------------------------------------------------
+-- Definition of witchunter specific variables.   --
+-------------------------------------------------
+
+function witchunter()
+--When should panic set in?
+	HP_panic = 20
+
+--Should I hang up of panic?
+	HP_panicHangup = true
+
+--When should I retreat from room?
+	HP_retreat = 30
+
+--When should I start using health spells?
+	HP_healthSpell = 25
+
+--Which spells are available?
+	minMagic = 8	
+	HP_maheAvail = nil
+	HP_miheAvail = nil
+	preSpell = nil
+
+--Array of attacks to run through
+	attackSeq = nil
+
+--When can I automatically re-enter battle?
+	HP_autoEnter = 35
+
+	uname = &quot;godd&quot;
+
+	echo(&quot;Using witchunter varibs\n&quot;)
+end</script>
+                    <eventHandlerList/>
+                </Script>
             </ScriptGroup>
             <Script isActive="yes" isFolder="no">
                 <name>UI</name>
@@ -1740,7 +1780,8 @@ function createRoom(room_name,area_name)
 end
 
 function changeRoom(direction)
-	if direction:find(&quot;go&quot;) then
+	last_movement = direction
+	if direction:find(&quot;go&quot;) or direction:find(&quot;push&quot;) or direction:find(&quot;pull&quot;) then
 		local exits = getSpecialExits(current_room)
 		for rid,command_table in pairs(exits) do
 			for command,locked in pairs(command_table) do 
