@@ -97,8 +97,8 @@ end</script>
                     <mStayOpen>0</mStayOpen>
                     <mCommand></mCommand>
                     <packageName></packageName>
-                    <mFgColor>#ff0000</mFgColor>
-                    <mBgColor>#ffaa00</mBgColor>
+                    <mFgColor>#000000</mFgColor>
+                    <mBgColor>#ff0000</mBgColor>
                     <mSoundFile></mSoundFile>
                     <colorTriggerFgColor>#000000</colorTriggerFgColor>
                     <colorTriggerBgColor>#000000</colorTriggerBgColor>
@@ -109,7 +109,7 @@ end</script>
                         <integer>1</integer>
                     </regexCodePropertyList>
                 </Trigger>
-                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>healing</name>
                     <script>hp = matches[2]
 if tonumber(hp) &gt;= HP_healthSpell and tonumber(hp) &lt; HP_autoEnter then
@@ -139,7 +139,7 @@ end</script>
                     <mCommand></mCommand>
                     <packageName></packageName>
                     <mFgColor>#ff0000</mFgColor>
-                    <mBgColor>#ffff00</mBgColor>
+                    <mBgColor>#ffaa00</mBgColor>
                     <mSoundFile></mSoundFile>
                     <colorTriggerFgColor>#000000</colorTriggerFgColor>
                     <colorTriggerBgColor>#000000</colorTriggerBgColor>
@@ -388,6 +388,54 @@ end</script>
                             <integer>0</integer>
                             <integer>0</integer>
                             <integer>0</integer>
+                            <integer>0</integer>
+                            <integer>0</integer>
+                            <integer>0</integer>
+                        </regexCodePropertyList>
+                    </Trigger>
+                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                        <name>Crypt Quest Area</name>
+                        <script>Hunt(matches[1])</script>
+                        <triggerType>0</triggerType>
+                        <conditonLineDelta>0</conditonLineDelta>
+                        <mStayOpen>0</mStayOpen>
+                        <mCommand></mCommand>
+                        <packageName></packageName>
+                        <mFgColor>#ff5500</mFgColor>
+                        <mBgColor>#ffff00</mBgColor>
+                        <mSoundFile></mSoundFile>
+                        <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                        <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                        <regexCodeList>
+                            <string>fire lizard</string>
+                            <string>troll</string>
+                            <string>\sogre\s</string>
+                        </regexCodeList>
+                        <regexCodePropertyList>
+                            <integer>0</integer>
+                            <integer>0</integer>
+                            <integer>1</integer>
+                        </regexCodePropertyList>
+                    </Trigger>
+                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                        <name>Dragon Teeth</name>
+                        <script>Hunt(matches[1])</script>
+                        <triggerType>0</triggerType>
+                        <conditonLineDelta>0</conditonLineDelta>
+                        <mStayOpen>0</mStayOpen>
+                        <mCommand></mCommand>
+                        <packageName></packageName>
+                        <mFgColor>#ff0000</mFgColor>
+                        <mBgColor>#ffff00</mBgColor>
+                        <mSoundFile></mSoundFile>
+                        <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                        <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                        <regexCodeList>
+                            <string>ankheg</string>
+                            <string>brigand</string>
+                            <string>harpy</string>
+                        </regexCodeList>
+                        <regexCodePropertyList>
                             <integer>0</integer>
                             <integer>0</integer>
                             <integer>0</integer>
@@ -1069,7 +1117,7 @@ end</script>
                     <name>Roam</name>
                     <script>roamDirection = matches[2]
 send(roamDirection) 
-changeRoom(roamDirection)</script>
+</script>
                     <command></command>
                     <packageName></packageName>
                     <regex>^roam\s(.+)$</regex>
@@ -1213,6 +1261,7 @@ function health(hp, ability)
 		disableTrigger(&quot;healing&quot;)
 		doRetreat()
 		send(&quot;rest&quot;)
+		enableTrigger(&quot;healing&quot;)
 		if autoEnterTrigger ~= nil then
 			cecho(&quot;&lt;:DarkGreen&gt;Enabling &quot;..tostring(autoEnterTrigger))
 			tableAutoEnter[autoEnterTrigger]()
@@ -1334,7 +1383,7 @@ function Hunt(monster)
 	disableTrigger(&quot;Exit_Line&quot;)
 	disableTrigger(&quot;Hunts&quot;)
 	enableTrigger(&quot;huntHold&quot;)
-	if preSpell ~= nil and preSpellCount == 4 then send(preSpell) preSpellCount = 0
+	if preSpell ~= nil and preSpellCount &gt;= 4 and magicPower &gt; minMagic then send(preSpell) preSpellCount = 0
 	else preSpellCount = preSpellCount + 1 end
 	if attackSeq == nil then send(&quot;attack &quot; .. string.trim(monster))
 	else
@@ -1502,8 +1551,7 @@ HP_retreat = 30
 --When should I start using health spells?
 HP_healthSpell = 20
 --Which health spells are available?
-	--HP_maheAvail = &quot;c rhel&quot;
-	HP_maheAvail = nil
+	HP_maheAvail = &quot;c rhel&quot;
 	HP_miheAvail = &quot;c mend&quot;
 	preSpell = nil
 	
@@ -1538,6 +1586,8 @@ function mystic()
 HP_maheAvail = &quot;invoke swan&quot;
 HP_miheAvail = nil
 	preSpell = &quot;invoke tiger&quot;
+
+	minMagic = 5
 	attackSeq = { &quot;punch&quot;,&quot;attack&quot; }
 --When can I automatically re-enter battle?
 HP_autoEnter = 38
