@@ -113,16 +113,7 @@ end</script>
                     <name>healing</name>
                     <script>hp = matches[2]
 if tonumber(hp) &gt;= HP_healthSpell and tonumber(hp) &lt; HP_autoEnter then
-	if HP_maheAvail ~= nil then
-		send(HP_maheAvail..&quot;;rest&quot;)
-	elseif HP_miheAvail ~= nil then
-		send(HP_miheAvail..&quot;;rest&quot;)
-	else
-		send(&quot;rest&quot;)
-	end
-	disableTrigger(&quot;healing&quot;)
-	tempTimer(7, [[enableTrigger(&quot;healing&quot;)]])
-	echo(&quot;Healing until &quot;..HP_autoEnter..&quot;\n&quot;)
+	heal()
 elseif tonumber(hp) &lt; HP_panic then
 	Panic()
 	disableTrigger(&quot;healing&quot;)
@@ -144,9 +135,11 @@ end</script>
                     <colorTriggerFgColor>#000000</colorTriggerFgColor>
                     <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
-                        <string>^\[HP=(\-*\d+)</string>
+                        <string>^\[HP=(\-*\d+)/..+=(\d+)</string>
+                        <string>^\[HP=(\-*\d+)(]|\s)</string>
                     </regexCodeList>
                     <regexCodePropertyList>
+                        <integer>1</integer>
                         <integer>1</integer>
                     </regexCodePropertyList>
                 </Trigger>
@@ -166,7 +159,7 @@ end</script>
                 <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList/>
                 <regexCodePropertyList/>
-                <TriggerGroup isActive="no" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>Hunts</name>
                     <script></script>
                     <triggerType>0</triggerType>
@@ -183,9 +176,8 @@ end</script>
                         <string>Also\shere</string>
                         <string>from</string>
                         <string>damage!</string>
-                        <string>with\stheir</string>
+                        <string>at you with</string>
                         <string>at you, but you</string>
-                        <string>with\sits</string>
                     </regexCodeList>
                     <regexCodePropertyList>
                         <integer>1</integer>
@@ -193,7 +185,6 @@ end</script>
                         <integer>0</integer>
                         <integer>1</integer>
                         <integer>0</integer>
-                        <integer>1</integer>
                     </regexCodePropertyList>
                     <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>newhavenHunt</name>
@@ -381,7 +372,7 @@ end</script>
                             <string>ghoul</string>
                             <string>zombie</string>
                             <string>skeleton</string>
-                            <string>spirit</string>
+                            <string>spirit\s</string>
                         </regexCodeList>
                         <regexCodePropertyList>
                             <integer>0</integer>
@@ -390,7 +381,7 @@ end</script>
                             <integer>0</integer>
                             <integer>0</integer>
                             <integer>0</integer>
-                            <integer>0</integer>
+                            <integer>1</integer>
                         </regexCodePropertyList>
                     </Trigger>
                     <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
@@ -417,7 +408,7 @@ end</script>
                             <integer>1</integer>
                         </regexCodePropertyList>
                     </Trigger>
-                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>Dragon Teeth</name>
                         <script>Hunt(matches[1])</script>
                         <triggerType>0</triggerType>
@@ -425,7 +416,7 @@ end</script>
                         <mStayOpen>0</mStayOpen>
                         <mCommand></mCommand>
                         <packageName></packageName>
-                        <mFgColor>#ff0000</mFgColor>
+                        <mFgColor>#ff5500</mFgColor>
                         <mBgColor>#ffff00</mBgColor>
                         <mSoundFile></mSoundFile>
                         <colorTriggerFgColor>#000000</colorTriggerFgColor>
@@ -434,6 +425,62 @@ end</script>
                             <string>ankheg</string>
                             <string>brigand</string>
                             <string>harpy</string>
+                            <string>monk</string>
+                            <string>axeman</string>
+                            <string>scout</string>
+                            <string>centaur</string>
+                        </regexCodeList>
+                        <regexCodePropertyList>
+                            <integer>0</integer>
+                            <integer>0</integer>
+                            <integer>0</integer>
+                            <integer>0</integer>
+                            <integer>0</integer>
+                            <integer>0</integer>
+                            <integer>0</integer>
+                        </regexCodePropertyList>
+                    </Trigger>
+                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                        <name>Avalanche</name>
+                        <script>Hunt(matches[1])</script>
+                        <triggerType>0</triggerType>
+                        <conditonLineDelta>0</conditonLineDelta>
+                        <mStayOpen>0</mStayOpen>
+                        <mCommand></mCommand>
+                        <packageName></packageName>
+                        <mFgColor>#ff5500</mFgColor>
+                        <mBgColor>#ffff00</mBgColor>
+                        <mSoundFile></mSoundFile>
+                        <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                        <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                        <regexCodeList>
+                            <string>hulk</string>
+                            <string>beetle</string>
+                            <string>mermex</string>
+                        </regexCodeList>
+                        <regexCodePropertyList>
+                            <integer>0</integer>
+                            <integer>0</integer>
+                            <integer>0</integer>
+                        </regexCodePropertyList>
+                    </Trigger>
+                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                        <name>Rhudaur</name>
+                        <script>Hunt(matches[1])</script>
+                        <triggerType>0</triggerType>
+                        <conditonLineDelta>0</conditonLineDelta>
+                        <mStayOpen>0</mStayOpen>
+                        <mCommand></mCommand>
+                        <packageName></packageName>
+                        <mFgColor>#ff5500</mFgColor>
+                        <mBgColor>#ffff00</mBgColor>
+                        <mSoundFile></mSoundFile>
+                        <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                        <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                        <regexCodeList>
+                            <string>cutpurse</string>
+                            <string>murderer</string>
+                            <string>shambling mound</string>
                         </regexCodeList>
                         <regexCodePropertyList>
                             <integer>0</integer>
@@ -885,7 +932,7 @@ echo(&quot;DAMAGE&quot;,&quot;DAMAGE: &quot;..damage)</script>
                     <integer>1</integer>
                 </regexCodePropertyList>
             </Trigger>
-            <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+            <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                 <name>AutoInvite</name>
                 <script>-- Auto Enter script:
 local autoEnter = &quot;graveyard&quot;
@@ -1014,6 +1061,13 @@ echo(&quot;walk count: &quot;..walkCount..&quot; speed walk steps: &quot;..table
             <packageName></packageName>
             <time>00:00:05.000</time>
         </Timer>
+        <Timer isActive="yes" isFolder="no" isTempTimer="no" isOffsetTimer="no">
+            <name>MagicPause</name>
+            <script>disableTimer(&quot;MagicPause&quot;)</script>
+            <command></command>
+            <packageName></packageName>
+            <time>00:00:06.000</time>
+        </Timer>
     </TimerPackage>
     <AliasPackage>
         <AliasGroup isActive="yes" isFolder="yes">
@@ -1117,6 +1171,7 @@ end</script>
                     <name>Roam</name>
                     <script>roamDirection = matches[2]
 send(roamDirection) 
+last_movement = roamDirection
 </script>
                     <command></command>
                     <packageName></packageName>
@@ -1183,6 +1238,19 @@ end</script>
                     <packageName></packageName>
                     <regex>^stop\swalk$</regex>
                 </Alias>
+                <Alias isActive="yes" isFolder="no">
+                    <name>sys goto</name>
+                    <script>send(matches[1])
+
+if matches[2] == &quot;silvermere&quot; then
+	setRoom(319)
+elseif matches[2] == &quot;rhudaur&quot; then
+	setRoom(1519)
+end</script>
+                    <command></command>
+                    <packageName></packageName>
+                    <regex>^sys\sgoto\s(.*)$</regex>
+                </Alias>
             </AliasGroup>
             <Alias isActive="yes" isFolder="no">
                 <name>Panic HangUp</name>
@@ -1212,7 +1280,25 @@ HP_panicHangup = matches[2]
 --                                             --
 -- Note that you can also use external Scripts --
 -------------------------------------------------
-</script>
+
+registerAnonymousEventHandler(&quot;sysLoadEvent&quot;, &quot;Startup&quot;)
+
+function Startup()
+	if getMudletHomeDir():find(&quot;unhappy&quot;) then mystic()
+	elseif getMudletHomeDir():find(&quot;ethereal&quot;) then cleric()
+	elseif getMudletHomeDir():find(&quot;pile&quot;) then paladin()
+	elseif getMudletHomeDir():find(&quot;godd&quot;) then witchunter()
+	elseif getMudletHomeDir():find(&quot;dryrain&quot;) then priest()
+	else ranger() end
+
+	UIStartup()
+	mapStartup()
+	setTownGlobals()
+	walkStartup()
+
+	healthStartup()
+	enableTrigger(&quot;check health&quot;)
+end</script>
             <eventHandlerList/>
             <Script isActive="yes" isFolder="no">
                 <name>Health</name>
@@ -1223,24 +1309,8 @@ HP_panicHangup = matches[2]
 -- Note that you can also use external Scripts --
 -------------------------------------------------
 
-maxHP = 0
-
-registerAnonymousEventHandler(&quot;sysLoadEvent&quot;, &quot;Startup&quot;)
-
-function Startup()
-	if getMudletHomeDir():find(&quot;unhappy&quot;) then mystic()
-	elseif getMudletHomeDir():find(&quot;ethereal&quot;) then cleric()
-	elseif getMudletHomeDir():find(&quot;pile&quot;) then paladin()
-	elseif getMudletHomeDir():find(&quot;godd&quot;) then witchunter()
-	else ranger() end
-
-	UIStartup()
-	mapStartup()
-	setTownGlobals()
-	walkStartup()
-
-	enableTrigger(&quot;check health&quot;)
-
+function healthStartup()
+	maxHP = 0
 	prevExp = 0
 	totExp = 0
 	magicPower = 0
@@ -1294,6 +1364,20 @@ function Panic()
 	end
 	enableTrigger(&quot;panic&quot;)
 	cecho (&quot;&lt;:red&gt;PANIC!&quot;)
+end
+
+function heal()
+	if isActive(&quot;MagicPause&quot;,&quot;timer&quot;) == 0 then
+		if HP_maheAvail ~= nil and magicPower &gt; minMagic then
+			send(HP_maheAvail..&quot;;rest&quot;)
+		elseif HP_miheAvail ~= nil then
+			send(HP_miheAvail..&quot;;rest&quot;)
+		else
+			send(&quot;rest&quot;)
+		end
+		enableTimer(&quot;MagicPause&quot;)
+		echo(&quot;Healing until &quot;..HP_autoEnter..&quot;\n&quot;)
+	end
 end
 
 function doRetreat()
@@ -1378,6 +1462,8 @@ function HuntHold()
 end
 
 function Hunt(monster)
+	if isActive(&quot;huntHold&quot;,&quot;trigger&quot;) == 1 then return end -- prevent issue with more than one monster when entering room
+
 	walkLoop_pause = true
 	disableTrigger(&quot;Name_Line&quot;)
 	disableTrigger(&quot;Exit_Line&quot;)
@@ -1480,7 +1566,7 @@ function cleric()
 	HP_panicHangup = true
 
 --When should I retreat from room?
-	HP_retreat = 30
+	HP_retreat = 35
 
 --When should I start using health spells?
 	HP_healthSpell = 25
@@ -1515,7 +1601,7 @@ HP_panic = 20
 --Should I hang up of panic?
 HP_panicHangup = true
 --When should I retreat from room?
-HP_retreat = 30
+HP_retreat = 35
 --When should I start using health spells?
 HP_healthSpell = 20
 --Which health spells are available?
@@ -1547,11 +1633,11 @@ HP_panic = 20
 --Should I hang up of panic?
 HP_panicHangup = true
 --When should I retreat from room?
-HP_retreat = 30
+HP_retreat = 35
 --When should I start using health spells?
 HP_healthSpell = 20
 --Which health spells are available?
-	HP_maheAvail = &quot;c rhel&quot;
+	--HP_maheAvail = &quot;c rhel&quot;
 	HP_miheAvail = &quot;c mend&quot;
 	preSpell = nil
 	
@@ -1579,13 +1665,13 @@ function mystic()
 --Should I hang up of panic?
 	HP_panicHangup = true
 --When should I retreat from room?
-	HP_retreat = 30
+	HP_retreat = 35
 --When should I start using health spells?
 	HP_healthSpell = 25
 --Which health spells are available?
 HP_maheAvail = &quot;invoke swan&quot;
 HP_miheAvail = nil
-	preSpell = &quot;invoke tiger&quot;
+	preSpell = &quot;invoke monk&quot;
 
 	minMagic = 5
 	attackSeq = { &quot;punch&quot;,&quot;attack&quot; }
@@ -1631,7 +1717,7 @@ function witchunter()
 	HP_panicHangup = true
 
 --When should I retreat from room?
-	HP_retreat = 30
+	HP_retreat = 35
 
 --When should I start using health spells?
 	HP_healthSpell = 25
@@ -1651,6 +1737,44 @@ function witchunter()
 	uname = &quot;godd&quot;
 
 	echo(&quot;Using witchunter varibs\n&quot;)
+end</script>
+                    <eventHandlerList/>
+                </Script>
+                <Script isActive="yes" isFolder="no">
+                    <name>priest</name>
+                    <packageName></packageName>
+                    <script>-------------------------------------------------
+-- Definition of priest specific variables.   --
+-------------------------------------------------
+
+function priest()
+--When should panic set in?
+	HP_panic = 15
+
+--Should I hang up of panic?
+	HP_panicHangup = true
+
+--When should I retreat from room?
+	HP_retreat = 25
+
+--When should I start using health spells?
+	HP_healthSpell = 25
+
+--Which spells are available?
+	minMagic = 8	
+	HP_maheAvail = nil
+	HP_miheAvail = &quot;c mihe&quot;
+	preSpell = nil
+
+--Array of attacks to run through
+	attackSeq = { &quot;c harm&quot;,&quot;attack&quot; }
+
+--When can I automatically re-enter battle?
+	HP_autoEnter = 35
+
+	uname = &quot;dryrain&quot;
+
+	echo(&quot;Using priest varibs\n&quot;)
 end</script>
                     <eventHandlerList/>
                 </Script>
