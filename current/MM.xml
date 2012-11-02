@@ -159,7 +159,7 @@ end</script>
                 <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList/>
                 <regexCodePropertyList/>
-                <TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <TriggerGroup isActive="no" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>Hunts</name>
                     <script></script>
                     <triggerType>0</triggerType>
@@ -489,7 +489,7 @@ end</script>
                         </regexCodePropertyList>
                     </Trigger>
                 </TriggerGroup>
-                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>huntHold</name>
                     <script>HuntHold()
 damage = 0</script>
@@ -662,8 +662,12 @@ end</script>
                         <name>autoRoamGraveyard</name>
                         <script>if tonumber(matches[2]) &gt;= HP_autoEnter then
 	disableTrigger(&quot;autoRoamGraveyard&quot;)
-	if current_room ~= 1012 then
+	if current_room ~= 1012 and current_room ~= 1010 then
 		enableTrigger(&quot;autoRoamGraveyard&quot;)
+	elseif current_room == 1010 then
+		walkLoop_count = 1
+		walkLoop_run = true
+		walkLoop(graveLoop,10)
 	else
 		roamDirection = &quot;n&quot;
 		send(roamDirection) changeRoom(roamDirection)
@@ -725,14 +729,10 @@ appendBuffer(&quot;chat&quot;)</script>
                 <colorTriggerFgColor>#000000</colorTriggerFgColor>
                 <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList>
-                    <string>say</string>
                     <string>gossip</string>
-                    <string>whisper</string>
                     <string>telepaths</string>
                 </regexCodeList>
                 <regexCodePropertyList>
-                    <integer>0</integer>
-                    <integer>0</integer>
                     <integer>0</integer>
                     <integer>0</integer>
                 </regexCodePropertyList>
@@ -752,7 +752,7 @@ appendBuffer(&quot;chat&quot;)</script>
                 <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList/>
                 <regexCodePropertyList/>
-                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="yes">
+                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="yes">
                     <name>Name_Line</name>
                     <script>--handle list
 if matches[1]:findPattern(&quot;Quantity&quot;) ~= nil then
@@ -932,15 +932,15 @@ echo(&quot;DAMAGE&quot;,&quot;DAMAGE: &quot;..damage)</script>
                     <integer>1</integer>
                 </regexCodePropertyList>
             </Trigger>
-            <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+            <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                 <name>AutoInvite</name>
                 <script>-- Auto Enter script:
-local autoEnter = &quot;graveyard&quot;
+autoEnterTrigger = &quot;graveyard&quot;
 
 tempTimer(660,[[send(&quot;invite ethereal;invite pile;invite unhappy;invite captain&quot;)]])
 
 if autoEnter ~= nil then
-	tempTimer(700,[[tableAutoEnter[&quot;]]..autoEnter..[[&quot;]()]])
+	tempTimer(700,[[tableAutoEnter[&quot;]]..autoEnterTrigger..[[&quot;]()]])
 end</script>
                 <triggerType>0</triggerType>
                 <conditonLineDelta>0</conditonLineDelta>
@@ -1001,10 +1001,44 @@ tempTimer(60,[[disconnect()]])
                     <integer>0</integer>
                 </regexCodePropertyList>
             </Trigger>
+            <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <name>Equip</name>
+                <script>local equipment = split(matches[2],&quot;,&quot;)
+
+if table.size(equipment) == 0 then
+	send(&quot;g &quot;..matches[2]:sub(1,string.len(matches[2]) - 6):trim())
+else
+	for k,v in pairs(equipment) do
+		if v:find(&quot;here&quot;) then
+			send(&quot;g &quot;..v:sub(1,string.len(matches[2]) - 6):trim())
+		else
+			send(&quot;g &quot;..v:trim())
+		end
+	end
+end
+
+disableTrigger(&quot;Equip&quot;)</script>
+                <triggerType>0</triggerType>
+                <conditonLineDelta>0</conditonLineDelta>
+                <mStayOpen>0</mStayOpen>
+                <mCommand></mCommand>
+                <packageName></packageName>
+                <mFgColor>#ff0000</mFgColor>
+                <mBgColor>#ffff00</mBgColor>
+                <mSoundFile></mSoundFile>
+                <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                <regexCodeList>
+                    <string>^You\snotice\s(.*)</string>
+                </regexCodeList>
+                <regexCodePropertyList>
+                    <integer>1</integer>
+                </regexCodePropertyList>
+            </Trigger>
         </TriggerGroup>
     </TriggerPackage>
     <TimerPackage>
-        <Timer isActive="no" isFolder="no" isTempTimer="no" isOffsetTimer="no">
+        <Timer isActive="yes" isFolder="no" isTempTimer="no" isOffsetTimer="no">
             <name>Combat</name>
             <script>CombatTimer = true
 disableTimer(&quot;combat&quot;)
@@ -1061,7 +1095,7 @@ echo(&quot;walk count: &quot;..walkCount..&quot; speed walk steps: &quot;..table
             <packageName></packageName>
             <time>00:00:05.000</time>
         </Timer>
-        <Timer isActive="yes" isFolder="no" isTempTimer="no" isOffsetTimer="no">
+        <Timer isActive="no" isFolder="no" isTempTimer="no" isOffsetTimer="no">
             <name>MagicPause</name>
             <script>disableTimer(&quot;MagicPause&quot;)</script>
             <command></command>
@@ -1246,7 +1280,9 @@ if matches[2] == &quot;silvermere&quot; then
 	setRoom(319)
 elseif matches[2] == &quot;rhudaur&quot; then
 	setRoom(1519)
-end</script>
+end
+
+last_movement = nil</script>
                     <command></command>
                     <packageName></packageName>
                     <regex>^sys\sgoto\s(.*)$</regex>
@@ -1267,6 +1303,14 @@ HP_panicHangup = matches[2]
                 <command></command>
                 <packageName></packageName>
                 <regex>^disable trigger (.*)$</regex>
+            </Alias>
+            <Alias isActive="yes" isFolder="no">
+                <name>Equip</name>
+                <script>enableTrigger(&quot;Equip&quot;)
+send(&quot;l&quot;)</script>
+                <command></command>
+                <packageName></packageName>
+                <regex>^equip$</regex>
             </Alias>
         </AliasGroup>
     </AliasPackage>
@@ -1531,12 +1575,13 @@ function setTownGlobals()
 		[&quot;bear&quot;] = function (x) enterArena(9,&quot;auto enter bear&quot;) end,
 		[&quot;bodyguard slums&quot;] = function (x) enterArena(427,&quot;auto Stroll Slums&quot;) end,
 		[&quot;cave worm&quot;] = function (x) enterArena(656,&quot;autoStrollCaveWorm&quot;) end,
-		[&quot;graveyard&quot;] = function (x) enterArena(1012,&quot;autoRoamGraveyard&quot;) end,
+		[&quot;graveyard&quot;] = function (x) enterArena(1010,&quot;autoRoamGraveyard&quot;) end,
 	}
 
 	slums2Loop = { &quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;e&quot;,&quot;e&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;e&quot;,&quot;e&quot; }
-	slumsLoop = { &quot;e&quot;,&quot;e&quot;,&quot;e&quot;,&quot;e&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;e&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;w&quot;,&quot;w&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot; }
+	slumsLoop = { &quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;e&quot;,&quot;e&quot;,&quot;e&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;n&quot;,&quot;n&quot;,&quot;e&quot;,&quot;e&quot;,&quot;e&quot;,&quot;e&quot;,&quot;n&quot;,&quot;n&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;n&quot;,&quot;n&quot;,&quot;e&quot;,&quot;e&quot;,&quot;e&quot;,&quot;e&quot;,&quot;n&quot;,&quot;e&quot;,&quot;e&quot;,&quot;e&quot;,&quot;n&quot;,&quot;w&quot;,&quot;e&quot;,&quot;s&quot; }
 	darkcavern3Loop = { &quot;nw&quot;,&quot;nw&quot;,&quot;w&quot;,&quot;s&quot;,&quot;n&quot;,&quot;e&quot;,&quot;se&quot;,&quot;se&quot;,&quot;s&quot;,&quot;s&quot;,&quot;sw&quot;,&quot;ne&quot;,&quot;n&quot;,&quot;n&quot; }
+	graveLoop = { &quot;ne&quot;,&quot;e&quot;,&quot;e&quot;,&quot;n&quot;,&quot;e&quot;,&quot;e&quot;,&quot;e&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;w&quot;,&quot;n&quot;,&quot;n&quot;,&quot;n&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;s&quot;,&quot;s&quot;,&quot;e&quot;,&quot;s&quot;,&quot;w&quot;,&quot;w&quot;,&quot;w&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;e&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;s&quot;,&quot;sw&quot; }
 end</script>
                     <eventHandlerList/>
                 </Script>
@@ -1749,13 +1794,13 @@ end</script>
 
 function priest()
 --When should panic set in?
-	HP_panic = 15
+	HP_panic = 20
 
 --Should I hang up of panic?
 	HP_panicHangup = true
 
 --When should I retreat from room?
-	HP_retreat = 25
+	HP_retreat = 30
 
 --When should I start using health spells?
 	HP_healthSpell = 25
@@ -1764,10 +1809,10 @@ function priest()
 	minMagic = 8	
 	HP_maheAvail = nil
 	HP_miheAvail = &quot;c mihe&quot;
-	preSpell = nil
+	preSpell = &quot;c chant&quot;
 
 --Array of attacks to run through
-	attackSeq = { &quot;c harm&quot;,&quot;attack&quot; }
+	attackSeq = { &quot;c hamm&quot;,&quot;bash&quot; }
 
 --When can I automatically re-enter battle?
 	HP_autoEnter = 35
@@ -1775,7 +1820,8 @@ function priest()
 	uname = &quot;dryrain&quot;
 
 	echo(&quot;Using priest varibs\n&quot;)
-end</script>
+end
+</script>
                     <eventHandlerList/>
                 </Script>
             </ScriptGroup>
