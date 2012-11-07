@@ -32,9 +32,11 @@
                 <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList>
                     <string>You gain</string>
+                    <string>You\snotice\s.*(silver\snobles|copper\sfarthings|gold\scrowns)</string>
                 </regexCodeList>
                 <regexCodePropertyList>
                     <integer>0</integer>
+                    <integer>1</integer>
                 </regexCodePropertyList>
             </Trigger>
             <TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
@@ -112,6 +114,8 @@ end</script>
                 <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>healing</name>
                     <script>hp = matches[2]
+currentHealth = tonumber(hp)
+
 if tonumber(hp) &gt;= HP_healthSpell and tonumber(hp) &lt; HP_autoEnter then
 	heal()
 elseif tonumber(hp) &lt; HP_panic then
@@ -488,8 +492,28 @@ end</script>
                             <integer>0</integer>
                         </regexCodePropertyList>
                     </Trigger>
+                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                        <name>Hidden Keep</name>
+                        <script>Hunt(matches[1])</script>
+                        <triggerType>0</triggerType>
+                        <conditonLineDelta>0</conditonLineDelta>
+                        <mStayOpen>0</mStayOpen>
+                        <mCommand></mCommand>
+                        <packageName></packageName>
+                        <mFgColor>#ff5500</mFgColor>
+                        <mBgColor>#ffff00</mBgColor>
+                        <mSoundFile></mSoundFile>
+                        <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                        <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                        <regexCodeList>
+                            <string>Leo the Quick</string>
+                        </regexCodeList>
+                        <regexCodePropertyList>
+                            <integer>0</integer>
+                        </regexCodePropertyList>
+                    </Trigger>
                 </TriggerGroup>
-                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>huntHold</name>
                     <script>HuntHold()
 damage = 0</script>
@@ -566,16 +590,13 @@ end</script>
                     <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>autoStrollCaveWorm</name>
                         <script>if tonumber(matches[2]) &gt;= HP_autoEnter then
-	if current_room ~= 656 then
-		echo(&quot;Loop must start at Slum Street Crossroads\nLoop will be unpaused\n&quot;) 
-		walkLoop_pause = false
-	else
-		walkLoop_count = 1
-		walkLoop_run = true
-		walkLoop_pause = false
-		walkLoop(darkcavern3Loop,10)
-	end
 	disableTrigger(&quot;autoStrollCaveWorm&quot;)
+	if current_room ~= 967 then
+		enableTrigger(&quot;autoStrollCaveWorm&quot;)
+	else
+		roamDirection = nil
+		tempTimer(10, [[roamDirection = &quot;w&quot; send(roamDirection) changeRoom(roamDirection)]])
+	end
 end</script>
                         <triggerType>0</triggerType>
                         <conditonLineDelta>0</conditonLineDelta>
@@ -636,9 +657,9 @@ end</script>
 		enableTrigger(&quot;auto enter newhaven&quot;)
 	else
 		HP_panicHangup = false
-		last_movement = &quot;d&quot;
-		send(last_movement)
-		changeRoom(last_movement)
+		lastMovement = &quot;d&quot;
+		send(lastMovement)
+		changeRoom(lastMovement)
 	end
 end</script>
                         <triggerType>0</triggerType>
@@ -752,22 +773,22 @@ appendBuffer(&quot;chat&quot;)</script>
                 <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList/>
                 <regexCodePropertyList/>
-                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="yes">
+                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="yes" isColorTriggerFg="yes" isColorTriggerBg="yes">
                     <name>Name_Line</name>
-                    <script>--handle list
+                    <script>if manual_map then return end
+
+--handle list
 if matches[1]:findPattern(&quot;Quantity&quot;) ~= nil then
 	disableTrigger(&quot;Name_Line&quot;)
 	tempTimer(1, [[enableTrigger(&quot;Name_Line&quot;)]])
 	return
 end
-if matches[1]:findPattern(&quot;%d&quot;) ~= nil or matches[1]:find(&quot;You&quot;) ~= nil or matches[1]:find(&quot;you&quot;) ~= nil or matches[1]:find(&quot;The&quot;) ~= nil then return end
+if matches[1]:findPattern(&quot;%d&quot;) ~= nil or matches[1]:find(&quot;You&quot;) ~= nil or matches[1]:find(&quot;you&quot;) ~= nil or matches[1]:find(&quot;The&quot;) ~= nil or matches[1]:find(&quot;cast&quot;) ~= nil or matches[1]:findPattern(&quot;%sat%s&quot;) ~= nil then return end
 
 if matches[1]:find(&quot;dark&quot;) then enteredRoom(&quot;&quot;,nil) setRoomEnv(current_room,272) return end
 
 disableTrigger(&quot;Name_Line&quot;)
 enableTrigger(&quot;Exit_Line&quot;)
-
-if manual_map then return end
 
 enteredRoom(matches[1],nil)</script>
                     <triggerType>0</triggerType>
@@ -815,7 +836,8 @@ enableTrigger(&quot;Name_Line&quot;)
                     <name>NewRoom</name>
                     <script>if not matches[1]:find(&quot;very dark&quot;) then roam(matches[2]) end
 disableTimer(&quot;backtrack&quot;)
-walkCount = walkCount + 1 
+moved = true
+
 </script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
@@ -848,7 +870,7 @@ if littleDir == &quot;n&quot; or littleDir == &quot;s&quot; then
 end
 disableTrigger(&quot;Name_Line&quot;)
 changeRoom(littleDir)
-last_movement = littleDir
+lastMovement = littleDir
 enableTrigger(&quot;Exit_Line&quot;)</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
@@ -864,6 +886,61 @@ enableTrigger(&quot;Exit_Line&quot;)</script>
                         <string>Following\syour\sParty\sleader\s(.*)\s--$</string>
                     </regexCodeList>
                     <regexCodePropertyList>
+                        <integer>1</integer>
+                    </regexCodePropertyList>
+                </Trigger>
+                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                    <name>ExitFound</name>
+                    <script>local littleExit = matches[2]:sub(1,1)
+if littleExit == &quot;n&quot; or littleExit == &quot;s&quot; then
+	if littleExit:find(&quot;e&quot;) then
+		littleExit = littleExit..&quot;e&quot;
+	elseif littleExit:find(&quot;w&quot;) then
+		littleExit = littleExit..&quot;w&quot;
+	end
+end
+
+if matches[1]:find(&quot;different&quot;) then
+	if isActive(&quot;10Timeout&quot;,&quot;timer&quot;) == 0 and not timeoutFired then
+		enableTimer(&quot;10Timeout&quot;)
+		send(&quot;search &quot;..littleExit)
+	elseif not timeoutFired then
+		send(&quot;search &quot;..littleExit)
+	else
+		cecho(&quot;&lt;IndianRed&gt;Exit searching failed\n&quot;)
+		disableTrigger(&quot;ExitFound&quot;)
+	end
+	return
+end
+
+lastMovement = littleExit
+local	pos_table = getRoomsByPosition(findAreaID(getRoomAreaName(getRoomArea(current_room))),targetPosition())
+if table.size(pos_table) ~= 0 then
+	local rid = pos_table[0]
+	setRoom(rid)
+	disableTrigger(&quot;Name_Line&quot;)
+	enableTrigger(&quot;Exit_Line&quot;)
+	send(littleExit)
+end
+
+disableTrigger(&quot;ExitFound&quot;)
+</script>
+                    <triggerType>0</triggerType>
+                    <conditonLineDelta>0</conditonLineDelta>
+                    <mStayOpen>0</mStayOpen>
+                    <mCommand></mCommand>
+                    <packageName></packageName>
+                    <mFgColor>#ff0000</mFgColor>
+                    <mBgColor>#ffff00</mBgColor>
+                    <mSoundFile></mSoundFile>
+                    <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                    <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                    <regexCodeList>
+                        <string>^You\sfound\san\sexit\sto\sthe\s(.*)$</string>
+                        <string>^You\snotice\snothing\sdifferent\sto\sthe\s(.*)$</string>
+                    </regexCodeList>
+                    <regexCodePropertyList>
+                        <integer>1</integer>
                         <integer>1</integer>
                     </regexCodePropertyList>
                 </Trigger>
@@ -939,7 +1016,7 @@ autoEnterTrigger = &quot;graveyard&quot;
 
 tempTimer(660,[[send(&quot;invite ethereal;invite pile;invite unhappy;invite captain&quot;)]])
 
-if autoEnter ~= nil then
+if autoEnterTrigger ~= nil then
 	tempTimer(700,[[tableAutoEnter[&quot;]]..autoEnterTrigger..[[&quot;]()]])
 end</script>
                 <triggerType>0</triggerType>
@@ -1035,10 +1112,45 @@ disableTrigger(&quot;Equip&quot;)</script>
                     <integer>1</integer>
                 </regexCodePropertyList>
             </Trigger>
+            <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <name>Auto Bash Open</name>
+                <script>if matches[1]:find(&quot;bashed&quot;) then 
+	disableTimer(&quot;10Timeout&quot;)
+	return
+end
+
+if isActive(&quot;10Timeout&quot;,&quot;timer&quot;) == 0 and not timeoutFired then
+	enableTimer(&quot;10Timeout&quot;)
+	send(&quot;bash &quot;..lastMovement..&quot;;&quot;..lastMovement)
+elseif not timeoutFired then
+	send(&quot;bash &quot;..lastMovement..&quot;;&quot;..lastMovement)
+else
+	cecho(&quot;&lt;IndianRed&gt;Exit bashing failed\n&quot;)
+end
+</script>
+                <triggerType>0</triggerType>
+                <conditonLineDelta>0</conditonLineDelta>
+                <mStayOpen>0</mStayOpen>
+                <mCommand></mCommand>
+                <packageName></packageName>
+                <mFgColor>#ff0000</mFgColor>
+                <mBgColor>#ffff00</mBgColor>
+                <mSoundFile></mSoundFile>
+                <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                <regexCodeList>
+                    <string>^The\s.*\sis\sclosed!$</string>
+                    <string>^You\sbashed\sthe\s.*\sopen.$</string>
+                </regexCodeList>
+                <regexCodePropertyList>
+                    <integer>1</integer>
+                    <integer>1</integer>
+                </regexCodePropertyList>
+            </Trigger>
         </TriggerGroup>
     </TriggerPackage>
     <TimerPackage>
-        <Timer isActive="yes" isFolder="no" isTempTimer="no" isOffsetTimer="no">
+        <Timer isActive="no" isFolder="no" isTempTimer="no" isOffsetTimer="no">
             <name>Combat</name>
             <script>CombatTimer = true
 disableTimer(&quot;combat&quot;)
@@ -1049,7 +1161,9 @@ send(&quot;rest&quot;)</script>
         </Timer>
         <Timer isActive="yes" isFolder="no" isTempTimer="no" isOffsetTimer="no">
             <name>Heartbeat</name>
-            <script>echo(&quot;RECON&quot;)
+            <script>if currentHealth &lt;= HP_panic or currentHealth &lt; 10 then return end
+
+echo(&quot;RECON&quot;)
 reConn()
 </script>
             <command></command>
@@ -1079,7 +1193,7 @@ totExp = 0</script>
             <script>-- Try to keep map loaction correct, roll back move if move didn't happen
 walkLoop_run = false
 roamDirection = nil
-changeRoom(inverseDirection(last_movement))
+changeRoom(inverseDirection(lastMovement))
 disableTimer(&quot;backtrack&quot;)
 echo(&quot;I didn't move, reverting position.\n&quot;)</script>
             <command></command>
@@ -1089,7 +1203,9 @@ echo(&quot;I didn't move, reverting position.\n&quot;)</script>
         <Timer isActive="no" isFolder="no" isTempTimer="no" isOffsetTimer="no">
             <name>debug print</name>
             <script>echo(&quot;walk loop pause: &quot;..tostring(walkLoop_pause)..&quot; walk loop run: &quot;..tostring(walkLoop_run)..&quot;\n&quot;)
-echo(&quot;walk count: &quot;..walkCount..&quot; speed walk steps: &quot;..table.size(speedWalkPath)..&quot;\n&quot;)
+echo(&quot;timeoutFired: &quot;..tostring(timeoutFired)..&quot;\n&quot;)
+echo(&quot;\n&quot;)
+
 </script>
             <command></command>
             <packageName></packageName>
@@ -1097,10 +1213,20 @@ echo(&quot;walk count: &quot;..walkCount..&quot; speed walk steps: &quot;..table
         </Timer>
         <Timer isActive="no" isFolder="no" isTempTimer="no" isOffsetTimer="no">
             <name>MagicPause</name>
-            <script>disableTimer(&quot;MagicPause&quot;)</script>
+            <script>disableTimer(&quot;MagicPause&quot;)
+if currentHealth &lt; HP_autoEnter then heal() end</script>
             <command></command>
             <packageName></packageName>
-            <time>00:00:06.000</time>
+            <time>00:00:05.000</time>
+        </Timer>
+        <Timer isActive="no" isFolder="no" isTempTimer="no" isOffsetTimer="no">
+            <name>10Timeout</name>
+            <script>disableTimer(&quot;10Timeout&quot;)
+timeoutFired = true
+tempTimer(2,[[timeoutFired = false]])</script>
+            <command></command>
+            <packageName></packageName>
+            <time>00:00:10.000</time>
         </Timer>
     </TimerPackage>
     <AliasPackage>
@@ -1164,13 +1290,12 @@ tableAutoEnter[autoEnterTrigger]()
                     <script>if autoEnterTrigger ~= nil then
 	echo(tostring(autoEnterTrigger)..&quot; disabled\n&quot;)
 	autoEnterTrigger = nil
-	walkLoop_run = false
-	walkLoop_pause = false
-	roamDirection = nil
 else
 	echo(&quot;Auto enter already disabled\n&quot;)
 end
-</script>
+walkLoop_run = false
+walkLoop_pause = false
+roamDirection = nil</script>
                     <command></command>
                     <packageName></packageName>
                     <regex>^disable auto enter$</regex>
@@ -1205,7 +1330,7 @@ end</script>
                     <name>Roam</name>
                     <script>roamDirection = matches[2]
 send(roamDirection) 
-last_movement = roamDirection
+lastMovement = roamDirection
 </script>
                     <command></command>
                     <packageName></packageName>
@@ -1227,16 +1352,16 @@ last_movement = roamDirection
                 <regex></regex>
                 <Alias isActive="yes" isFolder="no">
                     <name>Moved</name>
-                    <script>last_movement = matches[2]
+                    <script>lastMovement = matches[1]
 
 if manual_map then
 	enteredRoom(&quot;&quot;,nil)
 else
-	send(matches[2])
+	send(matches[1])
 end</script>
                     <command></command>
                     <packageName></packageName>
-                    <regex>^(n|s|e|w|ne|nw|se|sw|u|d)$</regex>
+                    <regex>^(n|s|e|w|ne|nw|se|sw|u|d|go|push|climb)(\s(.*))*$</regex>
                 </Alias>
                 <Alias isActive="yes" isFolder="no">
                     <name>Map Utilities</name>
@@ -1254,7 +1379,7 @@ send(matches[1])</script>
                     <packageName></packageName>
                     <regex>^(l)$</regex>
                 </Alias>
-                <Alias isActive="yes" isFolder="no">
+                <Alias isActive="no" isFolder="no">
                     <name>Special Exits</name>
                     <script>changeRoom(matches[1])
 
@@ -1263,11 +1388,11 @@ if not manual_map then
 end</script>
                     <command></command>
                     <packageName></packageName>
-                    <regex>^(go|push|pull)\s(.*)$</regex>
+                    <regex>^(go|push|climb)\s(.*)$</regex>
                 </Alias>
                 <Alias isActive="yes" isFolder="no">
                     <name>Stop Walk</name>
-                    <script>walkIt = false</script>
+                    <script>sWalk = false</script>
                     <command></command>
                     <packageName></packageName>
                     <regex>^stop\swalk$</regex>
@@ -1282,10 +1407,18 @@ elseif matches[2] == &quot;rhudaur&quot; then
 	setRoom(1519)
 end
 
-last_movement = nil</script>
+lastMovement = nil</script>
                     <command></command>
                     <packageName></packageName>
                     <regex>^sys\sgoto\s(.*)$</regex>
+                </Alias>
+                <Alias isActive="yes" isFolder="no">
+                    <name>Search and Move</name>
+                    <script>send(matches[1])
+enableTrigger(&quot;ExitFound&quot;)</script>
+                    <command></command>
+                    <packageName></packageName>
+                    <regex>^search\s(.*)$</regex>
                 </Alias>
             </AliasGroup>
             <Alias isActive="yes" isFolder="no">
@@ -1342,6 +1475,8 @@ function Startup()
 
 	healthStartup()
 	enableTrigger(&quot;check health&quot;)
+
+	timeoutFired = false
 end</script>
             <eventHandlerList/>
             <Script isActive="yes" isFolder="no">
@@ -1408,10 +1543,12 @@ function Panic()
 	end
 	enableTrigger(&quot;panic&quot;)
 	cecho (&quot;&lt;:red&gt;PANIC!&quot;)
+	currentHealth = 1
 end
 
 function heal()
-	if isActive(&quot;MagicPause&quot;,&quot;timer&quot;) == 0 then
+	if isActive(&quot;MagicPause&quot;,&quot;timer&quot;) == 0 and currentHealth &gt; HP_panic and currentHealth &gt; 10 then
+echo(currentHealth)
 		if HP_maheAvail ~= nil and magicPower &gt; minMagic then
 			send(HP_maheAvail..&quot;;rest&quot;)
 		elseif HP_miheAvail ~= nil then
@@ -1426,8 +1563,8 @@ end
 
 function doRetreat()
 	if retreatSequence == &quot;i&quot; then 
-		send(inverseDirection(last_movement)) 
-		changeRoom(inverseDirection(last_movement))
+		send(inverseDirection(lastMovement)) 
+		changeRoom(inverseDirection(lastMovement))
 	elseif retreatSequence ~= nil then
 		send(retreatSequence)
 		local retreats = split(retreatSequence,&quot;;&quot;)
@@ -1574,7 +1711,7 @@ function setTownGlobals()
 		[&quot;slums&quot;] = function (x) enterArena(289,&quot;auto Stroll Slums&quot;) end,
 		[&quot;bear&quot;] = function (x) enterArena(9,&quot;auto enter bear&quot;) end,
 		[&quot;bodyguard slums&quot;] = function (x) enterArena(427,&quot;auto Stroll Slums&quot;) end,
-		[&quot;cave worm&quot;] = function (x) enterArena(656,&quot;autoStrollCaveWorm&quot;) end,
+		[&quot;cave worm&quot;] = function (x) enterArena(967,&quot;autoStrollCaveWorm&quot;) end,
 		[&quot;graveyard&quot;] = function (x) enterArena(1010,&quot;autoRoamGraveyard&quot;) end,
 	}
 
@@ -1605,7 +1742,7 @@ end</script>
 
 function cleric()
 --When should panic set in?
-	HP_panic = 20
+	HP_panic = 25
 
 --Should I hang up of panic?
 	HP_panicHangup = true
@@ -1642,7 +1779,7 @@ end</script>
 
 function paladin()
 --When should panic set in?
-HP_panic = 20
+	HP_panic = 25
 --Should I hang up of panic?
 HP_panicHangup = true
 --When should I retreat from room?
@@ -1674,7 +1811,7 @@ end</script>
 
 function ranger()
 --When should panic set in?
-HP_panic = 20
+	HP_panic = 25
 --Should I hang up of panic?
 HP_panicHangup = true
 --When should I retreat from room?
@@ -1687,14 +1824,15 @@ HP_healthSpell = 20
 	preSpell = nil
 	
 	minMagic = 8
-	attackSeq = { &quot;c chao&quot;,&quot;bash&quot; }
+	attackSeq = { &quot;c chao&quot;,&quot;bash&quot;,&quot;c acid&quot;,&quot;bash&quot; }
 --When can I automatically re-enter battle?
 HP_autoEnter = 40
 
 	uname = &quot;captain&quot;
 
 	echo(&quot;Using ranger varibs\n&quot;)
-end</script>
+end
+</script>
                     <eventHandlerList/>
                 </Script>
                 <Script isActive="yes" isFolder="no">
@@ -1706,7 +1844,7 @@ end</script>
 
 function mystic()
 --When should panic set in?
-	HP_panic = 20
+	HP_panic = 25
 --Should I hang up of panic?
 	HP_panicHangup = true
 --When should I retreat from room?
@@ -1756,7 +1894,7 @@ end
 
 function witchunter()
 --When should panic set in?
-	HP_panic = 20
+	HP_panic = 25
 
 --Should I hang up of panic?
 	HP_panicHangup = true
@@ -1794,7 +1932,7 @@ end</script>
 
 function priest()
 --When should panic set in?
-	HP_panic = 20
+	HP_panic = 25
 
 --Should I hang up of panic?
 	HP_panicHangup = true
@@ -1880,11 +2018,10 @@ mudlet = mudlet or {}; mudlet.mapper_script = true
 registerAnonymousEventHandler(&quot;setPlayerLoc&quot;, &quot;setPlayerLocation&quot;)
 
 function mapStartup()
-	last_movement = nil
+	lastMovement = nil
 	current_room = nil
 	manual_map = false
 	auto_map = false
-	walkCount = 0
 
 	loadMap()
 	addMapEvent(&quot;I'm Here&quot;, &quot;setPlayerLoc&quot;)
@@ -1893,48 +2030,54 @@ end
 
 function setPlayerLocation(evet, list, rm)
 	setRoom(rm)
-	last_movement = nil
+	lastMovement = nil
 	enableTrigger(&quot;Name_Line&quot;)
 	disableTrigger(&quot;Exit_Line&quot;)
 end
 
 function doSpeedWalk()
 	if current_room == nil then echo(&quot;I don't know where I am\n&quot;) return end
+	if isActive(&quot;huntHold&quot;,&quot;trigger&quot;) == 1 then cecho(&quot;&lt;IndianRed&gt;In battle! Speedwalk ignored.\n&quot;) return end
 
 	auto_map = false
-	walkIt = true
-	disableTrigger(&quot;Name_Line&quot;)
+	sWalk = true sWalkAttempts = 0 moved = true
+
 	echo(&quot;Path we need to take: &quot; .. table.concat(speedWalkDir, &quot;, &quot;) .. &quot;\n&quot;)
 	echo(&quot;Rooms we'll pass through: &quot; .. table.concat(speedWalkPath, &quot;, &quot;) .. &quot;\n&quot;)
-	local vSub = nil
-	for i,v in ipairs(speedWalkDir) do
-		tempTimer(i * 1.5, [[walkMap(&quot;]]..v..[[&quot;)]])
-	end
 
-	walkCount = 0
-	amIspeedwalking(table.size(speedWalkPath))
 	walkLoop_pause = true
+	speedWalk(1,isActive(&quot;Hunts&quot;,&quot;trigger&quot;))
+	disableTrigger(&quot;Hunts&quot;)
 end
 
-function walkMap(direction)
-	if walkIt then
+function speedWalk(stepNumber,hunt)
+	local stepSpeed = 1.7
+
+	if stepNumber &lt;= table.size(speedWalkDir) and sWalk and moved then
+		local direction = speedWalkDir[stepNumber]
 		if direction:sub(1,1) == &quot;u&quot; or direction:sub(1,1) == &quot;d&quot; then
 			vSub = direction:sub(1,1) --up and down come as full words
 		else
 			vSub = direction
 		end
-		send(direction) changeRoom(vSub)
-	else
-		walkCount = table.size(speedWalkPath)
-	end
-end
 
-function amIspeedwalking(walk_size)
-	if walkCount ~= walk_size then
-		tempTimer(2.5, [[amIspeedwalking(]]..walk_size..[[)]])
+		lastMovement = vSub
+		if direction:find(&quot;search&quot;) then enableTrigger(&quot;ExitFound&quot;) end
+		send(direction)
+
+		stepNumber = stepNumber + 1
+		sWalkAttempts = 1
+		moved = false
+		tempTimer(stepSpeed,[[speedWalk(]]..stepNumber..[[,]]..hunt..[[)]])
+	elseif not moved  and sWalkAttempts &lt;= 3 then
+		--try to move again
+		tempTimer(stepSpeed,[[speedWalk(]]..stepNumber..[[,]]..hunt..[[)]])
+		cecho(&quot;&lt;yellow&gt;Failed to move, will check &quot;..3-sWalkAttempts..&quot; more time(s)\n&quot;)
+		sWalkAttempts = sWalkAttempts + 1
 	else
-		tempTimer(2, [[enableTrigger(&quot;Name_Line&quot;)]])
 		walkLoop_pause = false
+		if hunt == 1 then enableTrigger(&quot;Hunts&quot;) end
+		cecho(&quot;&lt;IndianRed&gt;Speedwalk Complete\n&quot;)
 	end
 end
 
@@ -1947,11 +2090,10 @@ function enteredRoom(room_name,area_name)
 			echo(&quot;I don't know where I am\n&quot;)
 		end
 	else
-		exits = getRoomExits(current_room)
-		if table.contains(exits,longDirection(last_movement)) then
-			local rid = exits[longDirection(last_movement)]
-			setRoom(rid)
-			if getRoomName(rid) == &quot;&quot; then setRoomName(rid,room_name) end
+		local exitRoomID = findExit(lastMovement)
+		if exitRoomID then
+			setRoom(exitRoomID)
+			if getRoomName(exitRoomID) == &quot;&quot; then setRoomName(exitRoomID,room_name) end
 		else 
 			if auto_map or manual_map then
 				createRoom(room_name,area_name)
@@ -1978,8 +2120,8 @@ function createRoom(room_name,area_name)
 	pos_table = getRoomsByPosition(findAreaID(area_name),targetPosition())
 	if table.size(pos_table) ~= 0 then
 		rid = pos_table[0]
-		setExit(rid,current_room,inverseDirection(last_movement))
-		setExit(current_room,rid,last_movement)
+		setExit(rid,current_room,inverseDirection(lastMovement))
+		setExit(current_room,rid,lastMovement)
 		setRoom(rid)
 		return
 	end
@@ -1991,8 +2133,8 @@ function createRoom(room_name,area_name)
 	setRoomCoordinates(rid,targetPosition())
 
 	if current_room ~= nil then
-		setExit(rid,current_room,inverseDirection(last_movement))
-		setExit(current_room,rid,last_movement)
+		setExit(rid,current_room,inverseDirection(lastMovement))
+		setExit(current_room,rid,lastMovement)
 	end
 
 	setRoom(rid)
@@ -2000,27 +2142,33 @@ function createRoom(room_name,area_name)
 end
 
 function changeRoom(direction)
-	last_movement = direction
-	if direction:find(&quot;go&quot;) or direction:find(&quot;push&quot;) or direction:find(&quot;pull&quot;) then
+	local rid = findExit(direction)
+	if rid then
+		setRoom(rid)
+		lastMovement = direction
+	else
+		cecho(&quot;&lt;yellow&gt;No exit &quot;..direction..&quot;\n&quot;)
+	end
+end
+
+function findExit(direction)
+	if direction:find(&quot;go&quot;) or direction:find(&quot;push&quot;) or direction:find(&quot;climb&quot;) then
 		local exits = getSpecialExits(current_room)
 		for rid,command_table in pairs(exits) do
 			for command,locked in pairs(command_table) do 
 				if command:find(direction) then
-					setRoom(rid)
-					return
+					return rid
 				end
 			end
 		end
-		echo(&quot;No exit to the &quot;..direction..&quot;\n&quot;) -- if we get here, no exit found
 	else
 		local exits = getRoomExits(current_room)
 		if table.contains(exits,longDirection(direction)) then
 			local rid = exits[longDirection(direction)]
-			setRoom(rid)
-		else
-			echo(&quot;No exit to the &quot;..longDirection(direction)..&quot;\n&quot;)
+			return rid
 		end
 	end
+	return false
 end
 
 function setRoom(room_id)
@@ -2046,15 +2194,7 @@ function mapControl(inst)
 	if inst == &quot;save&quot; then saveMap() echo(&quot;default map saved\n&quot;)
 	elseif inst == &quot;load&quot; then loadMap() updateMap() echo(&quot;default map loaded\n&quot;)
 	elseif inst:find(&quot;delete&quot;) ~= nil then
-		if inst:find(&quot;all&quot;) ~= nil then
-			local list = getAreaTable()
-			for area, id in pairs(list) do
-				deleteArea(id)
-			end
-			current_room = nil
-			last_movement = nil
-			echo(&quot;all map areas deleted\n&quot;)
-		elseif inst:find(&quot;area&quot;) then
+		if inst:find(&quot;area&quot;) then
 			aname = inst:sub(13,inst:len())
 			aid = findAreaID(aname)
 			if aid ~= nil then
@@ -2071,6 +2211,14 @@ function mapControl(inst)
 			else
 				echo(&quot;room &quot;..rid..&quot; does not exist\n&quot;)
 			end
+		elseif inst:find(&quot;all&quot;) ~= nil then
+			local list = getAreaTable()
+			for area, id in pairs(list) do
+				deleteArea(id)
+			end
+			current_room = nil
+			lastMovement = nil
+			echo(&quot;all map areas deleted\n&quot;)
 		end
 	elseif inst:find(&quot;create&quot;) ~= nil then
 		if inst:find(&quot;area&quot;) ~= nil then
@@ -2138,12 +2286,12 @@ function targetPosition()
 	else
 		x,y,z = getRoomCoordinates(current_room)
 
-		if last_movement:find(&quot;n&quot;) ~= nil then y = y + 2 end
-		if last_movement:find(&quot;s&quot;) ~= nil then y = y - 2 end
-		if last_movement:find(&quot;e&quot;) ~= nil then x = x + 2 end
-		if last_movement:find(&quot;w&quot;) ~= nil then x = x - 2 end
-		if last_movement:find(&quot;u&quot;) ~= nil then z = z + 1
-		elseif last_movement:find(&quot;d&quot;) ~= nil then z = z - 1
+		if lastMovement:find(&quot;n&quot;) ~= nil then y = y + 2 end
+		if lastMovement:find(&quot;s&quot;) ~= nil then y = y - 2 end
+		if lastMovement:find(&quot;e&quot;) ~= nil then x = x + 2 end
+		if lastMovement:find(&quot;w&quot;) ~= nil then x = x - 2 end
+		if lastMovement:find(&quot;u&quot;) ~= nil then z = z + 1
+		elseif lastMovement:find(&quot;d&quot;) ~= nil then z = z - 1
 		end
 
 		return x,y,z
@@ -2205,11 +2353,15 @@ function walkLoop(loop,time)
 	if walkLoop_run and not walkLoop_pause and HP &gt; HP_autoEnter then
 		cecho(&quot;&lt;lawn_green&gt;Walk loop &quot;..loop[walkLoop_count]..&quot;\n&quot;)
 		send(loop[walkLoop_count]..&quot;;rest&quot;) 
-		last_movement = loop[walkLoop_count]
+		lastMovement = loop[walkLoop_count]
 		walkLoop_count = walkLoop_count + 1
 		if walkLoop_count &gt; table.size(loop) then walkLoop_count =  1 end
-		changeRoom(last_movement)
+		changeRoom(lastMovement)
 		enableTimer(&quot;backtrack&quot;)
+	elseif walkLoop_pause then
+		echo(&quot;Looping paused\n&quot;)
+	elseif HP &lt; HP_autoEnter then
+		echo(&quot;Looping paused by health\n&quot;)
 	end
  
 	if walkLoop_run then
@@ -2222,38 +2374,42 @@ end
 
 function roam(exits)
 	if roamDirection == nil then return end
-		local found = false
-		local availExits = split(exits,&quot; &quot;)
-		for k,v in pairs(availExits) do
-			local littleExit = v:sub(1,1)
-			if littleExit == &quot;n&quot; or littleExit == &quot;s&quot; then
-				if v:find(&quot;e&quot;) then
-					littleExit = littleExit..&quot;e&quot;
-				elseif v:find(&quot;w&quot;) then
-					littleExit = littleExit..&quot;w&quot;
-				end
-			end
-			if littleExit == roamDirection then found = true end
-		end
 
-		if found then
-			tempTimer(5, [[doRoam()]])
-		else
-			roamDirection = inverseDirection(roamDirection)
-			tempTimer(5, [[doRoam()]])
-		end	
+	local found = false
+	local availExits = split(exits,&quot; &quot;)
+	for k,v in pairs(availExits) do
+		local littleExit = v:sub(1,1)
+		if littleExit == &quot;n&quot; or littleExit == &quot;s&quot; then
+			if v:find(&quot;e&quot;) then
+				littleExit = littleExit..&quot;e&quot;
+			elseif v:find(&quot;w&quot;) then
+				littleExit = littleExit..&quot;w&quot;
+			end
+		end
+		if littleExit == roamDirection then found = true end
+	end
+
+	if found then
+		tempTimer(5, [[doRoam()]])
+	else
+		roamDirection = inverseDirection(roamDirection)
+		tempTimer(5, [[doRoam()]])
+	end	
 end
 
 function doRoam()
 	if roamDirection == nil then return end
 
-	if walkLoop_pause or currentHealth &lt; HP_autoEnter then
+	if walkLoop_pause then
 		echo(&quot;Roaming paused\n&quot;)
+		tempTimer(5,[[doRoam()]])
+	elseif currentHealth &lt; HP_autoEnter then
+		echo(&quot;Roaming paused by health\n&quot;)
 		tempTimer(5,[[doRoam()]])
 	else
 		cecho(&quot;&lt;lawn_green&gt;Roam &quot;..roamDirection..&quot;\n&quot;)
 		send(roamDirection..&quot;;rest&quot;) 
-		last_movement = roamDirection
+		lastMovement = roamDirection
 		enableTimer(&quot;backtrack&quot;)
 	end
 end</script>
