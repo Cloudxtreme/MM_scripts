@@ -348,7 +348,7 @@ end</script>
                         <colorTriggerFgColor>#000000</colorTriggerFgColor>
                         <colorTriggerBgColor>#000000</colorTriggerBgColor>
                         <regexCodeList>
-                            <string>\sroc</string>
+                            <string>\sroc\s</string>
                             <string>huntsman</string>
                         </regexCodeList>
                         <regexCodePropertyList>
@@ -509,6 +509,30 @@ end</script>
                             <string>Leo the Quick</string>
                         </regexCodeList>
                         <regexCodePropertyList>
+                            <integer>0</integer>
+                        </regexCodePropertyList>
+                    </Trigger>
+                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                        <name>Strange Mansion</name>
+                        <script>Hunt(matches[1])</script>
+                        <triggerType>0</triggerType>
+                        <conditonLineDelta>0</conditonLineDelta>
+                        <mStayOpen>0</mStayOpen>
+                        <mCommand></mCommand>
+                        <packageName></packageName>
+                        <mFgColor>#ff0000</mFgColor>
+                        <mBgColor>#ffff00</mBgColor>
+                        <mSoundFile></mSoundFile>
+                        <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                        <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                        <regexCodeList>
+                            <string>\smage</string>
+                            <string>spectre</string>
+                            <string>vision</string>
+                        </regexCodeList>
+                        <regexCodePropertyList>
+                            <integer>1</integer>
+                            <integer>0</integer>
                             <integer>0</integer>
                         </regexCodePropertyList>
                     </Trigger>
@@ -893,9 +917,9 @@ enableTrigger(&quot;Exit_Line&quot;)</script>
                     <name>ExitFound</name>
                     <script>local littleExit = matches[2]:sub(1,1)
 if littleExit == &quot;n&quot; or littleExit == &quot;s&quot; then
-	if littleExit:find(&quot;e&quot;) then
+	if matches[2]:find(&quot;e&quot;) then
 		littleExit = littleExit..&quot;e&quot;
-	elseif littleExit:find(&quot;w&quot;) then
+	elseif matches[2]:find(&quot;w&quot;) then
 		littleExit = littleExit..&quot;w&quot;
 	end
 end
@@ -1361,7 +1385,7 @@ else
 end</script>
                     <command></command>
                     <packageName></packageName>
-                    <regex>^(n|s|e|w|ne|nw|se|sw|u|d|go|push|climb)(\s(.*))*$</regex>
+                    <regex>^(n|s|e|w|ne|nw|se|sw|u|d|go|push|climb|move)(\s(.*))*$</regex>
                 </Alias>
                 <Alias isActive="yes" isFolder="no">
                     <name>Map Utilities</name>
@@ -1378,17 +1402,6 @@ send(matches[1])</script>
                     <command></command>
                     <packageName></packageName>
                     <regex>^(l)$</regex>
-                </Alias>
-                <Alias isActive="no" isFolder="no">
-                    <name>Special Exits</name>
-                    <script>changeRoom(matches[1])
-
-if not manual_map then
-	send(matches[1])
-end</script>
-                    <command></command>
-                    <packageName></packageName>
-                    <regex>^(go|push|climb)\s(.*)$</regex>
                 </Alias>
                 <Alias isActive="yes" isFolder="no">
                     <name>Stop Walk</name>
@@ -2152,7 +2165,7 @@ function changeRoom(direction)
 end
 
 function findExit(direction)
-	if direction:find(&quot;go&quot;) or direction:find(&quot;push&quot;) or direction:find(&quot;climb&quot;) then
+	if direction:find(&quot;go&quot;) or direction:find(&quot;push&quot;) or direction:find(&quot;climb&quot;) or direction:find(&quot;more&quot;) then
 		local exits = getSpecialExits(current_room)
 		for rid,command_table in pairs(exits) do
 			for command,locked in pairs(command_table) do 

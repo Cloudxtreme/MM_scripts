@@ -1,5 +1,5 @@
 # find most recent profile
-profile=$(find ./current/ -name *#* | sort -n | tail -1)
+profile=$(find ./current/ -name *#* -printf '%T@ %p\n' | sort -k 1nr | sed 's/^[^ ]* //' | head -n 1)
 
 # make usable copy of profile
 ./copyProfiles.sh
@@ -14,7 +14,7 @@ sed -i '/<Host/,/<\/HostPackage>/d' ./current/MM.xml
 sed -i 's/7\.5,\[\[send(\&quot;.*\&quot/7\.5,\[\[send(\&quot;\&quot/' ./current/MM.xml
 
 # find most recent map
-profile=$(find ./map/ -name *dat | sort -n | tail -1)
+profile=$(find ./map/ -name *dat -printf '%T@ %p\n' | sort -k 1nr | sed 's/^[^ ]* //' | head -n 1)
 
 # backup map
 cp $profile ./map/mm

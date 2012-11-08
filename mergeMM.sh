@@ -1,5 +1,5 @@
 # find most recent profile
-profile=$(find ./current/ -name *#* | sort -n | tail -1)
+profile=$(find ./current/ -name *#* -printf '%T@ %p\n' | sort -k 1nr | sed 's/^[^ ]* //' | head -n 1)
 
 # Get HostPackage xml block
 sed -n '/<\?xml/,/\/HostPackage>/p' $profile > holder
@@ -15,7 +15,7 @@ sed -i "s/7\.5,\[\[send(\&quot;\&quot/7\.5,\[\[send(\&quot;$pass\&quot/" holder
 mv holder $profile
 
 # find most recent map
-profile=$(find ./map/ -name *dat | sort -n | tail -1)
+profile=$(find ./map/ -name *dat -printf '%T@ %p\n' | sort -k 1nr | sed 's/^[^ ]* //' | head -n 1)
 touch $profile
 
 # make usable copy of profile
